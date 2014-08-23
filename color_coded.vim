@@ -28,19 +28,12 @@ set cpo&vim
 ruby require './color_coded.so'
 set ft=cpp
 
-function! s:try_append()
-ruby << EOF
-  cc_append("|")
-EOF
-endfunction!
-
 function! s:try_work()
 ruby << EOF
   cc_work(VIM::Buffer.current.line)
 EOF
 endfunction!
 
-"au CursorMoved * call s:try_append()
 au TextChanged * call s:try_work()
 au TextChangedI * call s:try_work()
 au CursorMoved * call s:try_work()
