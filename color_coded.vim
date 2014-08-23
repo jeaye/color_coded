@@ -26,6 +26,7 @@ set cpo&vim
 " ------------------------------------------------------------------------------
 
 ruby require './color_coded.so'
+set ft=cpp
 
 function! s:try_append()
 ruby << EOF
@@ -33,9 +34,17 @@ ruby << EOF
 EOF
 endfunction!
 
-"au CursorMoved *.[ch],*.[ch]pp,*.m call s:try_append()
-au CursorMoved * call s:try_append()
+function! s:try_work()
+ruby << EOF
+  cc_work(VIM::Buffer.current.line)
+EOF
+endfunction!
+
+"au CursorMoved * call s:try_append()
+au TextChanged * call s:try_work()
+au TextChangedI * call s:try_work()
+au CursorMoved * call s:try_work()
 
 " ------------------------------------------------------------------------------
-let &cpo= s:keepcpo
+let &cpo = s:keepcpo
 unlet s:keepcpo
