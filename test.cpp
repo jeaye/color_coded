@@ -7,6 +7,17 @@ struct foo
   int age;
 };
 
+template <typename T>
+class bar
+{
+  public:
+    bar()
+    { }
+
+    virtual T spam() const
+    { return T(); }
+};
+
 /* Oh, excellent. */
 int main()
 {

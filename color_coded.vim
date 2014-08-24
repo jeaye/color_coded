@@ -42,7 +42,7 @@ hi link StructDecl Type
 hi link UnionDecl Type
 hi link ClassDecl Type
 hi link EnumDecl Type
-hi link FieldDecl Type
+hi link FieldDecl Comment
 hi link EnumConstantDecl Type
 hi link FunctionDecl Type
 hi link VarDecl Type
@@ -91,8 +91,8 @@ hi link NoDeclFound Type
 hi link NotImplemented Type
 hi link InvalidCode Type
 hi link FirstExpr Type
-hi link DeclRefExpr Type
-hi link MemberRefExpr Type
+hi link DeclRefExpr Label
+hi link MemberRefExpr Comment
 hi link CallExpr Type
 hi link ObjCMessageExpr Type
 hi link BlockExpr Type
