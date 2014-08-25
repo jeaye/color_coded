@@ -2,7 +2,7 @@ color_coded vim plugin
 ---
 color_coded is a vim plugin that provides realtime (fast), tagless code highlighting using libclang. color_coded can use your [YCM](https://github.com/Valloric/YouCompleteMe) configuration for compilation options, or it can be configured separately.
 
-  * Fast compilation, using native C++11
+  * Fast compilation, using native C++14
   * Ruby bindings (using [juble](https://github.com/jeaye/juble), a "C++14 embedded scripting framework")
   * Exhaustive customization possibilities
 
