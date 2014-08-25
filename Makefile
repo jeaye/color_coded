@@ -3,7 +3,7 @@ CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
 CXX_MISC = -fpic
-CXX_INCLUDE = -Iinclude -Ilib/juble/include -I/usr/include/ruby-2.1.0 -I/usr/include/ruby-2.1.0/x86_64-linux 
+CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include -Ilib/juble/lib/ruby/.ext/include/x86_64-linux
 CXX_PLATFORM_FLAGS =
 CXX_FLAGS=-std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
 

@@ -9,9 +9,9 @@
 
 #include <clang-c/Index.h>
 
-#include "ruby.h"
-
 #include <juble/juble.hpp>
+
+#include "clang/string.hpp"
 
 namespace color_coded
 {
@@ -302,15 +302,15 @@ namespace color_coded
     {
       CXToken const &token{ tokens[i] };
       CXTokenKind const kind{ clang_getTokenKind(token) };
-      CXString const spell(clang_getTokenSpelling(tu, token));
+      clang::string const spell{ clang_getTokenSpelling(tu, token) };
       CXSourceLocation const loc(clang_getTokenLocation(tu, token));
 
       CXFile file{};
       unsigned line{}, column{}, offset{};
       clang_getFileLocation(loc, &file, &line, &column, &offset);
-      CXString const filename(clang_getFileName(file));
+      clang::string const filename{ clang_getFileName(file) };
 
-      std::string const token_text{ clang_getCString(spell) };
+      std::string const token_text{ spell.c_str() };
       std::string const token_kind{ get_token_spelling(kind) };
 
       std::string const len{ std::to_string(token_text.size()) };
@@ -321,9 +321,6 @@ namespace color_coded
       //{ typ = "String"; }
 
       eval("VIM::command(\"call matchaddpos('" + typ + "', [[" + lin + ", " + col + ", " + len  + "]], -1)\")");
-
-      clang_disposeString(filename);
-      clang_disposeString(spell);
     }
   }
 
@@ -370,9 +367,8 @@ namespace color_coded
       for(size_t i{}; i != errors; ++i)
       {
         CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
-        CXString const string(clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()));
-        std::cout << clang_getCString(string) << std::endl;
-        clang_disposeString(string);
+        clang::string const string{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
+        std::cout << string.c_str() << std::endl;
       }
       throw std::runtime_error{ "unable to compile translation unit" };
     }

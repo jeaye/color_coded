@@ -25,7 +25,7 @@ let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-ruby require './color_coded.so'
+ruby require './bin/color_coded.so'
 set ft=cpp
 
 function! s:try_work()
