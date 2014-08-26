@@ -18,7 +18,7 @@ namespace color_coded
           : dtor_{ dtor }
         { }
         resource(resource const&) = delete;
-        resource(resource &&) noexcept = default;
+        resource(resource &&) = default; /* TODO: noexcept */
         resource(T &&t, dtor_t const &dtor)
           : data_(std::move(t)), dtor_{ dtor }
         { }

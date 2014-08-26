@@ -12,6 +12,7 @@
 #include <juble/juble.hpp>
 
 #include "clang/string.hpp"
+#include "clang/resource.hpp"
 
 namespace color_coded
 {
@@ -20,7 +21,7 @@ namespace color_coded
 
   template <typename T, typename... Ts>
   std::array<std::decay_t<T>, sizeof...(Ts) + 1> make_array(T &&t, Ts &&... ts)
-  { return { std::forward<T>(t), std::forward<Ts>(ts)... }; }
+  { return { { std::forward<T>(t), std::forward<Ts>(ts)... } }; }
 
   std::string get_token_spelling(CXTokenKind const kind)
   {
