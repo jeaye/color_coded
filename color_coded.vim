@@ -30,7 +30,7 @@ set ft=cpp
 
 function! s:try_work()
 ruby << EOF
-  cc_work(VIM::Buffer.current.line)
+  cc_work(VIM::Buffer.current.name)
 EOF
 endfunction!
 

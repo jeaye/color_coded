@@ -282,8 +282,13 @@ namespace color_coded
             return "String";
           case CXCursor_CharacterLiteral:
             return "Character";
+          case CXCursor_PreprocessingDirective:
+            return "MacroDefinition";
+          case CXType_Unexposed:
+            return "";
           default:
-            throw std::runtime_error{ "unknown literal" };
+            throw std::runtime_error{ "unknown literal: " +
+                                      std::to_string(cursor_kind) };
         }
       case CXToken_Comment:
         return "Comment";
@@ -318,8 +323,6 @@ namespace color_coded
       std::string const col{ std::to_string(column) };
       std::string const lin{ std::to_string(line) };
       std::string typ{ get_token_type(kind, cursors[i].kind) };
-      //if(cursors[i].kind == CXCursor_StructDecl && kind == CXToken_Identifier)
-      //{ typ = "String"; }
 
       eval("VIM::command(\"call matchaddpos('" + typ + "', [[" + lin + ", " + col + ", " + len  + "]], -1)\")");
     }
@@ -352,11 +355,11 @@ namespace color_coded
     return range;
   }
 
-  void work(std::string const &)
+  void work(std::string const &name)
   {
-    auto const args(make_array("-I/usr/include", "-I."));
+    auto const args(make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
 
-    std::string const filename{ "test.cpp" };
+    std::string const filename{ name };
     CXIndex const index{ clang_createIndex(true, true) };
     CXTranslationUnit const tu
     { clang_parseTranslationUnit(index, filename.c_str(),

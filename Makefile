@@ -5,7 +5,7 @@ CXX_OPT = -O3
 CXX_MISC = -fpic
 CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include -Ilib/juble/lib/ruby/.ext/include/x86_64-linux
 CXX_PLATFORM_FLAGS =
-CXX_FLAGS=-std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
+CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
 
 LD_PLATFORM_LIBS =
 LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static ${LD_PLATFORM_LIBS}
@@ -39,6 +39,7 @@ setup:
 
 run:
 	gvim -c ":source ${PWD}/color_coded.vim" test.cpp
+	#gvim -c ":source ${PWD}/color_coded.vim" src/color_coded.cpp
 
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
