@@ -5,40 +5,38 @@
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
-#include <array>
 
 #include <clang-c/Index.h>
 
 #include <juble/juble.hpp>
 
 #include "clang/string.hpp"
+#include "clang/token_pack.hpp"
 #include "clang/resource.hpp"
+
+#include "detail/util.hpp"
 
 namespace color_coded
 {
   void eval(std::string const &str)
   { rb_eval_string(str.c_str()); }
 
-  template <typename T, typename... Ts>
-  std::array<std::decay_t<T>, sizeof...(Ts) + 1> make_array(T &&t, Ts &&... ts)
-  { return { { std::forward<T>(t), std::forward<Ts>(ts)... } }; }
-
-  std::string get_token_spelling(CXTokenKind const kind)
+  std::ostream& operator <<(std::ostream &os, CXTokenKind const kind)
   {
     switch (kind)
     {
       case CXToken_Punctuation:
-        return "Punctuation";
+        return os << "Punctuation";
       case CXToken_Keyword:
-        return "Keyword";
+        return os << "Keyword";
       case CXToken_Identifier:
-        return "Identifier";
+        return os << "Identifier";
       case CXToken_Literal:
-        return "Literal";
+        return os << "Literal";
       case CXToken_Comment:
-        return "Comment";
+        return os << "Comment";
       default:
-        return "Unknown";
+        return os << "Unknown";
     }
   }
 
@@ -297,14 +295,15 @@ namespace color_coded
     }
   }
 
-  void show_all_tokens(CXTranslationUnit const &tu, CXToken *tokens, size_t num_tokens)
+  void show_all_tokens(CXTranslationUnit const &tu, CXToken *tokens,
+                       std::size_t num_tokens)
   {
     eval("VIM::command(\"call clearmatches()\")");
 
     std::vector<CXCursor> cursors(num_tokens);
     clang_annotateTokens(tu, tokens, num_tokens, cursors.data());
 
-    for(size_t i{}; i < num_tokens; ++i)
+    for(std::size_t i{}; i < num_tokens; ++i)
     {
       CXToken const &token{ tokens[i] };
       CXTokenKind const kind{ clang_getTokenKind(token) };
@@ -317,7 +316,6 @@ namespace color_coded
       clang::string const filename{ clang_getFileName(file) };
 
       std::string const token_text{ spell.c_str() };
-      std::string const token_kind{ get_token_spelling(kind) };
 
       std::string const len{ std::to_string(token_text.size()) };
       std::string const col{ std::to_string(column) };
@@ -328,7 +326,7 @@ namespace color_coded
     }
   }
 
-  size_t get_filesize(std::string const &file)
+  std::size_t get_filesize(std::string const &file)
   {
     std::ifstream ifs{ file };
     if(!ifs.is_open())
@@ -340,7 +338,7 @@ namespace color_coded
   CXSourceRange get_filerange(CXTranslationUnit const &tu, std::string const &filename)
   {
     CXFile const file{ clang_getFile(tu, filename.c_str()) };
-    size_t const size{ get_filesize(filename.c_str()) };
+    std::size_t const size{ get_filesize(filename.c_str()) };
 
     CXSourceLocation const top(clang_getLocationForOffset(tu, file, 0));
     CXSourceLocation const bottom(clang_getLocationForOffset(tu, file, size));
@@ -357,7 +355,7 @@ namespace color_coded
 
   void work(std::string const &name)
   {
-    auto const args(make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
+    auto const args(detail::make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
 
     std::string const filename{ name };
     CXIndex const index{ clang_createIndex(true, true) };
@@ -365,10 +363,10 @@ namespace color_coded
     { clang_parseTranslationUnit(index, filename.c_str(),
         args.data(), args.size(), nullptr, 0, CXTranslationUnit_None) };
 
-    size_t const errors{ clang_getNumDiagnostics(tu) };
+    std::size_t const errors{ clang_getNumDiagnostics(tu) };
     if(errors || !tu)
     {
-      for(size_t i{}; i != errors; ++i)
+      for(std::size_t i{}; i != errors; ++i)
       {
         CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
         clang::string const string{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
@@ -379,12 +377,9 @@ namespace color_coded
 
     CXSourceRange const range(get_filerange(tu, filename));
 
-    CXToken *tokens{};
-    unsigned num_tokens{};
-    clang_tokenize(tu, range, &tokens, &num_tokens);
-    show_all_tokens(tu, tokens, num_tokens);
+    clang::token_pack tp{ tu, range };
+    show_all_tokens(tu, tp.begin(), tp.size()); /* TODO: just take in tp */
 
-    clang_disposeTokens(tu, tokens, num_tokens);
     clang_disposeTranslationUnit(tu);
     clang_disposeIndex(index);
   }

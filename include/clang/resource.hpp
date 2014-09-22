@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <clang-c/Index.h>
 
-#include "detail/resource_impl.hpp"
+#include "detail/resource.hpp"
 
 namespace color_coded
 {
