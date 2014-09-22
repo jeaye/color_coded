@@ -13,6 +13,7 @@
 #include "clang/string.hpp"
 #include "clang/token_pack.hpp"
 #include "clang/translation_unit.hpp"
+#include "clang/index.hpp"
 #include "clang/resource.hpp"
 #include "clang/token.hpp"
 
@@ -78,9 +79,9 @@ namespace color_coded
     auto const args(detail::make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
 
     std::string const filename{ name };
-    CXIndex const index{ clang_createIndex(true, true) };
+    clang::index const index{ clang_createIndex(true, true) };
     clang::translation_unit const tu
-    { clang_parseTranslationUnit(index, filename.c_str(),
+    { clang_parseTranslationUnit(index.get(), filename.c_str(),
         args.data(), args.size(), nullptr, 0, CXTranslationUnit_None) };
 
     std::size_t const errors{ clang_getNumDiagnostics(tu.get()) };
@@ -99,8 +100,6 @@ namespace color_coded
 
     clang::token_pack tp{ tu.get(), range };
     show_all_tokens(tu.get(), tp.begin(), tp.size()); /* TODO: just take in tp */
-
-    clang_disposeIndex(index);
   }
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <clang-c/CXString.h>
 
 #include "resource.hpp"
 
