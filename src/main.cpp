@@ -12,6 +12,7 @@
 
 #include "clang/string.hpp"
 #include "clang/token_pack.hpp"
+#include "clang/translation_unit.hpp"
 #include "clang/resource.hpp"
 #include "clang/token.hpp"
 
@@ -78,28 +79,27 @@ namespace color_coded
 
     std::string const filename{ name };
     CXIndex const index{ clang_createIndex(true, true) };
-    CXTranslationUnit const tu
+    clang::translation_unit const tu
     { clang_parseTranslationUnit(index, filename.c_str(),
         args.data(), args.size(), nullptr, 0, CXTranslationUnit_None) };
 
-    std::size_t const errors{ clang_getNumDiagnostics(tu) };
-    if(errors || !tu)
+    std::size_t const errors{ clang_getNumDiagnostics(tu.get()) };
+    if(errors || !tu.get())
     {
       for(std::size_t i{}; i != errors; ++i)
       {
-        CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
+        CXDiagnostic const diag{ clang_getDiagnostic(tu.get(), i) };
         clang::string const string{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
         std::cout << string.c_str() << std::endl;
       }
       throw std::runtime_error{ "unable to compile translation unit" };
     }
 
-    CXSourceRange const range(get_filerange(tu, filename));
+    CXSourceRange const range(get_filerange(tu.get(), filename));
 
-    clang::token_pack tp{ tu, range };
-    show_all_tokens(tu, tp.begin(), tp.size()); /* TODO: just take in tp */
+    clang::token_pack tp{ tu.get(), range };
+    show_all_tokens(tu.get(), tp.begin(), tp.size()); /* TODO: just take in tp */
 
-    clang_disposeTranslationUnit(tu);
     clang_disposeIndex(index);
   }
 }
