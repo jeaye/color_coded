@@ -2,6 +2,9 @@
 
 #include <clang-c/Index.h>
 
+#include "translation_unit.hpp"
+#include "source_range.hpp"
+
 namespace color_coded
 {
   namespace clang
@@ -14,16 +17,16 @@ namespace color_coded
         using const_iterator = token_t const *;
 
         token_pack() = delete;
-        token_pack(CXTranslationUnit const &tu, CXSourceRange const &range)
+        token_pack(translation_unit const &tu, source_range_t const &range)
           : tu_{ tu }
           , range_{ range }
         {
           unsigned num{};
-          clang_tokenize(tu_, range_, &data_, &num);
+          clang_tokenize(tu_.get(), range_, &data_, &num);
           size_ = num;
         }
         ~token_pack()
-        { clang_disposeTokens(tu_, data_, size_); }
+        { clang_disposeTokens(tu_.get(), data_, size_); }
           
         iterator begin()
         { return data_; }
@@ -38,10 +41,10 @@ namespace color_coded
         { return size_; }
 
       private:
-        CXToken *data_{};
+        token_t *data_{};
         std::size_t size_{};
-        CXTranslationUnit const &tu_;
-        CXSourceRange const &range_;
+        translation_unit const &tu_;
+        source_range_t const &range_;
     };
   }
 }

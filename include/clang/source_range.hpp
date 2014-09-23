@@ -12,8 +12,10 @@ namespace color_coded
 {
   namespace clang
   {
-    inline CXSourceRange source_range(translation_unit const &trans_unit,
-                                      std::string const &filename)
+    using source_range_t = CXSourceRange;
+
+    inline source_range_t source_range(translation_unit const &trans_unit,
+                                       std::string const &filename)
     {
       auto &tu(trans_unit.get());
 
@@ -26,7 +28,7 @@ namespace color_coded
          clang_equalLocations(bottom, clang_getNullLocation()))
       { throw std::runtime_error{ "cannot retrieve location" }; }
 
-      CXSourceRange const range(clang_getRange(top, bottom));
+      source_range_t const range(clang_getRange(top, bottom));
       if(clang_Range_isNull(range))
       { throw std::runtime_error{ "cannot retrieve range" }; }
 

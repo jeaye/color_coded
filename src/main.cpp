@@ -22,10 +22,12 @@
 
 namespace color_coded
 {
-  void show_all_tokens(CXTranslationUnit const &tu, clang::token_pack &tokens)
+  void show_all_tokens(clang::translation_unit const &trans_unit,
+                       clang::token_pack &tokens)
   {
     ruby::vim::clearmatches();
 
+    auto &tu(trans_unit.get());
     std::vector<CXCursor> cursors(tokens.size());
     clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
@@ -48,11 +50,10 @@ namespace color_coded
     }
   }
 
-  void work(std::string const &name)
+  void work(std::string const &filename)
   {
     auto const args(detail::make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
 
-    std::string const filename{ name };
     clang::index const index{ clang_createIndex(true, true) };
     clang::translation_unit const tu
     { clang_parseTranslationUnit(index.get(), filename.c_str(),
@@ -70,8 +71,8 @@ namespace color_coded
       throw std::runtime_error{ "unable to compile translation unit" };
     }
 
-    clang::token_pack tp{ tu.get(), clang::source_range(tu, filename) };
-    show_all_tokens(tu.get(), tp);
+    clang::token_pack tp{ tu, clang::source_range(tu, filename) };
+    show_all_tokens(tu, tp);
   }
 }
 
