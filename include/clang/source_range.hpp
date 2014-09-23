@@ -14,13 +14,12 @@ namespace color_coded
   {
     using source_range_t = CXSourceRange;
 
-    inline source_range_t source_range(translation_unit const &trans_unit,
-                                       std::string const &filename)
+    inline source_range_t source_range(translation_unit const &trans_unit)
     {
-      auto &tu(trans_unit.get());
+      auto &tu(trans_unit.impl.get());
 
-      CXFile const file{ clang_getFile(tu, filename.c_str()) };
-      std::size_t const size{ filesystem::file_size(filename) };
+      CXFile const file{ clang_getFile(tu, trans_unit.filename.c_str()) };
+      std::size_t const size{ filesystem::file_size(trans_unit.filename) };
 
       CXSourceLocation const top(clang_getLocationForOffset(tu, file, 0));
       CXSourceLocation const bottom(clang_getLocationForOffset(tu, file, size));

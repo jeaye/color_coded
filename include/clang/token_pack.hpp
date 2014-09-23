@@ -22,11 +22,11 @@ namespace color_coded
           , range_{ range }
         {
           unsigned num{};
-          clang_tokenize(tu_.get(), range_, &data_, &num);
+          clang_tokenize(tu_.impl.get(), range_, &data_, &num);
           size_ = num;
         }
         ~token_pack()
-        { clang_disposeTokens(tu_.get(), data_, size_); }
+        { clang_disposeTokens(tu_.impl.get(), data_, size_); }
           
         iterator begin()
         { return data_; }

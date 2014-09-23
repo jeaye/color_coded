@@ -18,8 +18,6 @@
 
 #include "ruby/vim.hpp"
 
-#include "detail/util.hpp"
-
 namespace color_coded
 {
   void show_all_tokens(clang::translation_unit const &trans_unit,
@@ -27,7 +25,7 @@ namespace color_coded
   {
     ruby::vim::clearmatches();
 
-    auto &tu(trans_unit.get());
+    auto &tu(trans_unit.impl.get());
     std::vector<CXCursor> cursors(tokens.size());
     clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
@@ -52,27 +50,24 @@ namespace color_coded
 
   void work(std::string const &filename)
   {
-    auto const args(detail::make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
+    clang::index const index{ clang_createIndex(false, false) };
+    clang::translation_unit const trans_unit{ index, filename };
+    auto &tu(trans_unit.impl.get());
 
-    clang::index const index{ clang_createIndex(true, true) };
-    clang::translation_unit const tu
-    { clang_parseTranslationUnit(index.get(), filename.c_str(),
-        args.data(), args.size(), nullptr, 0, CXTranslationUnit_None) };
-
-    std::size_t const errors{ clang_getNumDiagnostics(tu.get()) };
-    if(errors || !tu.get())
+    std::size_t const errors{ clang_getNumDiagnostics(tu) };
+    if(errors || !tu)
     {
       for(std::size_t i{}; i != errors; ++i)
       {
-        CXDiagnostic const diag{ clang_getDiagnostic(tu.get(), i) };
+        CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
         clang::string const str{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
         std::cout << str.c_str() << std::endl;
       }
       throw std::runtime_error{ "unable to compile translation unit" };
     }
 
-    clang::token_pack tp{ tu, clang::source_range(tu, filename) };
-    show_all_tokens(tu, tp);
+    clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
+    show_all_tokens(trans_unit, tp);
   }
 }
 
