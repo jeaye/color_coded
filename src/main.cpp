@@ -22,20 +22,19 @@
 
 namespace color_coded
 {
-  void show_all_tokens(CXTranslationUnit const &tu, CXToken *tokens,
-                       std::size_t num_tokens)
+  void show_all_tokens(CXTranslationUnit const &tu, clang::token_pack &tokens)
   {
     ruby::vim::clearmatches();
 
-    std::vector<CXCursor> cursors(num_tokens);
-    clang_annotateTokens(tu, tokens, num_tokens, cursors.data());
+    std::vector<CXCursor> cursors(tokens.size());
+    clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
-    for(std::size_t i{}; i < num_tokens; ++i)
+    auto cursor(cursors.cbegin());
+    for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
     {
-      CXToken const &token{ tokens[i] };
-      CXTokenKind const kind{ clang_getTokenKind(token) };
-      clang::string const spell{ clang_getTokenSpelling(tu, token) };
-      CXSourceLocation const loc(clang_getTokenLocation(tu, token));
+      CXTokenKind const kind{ clang_getTokenKind(*token) };
+      clang::string const spell{ clang_getTokenSpelling(tu, *token) };
+      CXSourceLocation const loc(clang_getTokenLocation(tu, *token));
 
       CXFile file{};
       unsigned line{}, column{}, offset{};
@@ -43,7 +42,7 @@ namespace color_coded
       clang::string const filename{ clang_getFileName(file) };
 
       std::string const token_text{ spell.c_str() };
-      std::string const typ{ clang::token::to_string(kind, cursors[i].kind) };
+      std::string const typ{ clang::token::to_string(kind, cursor->kind) };
 
       ruby::vim::matchaddpos(typ, line, column, token_text.size());
     }
@@ -90,9 +89,8 @@ namespace color_coded
     }
 
     CXSourceRange const range(get_filerange(tu.get(), filename));
-
     clang::token_pack tp{ tu.get(), range };
-    show_all_tokens(tu.get(), tp.begin(), tp.size()); /* TODO: just take in tp */
+    show_all_tokens(tu.get(), tp);
   }
 }
 
