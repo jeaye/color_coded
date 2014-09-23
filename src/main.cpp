@@ -14,11 +14,11 @@
 #include "clang/index.hpp"
 #include "clang/resource.hpp"
 #include "clang/token.hpp"
+#include "clang/source_range.hpp"
 
 #include "ruby/vim.hpp"
 
 #include "detail/util.hpp"
-#include "detail/filesystem.hpp"
 
 namespace color_coded
 {
@@ -48,24 +48,6 @@ namespace color_coded
     }
   }
 
-  CXSourceRange get_filerange(CXTranslationUnit const &tu, std::string const &filename)
-  {
-    CXFile const file{ clang_getFile(tu, filename.c_str()) };
-    std::size_t const size{ detail::filesystem::file_size(filename.c_str()) };
-
-    CXSourceLocation const top(clang_getLocationForOffset(tu, file, 0));
-    CXSourceLocation const bottom(clang_getLocationForOffset(tu, file, size));
-    if(clang_equalLocations(top,  clang_getNullLocation()) ||
-       clang_equalLocations(bottom, clang_getNullLocation()))
-    { throw std::runtime_error{ "cannot retrieve location" }; }
-
-    CXSourceRange const range(clang_getRange(top, bottom));
-    if(clang_Range_isNull(range))
-    { throw std::runtime_error{ "cannot retrieve range" }; }
-
-    return range;
-  }
-
   void work(std::string const &name)
   {
     auto const args(detail::make_array("-std=c++1y", "-stdlib=libc++", "-I/usr/include", "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude", "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include", "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"));
@@ -82,14 +64,13 @@ namespace color_coded
       for(std::size_t i{}; i != errors; ++i)
       {
         CXDiagnostic const diag{ clang_getDiagnostic(tu.get(), i) };
-        clang::string const string{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
-        std::cout << string.c_str() << std::endl;
+        clang::string const str{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
+        std::cout << str.c_str() << std::endl;
       }
       throw std::runtime_error{ "unable to compile translation unit" };
     }
 
-    CXSourceRange const range(get_filerange(tu.get(), filename));
-    clang::token_pack tp{ tu.get(), range };
+    clang::token_pack tp{ tu.get(), clang::source_range(tu, filename) };
     show_all_tokens(tu.get(), tp);
   }
 }
