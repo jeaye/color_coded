@@ -1,2 +1,5 @@
 # Binaries
 bin
+
+# YCM
+*.pyc

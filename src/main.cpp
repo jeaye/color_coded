@@ -8,8 +8,6 @@
 
 #include <clang-c/Index.h>
 
-#include <juble/juble.hpp>
-
 #include "clang/string.hpp"
 #include "clang/token_pack.hpp"
 #include "clang/translation_unit.hpp"
@@ -17,18 +15,17 @@
 #include "clang/resource.hpp"
 #include "clang/token.hpp"
 
+#include "ruby/vim.hpp"
+
 #include "detail/util.hpp"
 #include "detail/filesystem.hpp"
 
 namespace color_coded
 {
-  void eval(std::string const &str)
-  { rb_eval_string(str.c_str()); }
-
   void show_all_tokens(CXTranslationUnit const &tu, CXToken *tokens,
                        std::size_t num_tokens)
   {
-    eval("VIM::command(\"call clearmatches()\")");
+    ruby::vim::clearmatches();
 
     std::vector<CXCursor> cursors(num_tokens);
     clang_annotateTokens(tu, tokens, num_tokens, cursors.data());
@@ -46,13 +43,9 @@ namespace color_coded
       clang::string const filename{ clang_getFileName(file) };
 
       std::string const token_text{ spell.c_str() };
+      std::string const typ{ clang::token::to_string(kind, cursors[i].kind) };
 
-      std::string const len{ std::to_string(token_text.size()) };
-      std::string const col{ std::to_string(column) };
-      std::string const lin{ std::to_string(line) };
-      std::string typ{ clang::token::to_string(kind, cursors[i].kind) };
-
-      eval("VIM::command(\"call matchaddpos('" + typ + "', [[" + lin + ", " + col + ", " + len  + "]], -1)\")");
+      ruby::vim::matchaddpos(typ, line, column, token_text.size());
     }
   }
 
