@@ -36,74 +36,79 @@ ruby << EOF
     data += VIM::Buffer.current[i] + "\n"
   end
   cc_work(data)
-  #cc_work(VIM::Buffer.current.name)
 EOF
 endfunction!
 
+au BufEnter * call s:try_work()
+au VimEnter * call s:try_work()
 au TextChanged * call s:try_work()
 au TextChangedI * call s:try_work()
-au CursorMoved * call s:try_work()
+"au CursorMoved * call s:try_work()
+
+hi Member ctermfg=Cyan guifg=Cyan
+hi Variable ctermfg=Magenta guifg=Magenta
+hi Namespace ctermfg=DarkYellow guifg=DarkYellow
 
 hi link StructDecl Type
 hi link UnionDecl Type
 hi link ClassDecl Type
 hi link EnumDecl Type
-hi link FieldDecl Comment
-hi link EnumConstantDecl Type
-hi link FunctionDecl Type
-hi link VarDecl Type
-hi link ParmDecl Type
-hi link ObjCInterfaceDecl Type
-hi link ObjCCategoryDecl Type
-hi link ObjCProtocolDecl Type
-hi link ObjCPropertyDecl Type
-hi link ObjCIvarDecl Type
-hi link ObjCInstanceMethodDecl Type
-hi link ObjCClassMethodDecl Type
-hi link ObjCImplementationDecl Type
-hi link ObjCCategoryImplDecl Type
+hi link FieldDecl Member
+hi link EnumConstantDecl Enum
+hi link FunctionDecl Function
+hi link VarDecl Variable
+hi link ParmDecl Variable
+hi link ObjCInterfaceDecl Normal
+hi link ObjCCategoryDecl Normal
+hi link ObjCProtocolDecl Normal
+hi link ObjCPropertyDecl Normal
+hi link ObjCIvarDecl Normal
+hi link ObjCInstanceMethodDecl Normal
+hi link ObjCClassMethodDecl Normal
+hi link ObjCImplementationDecl Normal
+hi link ObjCCategoryImplDecl Normal
 hi link TypedefDecl Type
-hi link CXXMethod Comment
-hi link Namespace Type
-hi link LinkageSpec Type
-hi link Constructor Type
-hi link Destructor Type
-hi link ConversionFunction Type
+hi link CXXMethod Method
+hi link Namespace Namespace
+hi link LinkageSpec Normal
+hi link Constructor Function
+hi link Destructor Function
+hi link ConversionFunction Function
 hi link TemplateTypeParameter Type
-hi link NonTypeTemplateParameter Type
+hi link NonTypeTemplateParameter Normal
 hi link TemplateTemplateParameter Type
-hi link FunctionTemplate Type
+hi link FunctionTemplate Function
 hi link ClassTemplate Type
 hi link ClassTemplatePartialSpecialization Type
-hi link NamespaceAlias Type
+hi link NamespaceAlias Namespace
 hi link UsingDirective Type
 hi link UsingDeclaration Type
 hi link TypeAliasDecl Type
-hi link ObjCSynthesizeDecl Type
-hi link ObjCDynamicDecl Type
-hi link CXXAccessSpecifier Type
-hi link ObjCSuperClassRef Type
-hi link ObjCProtocolRef Type
-hi link ObjCClassRef Type
+hi link ObjCSynthesizeDecl Normal
+hi link ObjCDynamicDecl Normal
+hi link CXXAccessSpecifier Normal
+hi link ObjCSuperClassRef Normal
+hi link ObjCProtocolRef Normal
+hi link ObjCClassRef Normal
 hi link TypeRef Type
 hi link CXXBaseSpecifier Type
-hi link NamespaceRef Type
-hi link MemberRef Comment
-hi link LabelRef Type
-hi link OverloadedDeclRef Type
-hi link VariableRef Type
-hi link FirstInvalid Type
-hi link NoDeclFound Type
-hi link NotImplemented Type
-hi link InvalidCode Type
-hi link FirstExpr Type
-hi link DeclRefExpr Label
-hi link MemberRefExpr Comment
-hi link CallExpr Type
-hi link ObjCMessageExpr Type
-hi link BlockExpr Type
-hi link MacroDefinition Constant
-hi link MacroInstantiation Constant
+hi link NamespaceRef Namespace
+hi link MemberRef Member
+hi link LabelRef Label
+hi link OverloadedDeclRef Function
+hi link VariableRef Variable
+hi link FirstInvalid Normal
+hi link NoDeclFound Normal
+hi link NotImplemented Normal
+hi link InvalidCode Error
+hi link FirstExpr Normal
+hi link DeclRefExpr Normal
+hi link MemberRefExpr Member
+hi link CallExpr Normal
+hi link ObjCMessageExpr Normal
+hi link BlockExpr Normal
+hi link MacroDefinition Macro
+hi link MacroInstantiation Macro
 hi link IntegerLiteral Number
 hi link FloatingLiteral Float
 hi link ImaginaryLiteral Number

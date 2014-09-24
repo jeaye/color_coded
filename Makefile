@@ -39,7 +39,9 @@ setup:
 
 run:
 	gvim -c ":source ${PWD}/color_coded.vim" test.cpp
-	#gvim -c ":source ${PWD}/color_coded.vim" src/color_coded.cpp
+
+run_full:
+	gvim -c ":source ${PWD}/color_coded.vim" src/main.cpp
 
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
