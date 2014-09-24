@@ -49,12 +49,20 @@ namespace color_coded
     }
   }
 
-  void work(std::string const &filename)
+  void work(std::string const &data)
+  try
   {
+    std::string const filename{ ".tmp.cpp" };
+    {
+      std::ofstream ofs{ filename };
+      ofs << data << std::endl;
+    }
     clang::translation_unit trans_unit{ clang::compile(filename) };
     clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
     show_all_tokens(trans_unit, tp);
   }
+  catch(clang::compilation_error const &)
+  { }
 }
 
 extern "C" void Init_color_coded()

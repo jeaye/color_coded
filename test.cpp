@@ -15,7 +15,7 @@ class bar
     { }
 
     virtual T spam() const
-    { return T(); }
+    { return T{}; }
 };
 
 /* Oh, excellent. */

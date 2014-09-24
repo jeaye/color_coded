@@ -30,7 +30,13 @@ set ft=cpp
 
 function! s:try_work()
 ruby << EOF
-  cc_work(VIM::Buffer.current.name)
+  line_count = VIM::Buffer.current.count
+  data = ''
+  for i in 1..line_count do
+    data += VIM::Buffer.current[i] + "\n"
+  end
+  cc_work(data)
+  #cc_work(VIM::Buffer.current.name)
 EOF
 endfunction!
 

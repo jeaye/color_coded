@@ -13,6 +13,9 @@ namespace color_coded
 {
   namespace clang
   {
+    struct compilation_error : std::runtime_error
+    { using std::runtime_error::runtime_error; };
+
     inline translation_unit compile(std::string const &filename)
     {
       auto const index(std::make_shared<index>(clang_createIndex(false, false)));
@@ -29,7 +32,7 @@ namespace color_coded
                             clang_defaultDiagnosticDisplayOptions()) };
           //std::cout << str.c_str() << std::endl;
         }
-        throw std::runtime_error{ "unable to compile translation unit" };
+        throw compilation_error{ "unable to compile translation unit" };
       }
 
       return trans_unit;
