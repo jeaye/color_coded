@@ -15,6 +15,7 @@
 #include "clang/resource.hpp"
 #include "clang/token.hpp"
 #include "clang/source_range.hpp"
+#include "clang/compile.hpp"
 
 #include "ruby/vim.hpp"
 
@@ -25,7 +26,7 @@ namespace color_coded
   {
     ruby::vim::clearmatches();
 
-    auto &tu(trans_unit.impl.get());
+    auto &tu(trans_unit.impl);
     std::vector<CXCursor> cursors(tokens.size());
     clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
@@ -50,22 +51,7 @@ namespace color_coded
 
   void work(std::string const &filename)
   {
-    clang::index const index{ clang_createIndex(false, false) };
-    clang::translation_unit const trans_unit{ index, filename };
-    auto &tu(trans_unit.impl.get());
-
-    std::size_t const errors{ clang_getNumDiagnostics(tu) };
-    if(errors || !tu)
-    {
-      for(std::size_t i{}; i != errors; ++i)
-      {
-        CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
-        clang::string const str{ clang_formatDiagnostic(diag, clang_defaultDiagnosticDisplayOptions()) };
-        std::cout << str.c_str() << std::endl;
-      }
-      throw std::runtime_error{ "unable to compile translation unit" };
-    }
-
+    clang::translation_unit trans_unit{ clang::compile(filename) };
     clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
     show_all_tokens(trans_unit, tp);
   }

@@ -16,7 +16,7 @@ namespace color_coded
 
     inline source_range_t source_range(translation_unit const &trans_unit)
     {
-      auto &tu(trans_unit.impl.get());
+      auto &tu(trans_unit.impl);
 
       CXFile const file{ clang_getFile(tu, trans_unit.filename.c_str()) };
       std::size_t const size{ filesystem::file_size(trans_unit.filename) };

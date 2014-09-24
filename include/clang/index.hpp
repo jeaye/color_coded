@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <memory>
 
 #include "resource.hpp"
 
@@ -19,5 +19,6 @@ namespace color_coded
     }
 
     using index = resource<CXIndex>;
+    using index_ptr = std::shared_ptr<index const>;
   }
 }
