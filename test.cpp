@@ -3,8 +3,9 @@ struct foo
   void work()
   { }
 
-  char const * name;
-  int age;
+  char const * name{};
+  int age{};
+  static long count;
 };
 
 template <typename T>

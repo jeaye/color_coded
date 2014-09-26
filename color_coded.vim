@@ -43,10 +43,9 @@ au BufEnter * call s:try_work()
 au VimEnter * call s:try_work()
 au TextChanged * call s:try_work()
 au TextChangedI * call s:try_work()
-"au CursorMoved * call s:try_work()
 
 hi Member ctermfg=Cyan guifg=Cyan
-hi Variable ctermfg=Magenta guifg=Magenta
+hi Variable ctermfg=Grey guifg=Grey
 hi Namespace ctermfg=DarkYellow guifg=DarkYellow
 
 hi link StructDecl Type
@@ -68,7 +67,7 @@ hi link ObjCClassMethodDecl Normal
 hi link ObjCImplementationDecl Normal
 hi link ObjCCategoryImplDecl Normal
 hi link TypedefDecl Type
-hi link CXXMethod Method
+hi link CXXMethod Function
 hi link Namespace Namespace
 hi link LinkageSpec Normal
 hi link Constructor Function
@@ -86,7 +85,7 @@ hi link UsingDeclaration Type
 hi link TypeAliasDecl Type
 hi link ObjCSynthesizeDecl Normal
 hi link ObjCDynamicDecl Normal
-hi link CXXAccessSpecifier Normal
+hi link CXXAccessSpecifier Label
 hi link ObjCSuperClassRef Normal
 hi link ObjCProtocolRef Normal
 hi link ObjCClassRef Normal
@@ -98,13 +97,13 @@ hi link LabelRef Label
 hi link OverloadedDeclRef Function
 hi link VariableRef Variable
 hi link FirstInvalid Normal
-hi link NoDeclFound Normal
+hi link NoDeclFound Error
 hi link NotImplemented Normal
 hi link InvalidCode Error
 hi link FirstExpr Normal
-hi link DeclRefExpr Normal
+hi link DeclRefExpr Variable
 hi link MemberRefExpr Member
-hi link CallExpr Normal
+hi link CallExpr Function
 hi link ObjCMessageExpr Normal
 hi link BlockExpr Normal
 hi link MacroDefinition Macro
@@ -114,7 +113,7 @@ hi link FloatingLiteral Float
 hi link ImaginaryLiteral Number
 hi link StringLiteral String
 hi link CharacterLiteral Character
-hi link Punctuation Normal
+hi link Punctuation Macro
 
 " ------------------------------------------------------------------------------
 let &cpo = s:keepcpo
