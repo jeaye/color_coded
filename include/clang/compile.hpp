@@ -30,7 +30,6 @@ namespace color_coded
           CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
           string const str{ clang_formatDiagnostic(diag,
                             clang_defaultDiagnosticDisplayOptions()) };
-          //std::cout << str.c_str() << std::endl;
         }
         throw compilation_error{ "unable to compile translation unit" };
       }

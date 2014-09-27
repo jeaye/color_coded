@@ -19,17 +19,18 @@
 
 #include "ruby/vim.hpp"
 
+#include "async/queue.hpp"
+
 namespace color_coded
 {
-  void show_all_tokens(clang::translation_unit const &trans_unit,
+  std::vector<vim::highlight_group> show_all_tokens(clang::translation_unit const &trans_unit,
                        clang::token_pack &tokens)
   {
-    ruby::vim::clearmatches();
-
     auto &tu(trans_unit.impl);
     std::vector<CXCursor> cursors(tokens.size());
     clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
+    std::vector<vim::highlight_group> groups;
     auto cursor(cursors.cbegin());
     for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
     {
@@ -43,23 +44,50 @@ namespace color_coded
       clang::string const filename{ clang_getFileName(file) };
 
       std::string const token_text{ spell.c_str() };
-      std::string const typ{ clang::token::to_string(kind, cursor->kind) };
+      std::string const type{ clang::token::to_string(kind, cursor->kind) };
 
-      ruby::vim::matchaddpos(typ, line, column, token_text.size());
+      groups.emplace_back(type, line, column, token_text);
     }
+
+    return groups;
+  }
+
+  void apply_highlighting(std::vector<vim::highlight_group> const &groups)
+  {
+    if(groups.empty())
+    { return; }
+
+    ruby::vim::clearmatches();
+    for(auto const &group : groups)
+    { ruby::vim::matchaddpos(group.type, group.line, group.column, group.token.size()); }
   }
 
   void work(std::string const &data)
   try
   {
-    std::string const filename{ ".tmp.cpp" };
+    static async::queue<async::task, async::result> q{
+    [](async::task const &t)
     {
-      std::ofstream ofs{ filename };
-      ofs << data << std::endl;
-    }
-    clang::translation_unit trans_unit{ clang::compile(filename) };
-    clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
-    show_all_tokens(trans_unit, tp);
+      std::string const filename{ ".tmp.cpp" };
+      {
+        std::ofstream ofs{ filename };
+        ofs << t.code << std::endl;
+      }
+      try
+      {
+        clang::translation_unit trans_unit{ clang::compile(filename) };
+        clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
+        return async::result{ show_all_tokens(trans_unit, tp) };
+      }
+      catch(clang::compilation_error const&)
+      { return async::result{{}}; }
+    } };
+
+    auto const pulled(q.poll());
+    if(pulled.second)
+    { apply_highlighting(pulled.first.groups); }
+
+    q.push({ data });
   }
   catch(clang::compilation_error const &)
   { }

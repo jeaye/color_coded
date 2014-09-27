@@ -43,6 +43,8 @@ au BufEnter * call s:try_work()
 au VimEnter * call s:try_work()
 au TextChanged * call s:try_work()
 au TextChangedI * call s:try_work()
+au TextChangedI * call s:try_work()
+au CursorMoved * call s:try_work()
 
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey
@@ -113,7 +115,7 @@ hi link FloatingLiteral Float
 hi link ImaginaryLiteral Number
 hi link StringLiteral String
 hi link CharacterLiteral Character
-hi link Punctuation Macro
+hi link Punctuation Normal
 
 " ------------------------------------------------------------------------------
 let &cpo = s:keepcpo
