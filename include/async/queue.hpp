@@ -6,17 +6,10 @@
 #include <chrono>
 #include <vector>
 
-#include "vim/highlight_group.hpp"
-
 namespace color_coded
 {
   namespace async
   {
-    struct task
-    { std::string code; };
-    struct result
-    { std::vector<vim::highlight_group> groups; };
-
     template <typename Task, typename Result>
     class queue
     {
@@ -40,8 +33,7 @@ namespace color_coded
           task_ = std::move(t);
           has_work_.store(true);
         }
-
-        std::pair<Result, bool> poll()
+        std::pair<Result, bool> pull()
         {
           std::lock_guard<std::mutex> const lock{ result_mutex_ };
           return { result_, has_result_.load() };

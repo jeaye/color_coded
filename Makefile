@@ -1,7 +1,7 @@
 CXX = c++
 CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
-CXX_OPT = -03
+CXX_OPT = -O3
 CXX_MISC = -fpic
 CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include -Ilib/juble/lib/ruby/.ext/include/x86_64-linux
 CXX_PLATFORM_FLAGS =
