@@ -15,7 +15,7 @@ namespace color_coded
       "-std=c++1y", "-stdlib=libc++", "-I/usr/include",
       "-I/usr/lib/clang/3.5.0/include", "-I.", "-Iinclude",
       "-Ilib/juble/include", "-Ilib/juble/lib/ruby/include",
-      "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux"
+      "-Ilib/juble/lib/ruby/.ext/include/x86_64-linux", "-w"
     ));
 
     using translation_unit_impl = CXTranslationUnit;

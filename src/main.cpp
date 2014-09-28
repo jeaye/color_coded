@@ -22,13 +22,14 @@
 
 namespace color_coded
 {
-  void work(std::string const &data)
+  void work(std::string const &file, std::string const &data)
   {
     static async::queue<async::task, async::result> q
     {
       [](async::task const &t)
       {
-        std::string const filename{ ".tmp.cpp" };
+        /* TODO: wrap temp file in RAII to delete when done. */
+        std::string const filename{ t.file + ".color_coded.cpp" };
         {
           std::ofstream ofs{ filename };
           ofs << t.code << std::endl;
@@ -48,7 +49,7 @@ namespace color_coded
     if(pulled.second)
     { vim::apply(pulled.first.group); }
 
-    q.push({ data });
+    q.push({ file, data });
   }
 }
 

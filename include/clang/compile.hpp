@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 #include <clang-c/Index.h>
 
@@ -22,16 +23,18 @@ namespace color_coded
       translation_unit const trans_unit{ index, filename };
       auto &tu(trans_unit.impl);
 
-      std::size_t const errors{ clang_getNumDiagnostics(tu) };
-      if(errors || !tu)
+      std::size_t const diags{ clang_getNumDiagnostics(tu) };
+      if(diags || !tu)
       {
-        for(std::size_t i{}; i != errors; ++i)
+        std::stringstream ss;
+        for(std::size_t i{}; i != diags; ++i)
         {
           CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
           string const str{ clang_formatDiagnostic(diag,
                             clang_defaultDiagnosticDisplayOptions()) };
+          ss << str.c_str() << std::endl;
         }
-        throw compilation_error{ "unable to compile translation unit" };
+        throw compilation_error{ ss.str() };
       }
 
       return trans_unit;

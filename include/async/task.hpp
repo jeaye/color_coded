@@ -10,7 +10,10 @@ namespace color_coded
   namespace async
   {
     struct task
-    { std::string code; };
+    {
+      std::string file;
+      std::string code;
+    };
     struct result
     { vim::highlight_group group; };
   }

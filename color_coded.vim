@@ -35,7 +35,9 @@ ruby << EOF
   for i in 1..line_count do
     data += VIM::Buffer.current[i] + "\n"
   end
-  cc_work(data)
+  name = VIM::Buffer.current.name
+  name = VIM::Buffer.current.number.to_s if name.nil?
+  cc_work(name, data.nil? ? "" : data)
 EOF
 endfunction!
 

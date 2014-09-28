@@ -1,3 +1,6 @@
+#include <iostream>
+#include <string>
+
 struct foo
 {
   void work()
@@ -33,4 +36,5 @@ int main()
   f.age = 22;
   f.work();
   auto const b(boobs::small);
+  std::cout << static_cast<int>(b) << std::endl;
 }

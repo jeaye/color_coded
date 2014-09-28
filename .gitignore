@@ -3,3 +3,6 @@ bin
 
 # YCM
 *.pyc
+
+# Personal notes
+NOTES
