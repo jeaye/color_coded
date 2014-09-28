@@ -53,13 +53,17 @@ namespace color_coded
           {
             CXTokenKind const kind{ clang_getTokenKind(*token) };
             clang::string const spell{ clang_getTokenSpelling(tu, *token) };
-            CXSourceLocation const loc(clang_getTokenLocation(tu, *token));
+            auto const loc(clang_getTokenLocation(tu, *token));
+
+            auto const cursor_kind(cursor->kind);
+            auto const cursor_type(clang_getCursorType(*cursor).kind);
 
             CXFile file{};
             unsigned line{}, column{}, offset{};
             clang_getFileLocation(loc, &file, &line, &column, &offset);
 
-            group_.emplace_back(clang::token::to_string(kind, cursor->kind),
+            group_.emplace_back(clang::token::to_string(kind, cursor_kind,
+                                                        cursor_type),
                                 line, column, spell.c_str());
           }
         }

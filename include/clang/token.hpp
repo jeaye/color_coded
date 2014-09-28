@@ -12,7 +12,8 @@ namespace color_coded
     namespace token
     {
       inline std::string to_string(CXTokenKind const token_kind,
-                                   CXCursorKind const cursor_kind)
+                                   CXCursorKind const cursor_kind,
+                                   CXTypeKind const cursor_type)
       {
         switch (token_kind)
         {
@@ -217,6 +218,20 @@ namespace color_coded
                 return "FirstExpr";
               case CXCursor_DeclRefExpr: 	
                 /* An expression that refers to some value declaration, such as a function, variable, or enumerator. */
+                switch(cursor_type)
+                {
+                  case CXType_Enum:
+                    return "EnumConstantDecl";
+                  case CXType_Typedef:
+                    return "Type";
+                  case CXType_FunctionProto:
+                  case CXType_FunctionNoProto:
+                    return "Function";
+                  case CXType_MemberPointer:
+                    return "MemberRef";
+                  default:
+                    return "Variable";
+                }
                 return "DeclRefExpr";
               case CXCursor_MemberRefExpr: 	
                 /* An expression that refers to a member of a struct, union, class, Objective-C class, etc. */
