@@ -19,6 +19,12 @@ class bar
     { return T{}; }
 };
 
+enum class boobs
+{
+  large,
+  small
+};
+
 /* Oh, excellent. */
 int main()
 {
@@ -26,4 +32,5 @@ int main()
   f.name = "jeaye";
   f.age = 22;
   f.work();
+  auto const b(boobs::small);
 }

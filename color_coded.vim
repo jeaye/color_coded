@@ -49,13 +49,14 @@ au CursorMoved * call s:try_work()
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey
 hi Namespace ctermfg=DarkYellow guifg=DarkYellow
+hi EnumConstant ctermfg=LightGreen guifg=LightGreen
 
 hi link StructDecl Type
 hi link UnionDecl Type
 hi link ClassDecl Type
 hi link EnumDecl Type
 hi link FieldDecl Member
-hi link EnumConstantDecl Enum
+hi link EnumConstantDecl EnumConstant
 hi link FunctionDecl Function
 hi link VarDecl Variable
 hi link ParmDecl Variable
