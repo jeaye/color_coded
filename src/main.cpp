@@ -19,6 +19,7 @@
 
 #include "async/queue.hpp"
 #include "async/task.hpp"
+#include "async/temp_file.hpp"
 
 namespace color_coded
 {
@@ -28,12 +29,8 @@ namespace color_coded
     {
       [](async::task const &t)
       {
-        /* TODO: wrap temp file in RAII to delete when done. */
         std::string const filename{ t.file + ".color_coded.cpp" };
-        {
-          std::ofstream ofs{ filename };
-          ofs << t.code << std::endl;
-        }
+        async::temp_file tmp{ filename, t.code };
         try
         {
           clang::translation_unit trans_unit{ clang::compile(filename) };
