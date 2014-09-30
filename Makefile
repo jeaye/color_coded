@@ -8,7 +8,7 @@ CXX_PLATFORM_FLAGS =
 CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
 
 LD_PLATFORM_LIBS =
-LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static ${LD_PLATFORM_LIBS}
+LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static -lboost_filesystem ${LD_PLATFORM_LIBS}
 
 OUT_DIR = bin/
 OBJ_DIR = ${OUT_DIR}obj/

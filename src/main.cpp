@@ -21,19 +21,25 @@
 #include "async/task.hpp"
 #include "async/temp_file.hpp"
 
+#include "conf/find.hpp"
+#include "conf/load.hpp"
+#include "conf/defaults.hpp"
+
 namespace color_coded
 {
   void work(std::string const &file, std::string const &data)
   {
+    static conf::args_t config_args{ conf::load(conf::find(".")) };
     static async::queue<async::task, async::result> q
     {
-      [](async::task const &t)
+      [&](async::task const &t)
       {
         std::string const filename{ t.file + ".color_coded.cpp" };
         async::temp_file tmp{ filename, t.code };
         try
         {
-          clang::translation_unit trans_unit{ clang::compile(filename) };
+          clang::translation_unit trans_unit{ clang::compile({ config_args },
+                                                             filename) };
           clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
           return async::result{ { trans_unit, tp } };
         }
@@ -51,6 +57,4 @@ namespace color_coded
 }
 
 extern "C" void Init_color_coded()
-{
-  script::registrar::add(script::func(&color_coded::work, "cc_work"));
-}
+{ script::registrar::add(script::func(&color_coded::work, "cc_work")); }

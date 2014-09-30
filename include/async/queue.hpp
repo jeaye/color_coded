@@ -24,7 +24,7 @@ namespace color_coded
         ~queue()
         {
           should_work_.store(false);
-          thread_.join();
+          thread_.join(); /* TODO: seem to've locked here once */
         }
 
         void push(Task &&t)
