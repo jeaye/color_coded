@@ -25,7 +25,10 @@ let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
-ruby require './bin/color_coded.so'
+let s:path = expand('<sfile>:p:h')
+ruby << EOF
+  require VIM::evaluate('s:path') + '/../bin/color_coded.so'
+EOF
 set ft=cpp
 
 function! s:try_work()
