@@ -31,7 +31,7 @@ ruby << EOF
 EOF
 set ft=cpp
 
-function! s:try_work()
+function! s:try_push()
 ruby << EOF
   line_count = VIM::Buffer.current.count
   data = ''
@@ -40,16 +40,22 @@ ruby << EOF
   end
   name = VIM::Buffer.current.name
   name = VIM::Buffer.current.number.to_s if name.nil?
-  cc_work(name, data.nil? ? "" : data)
+  cc_push(name, data.nil? ? "" : data)
 EOF
 endfunction!
 
-au BufEnter * call s:try_work()
-au VimEnter * call s:try_work()
-au TextChanged * call s:try_work()
-au TextChangedI * call s:try_work()
-au TextChangedI * call s:try_work()
-au CursorMoved * call s:try_work()
+function! s:try_pull()
+ruby << EOF
+  cc_pull
+EOF
+endfunction!
+
+au BufEnter * call s:try_push()
+au VimEnter * call s:try_push()
+au TextChanged * call s:try_push()
+au TextChangedI * call s:try_push()
+au TextChangedI * call s:try_push()
+au CursorMoved * call s:try_pull()
 
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey
