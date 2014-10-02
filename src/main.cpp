@@ -10,19 +10,19 @@
 
 namespace color_coded
 {
-  static void push(std::string const &file, std::string const &data)
-  { core::get().q.push({ file, data }); }
-
   static void pull()
   {
-    auto const pulled(core::get().q.pull());
+    auto const pulled(core::queue.pull());
     if(pulled.second)
     { vim::apply(pulled.first.group); }
   }
+
+  static void push(std::string const &file, std::string const &data)
+  { core::queue.push({ file, data }); }
 }
 
 extern "C" void Init_color_coded()
 {
-  script::registrar::add(script::func(&color_coded::push, "cc_push"));
   script::registrar::add(script::func(&color_coded::pull, "cc_pull"));
+  script::registrar::add(script::func(&color_coded::push, "cc_push"));
 }

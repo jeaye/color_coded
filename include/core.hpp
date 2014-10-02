@@ -19,36 +19,28 @@
 #include "conf/load.hpp"
 #include "conf/defaults.hpp"
 
-/* TODO: This is temporary; come up with something better. */
+/* XXX: It's a shared object to a C lib; I need globals. :| */
 namespace color_coded
 {
-  struct core
+  namespace core
   {
-    static core& get()
+    static conf::args_t config_args{ conf::load(conf::find(".")) };
+    static async::queue<async::task, async::result> queue
     {
-      static core c;
-      return c;
-    }
-
-    static conf::args_t config_args;
-    static async::queue<async::task, async::result> q;
-  };
-  conf::args_t core::config_args{ conf::load(conf::find(".")) };
-  async::queue<async::task, async::result> core::q
-  {
-    [](async::task const &t)
-    {
-      std::string const filename{ t.file + ".color_coded.cpp" };
-      async::temp_file tmp{ filename, t.code };
-      try
+      [](async::task const &t)
       {
-        clang::translation_unit trans_unit{ clang::compile({ config_args },
-                                                           filename) };
-        clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
-        return async::result{ { trans_unit, tp } };
+        std::string const filename{ t.file + ".color_coded.cpp" };
+        async::temp_file tmp{ filename, t.code };
+        try
+        {
+          clang::translation_unit trans_unit{ clang::compile({ config_args },
+                                                             filename) };
+          clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
+          return async::result{ { trans_unit, tp } };
+        }
+        catch(clang::compilation_error const&)
+        { return async::result{{}}; }
       }
-      catch(clang::compilation_error const&)
-      { return async::result{{}}; }
-    }
-  };
+    };
+  }
 }
