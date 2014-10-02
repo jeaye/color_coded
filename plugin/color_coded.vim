@@ -54,8 +54,8 @@ au BufEnter * call s:try_push()
 au VimEnter * call s:try_push()
 au TextChanged * call s:try_push()
 au TextChangedI * call s:try_push()
-au TextChangedI * call s:try_push()
 au CursorMoved * call s:try_pull()
+au CursorMovedI * call s:try_pull()
 
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey

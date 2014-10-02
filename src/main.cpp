@@ -18,7 +18,7 @@ namespace color_coded
   }
 
   static void push(std::string const &file, std::string const &data)
-  { core::queue.push({ file, data }); }
+  { pull(); core::queue.push({ file, data }); }
 }
 
 extern "C" void Init_color_coded()
