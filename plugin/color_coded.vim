@@ -58,12 +58,14 @@ ruby << EOF
 EOF
 endfunction!
 
-au BufEnter * call s:color_coded_push()
-au VimEnter * call s:color_coded_push()
-au TextChanged * call s:color_coded_push()
-au TextChangedI * call s:color_coded_push()
-au CursorMoved * call s:color_coded_pull()
-au CursorMovedI * call s:color_coded_pull()
+augroup color_coded
+  au BufEnter * call s:color_coded_push()
+  au VimEnter * call s:color_coded_push()
+  au TextChanged * call s:color_coded_push()
+  au TextChangedI * call s:color_coded_push()
+  au CursorMoved * call s:color_coded_pull()
+  au CursorMovedI * call s:color_coded_pull()
+augroup END
 
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey

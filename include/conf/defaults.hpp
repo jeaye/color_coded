@@ -13,12 +13,8 @@ namespace color_coded
     {
       return
       { 
-        "-std=c++1y", "-stdlib=libc++",
-        "-I/usr/include",
-        "-I/usr/lib/clang/3.5.0/include",
-        "-I/usr/lib/clang/3.4/include",
+        "-std=c++1y",
         "-I.", "-Iinclude",
-        "-w"
       };
     }
 
@@ -27,6 +23,7 @@ namespace color_coded
       return
       { 
         "-stdlib=libc++",
+        "-I/usr/include",
         "-I/usr/lib/clang/3.5.0/include",
         "-I/usr/lib/clang/3.4/include",
         "-w"
