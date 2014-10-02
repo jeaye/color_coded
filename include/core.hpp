@@ -24,23 +24,27 @@ namespace color_coded
 {
   namespace core
   {
-    static conf::args_t config_args{ conf::load(conf::find(".")) };
-    static async::queue<async::task, async::result> queue
+    static auto& queue()
     {
-      [](async::task const &t)
+      static async::queue<async::task, async::result> q
       {
-        std::string const filename{ t.file + ".color_coded.cpp" };
-        async::temp_file tmp{ filename, t.code };
-        try
+        [](async::task const &t)
         {
-          clang::translation_unit trans_unit{ clang::compile({ config_args },
-                                                             filename) };
-          clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
-          return async::result{ { trans_unit, tp } };
+          static conf::args_t config_args{ conf::load(conf::find(".")) };
+          std::string const filename{ t.file + ".color_coded.cpp" };
+          async::temp_file tmp{ filename, t.code };
+          try
+          {
+            clang::translation_unit trans_unit{ clang::compile({ config_args },
+                                                               filename) };
+            clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
+            return async::result{ { trans_unit, tp } };
+          }
+          catch(clang::compilation_error const&)
+          { return async::result{{}}; }
         }
-        catch(clang::compilation_error const&)
-        { return async::result{{}}; }
-      }
-    };
+      };
+      return q;
+    }
   }
 }

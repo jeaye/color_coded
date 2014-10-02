@@ -12,13 +12,13 @@ namespace color_coded
 {
   static void pull()
   {
-    auto const pulled(core::queue.pull());
+    auto const pulled(core::queue().pull());
     if(pulled.second)
     { vim::apply(pulled.first.group); }
   }
 
   static void push(std::string const &file, std::string const &data)
-  { pull(); core::queue.push({ file, data }); }
+  { core::queue().push({ file, data }); }
 }
 
 extern "C" void Init_color_coded()
