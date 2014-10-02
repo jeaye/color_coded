@@ -16,7 +16,19 @@ namespace color_coded
         "-std=c++1y", "-stdlib=libc++",
         "-I/usr/include",
         "-I/usr/lib/clang/3.5.0/include",
+        "-I/usr/lib/clang/3.4/include",
         "-I.", "-Iinclude",
+        "-w"
+      };
+    }
+
+    inline args_t constants()
+    {
+      return
+      { 
+        "-stdlib=libc++",
+        "-I/usr/lib/clang/3.5.0/include",
+        "-I/usr/lib/clang/3.4/include",
         "-w"
       };
     }

@@ -1,5 +1,4 @@
 " Vim global plugin for semantic highlighting using libclang
-" Last Change: Sept. 2014
 " Maintainer:	Jeaye <contact@jeaye.com>
 
 " ------------------------------------------------------------------------------

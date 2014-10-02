@@ -25,6 +25,11 @@ namespace color_coded
       while(std::getline(ifs, tmp))
       { args.emplace_back(std::move(tmp)); }
 
+      /* Add some constant defaults. */
+      static auto const additions(constants());
+      std::copy(std::begin(additions), std::end(additions),
+                std::back_inserter(args));
+
       return args;
     }
   }
