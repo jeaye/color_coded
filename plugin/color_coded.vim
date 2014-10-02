@@ -25,13 +25,19 @@ let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
 
+if !exists("g:color_coded_filetypes")
+  let g:color_coded_filetypes = ['c', 'h', 'cpp', 'hpp', 'cc', 'm', 'mm']
+endif
+
 let s:path = expand('<sfile>:p:h')
 ruby << EOF
   require VIM::evaluate('s:path') + '/../bin/color_coded.so'
 EOF
-set ft=cpp
 
-function! s:try_push()
+function! s:color_coded_push()
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
 ruby << EOF
   line_count = VIM::Buffer.current.count
   data = ''
@@ -40,22 +46,25 @@ ruby << EOF
   end
   name = VIM::Buffer.current.name
   name = VIM::Buffer.current.number.to_s if name.nil?
-  cc_push(name, data.nil? ? "" : data)
+  color_coded_push(name, data.nil? ? "" : data)
 EOF
 endfunction!
 
-function! s:try_pull()
+function! s:color_coded_pull()
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
 ruby << EOF
-  cc_pull
+  color_coded_pull
 EOF
 endfunction!
 
-au BufEnter * call s:try_push()
-au VimEnter * call s:try_push()
-au TextChanged * call s:try_push()
-au TextChangedI * call s:try_push()
-au CursorMoved * call s:try_pull()
-au CursorMovedI * call s:try_pull()
+au BufEnter * call s:color_coded_push()
+au VimEnter * call s:color_coded_push()
+au TextChanged * call s:color_coded_push()
+au TextChangedI * call s:color_coded_push()
+au CursorMoved * call s:color_coded_pull()
+au CursorMovedI * call s:color_coded_pull()
 
 hi Member ctermfg=Cyan guifg=Cyan
 hi Variable ctermfg=Grey guifg=Grey

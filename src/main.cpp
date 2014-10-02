@@ -23,6 +23,6 @@ namespace color_coded
 
 extern "C" void Init_color_coded()
 {
-  script::registrar::add(script::func(&color_coded::pull, "cc_pull"));
-  script::registrar::add(script::func(&color_coded::push, "cc_push"));
+  script::registrar::add(script::func(&color_coded::pull, "color_coded_pull"));
+  script::registrar::add(script::func(&color_coded::push, "color_coded_push"));
 }
