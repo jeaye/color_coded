@@ -83,11 +83,10 @@ do
 done
 
 # Update after params
-log
-log
 
 log_start "Updating submodules..."
-log_start " juble" && git submodule update --init --recursive lib/juble 2>&1 > /dev/null || true
+log_start " jest"
+pushd lib/juble && ./configure --disable-chai 2>&1 > /dev/null && popd
 log_end " done"
 
 # Configure the makefile
@@ -101,4 +100,4 @@ log "Done configuring ${project}"
 
 # Describe next steps
 log
-log "To run compile, use `make`"
+log "To run compile, use \`make\`"

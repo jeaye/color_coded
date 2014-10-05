@@ -1,6 +1,9 @@
 # Binaries
 bin
 
+# Generated build files
+/Makefile
+
 # YCM
 *.pyc
 
