@@ -2,12 +2,6 @@
 " Maintainer:	Jeaye <contact@jeaye.com>
 
 " ------------------------------------------------------------------------------
-if v:version < 704 || !exists("*matchaddpos")
-  echohl WarningMsg |
-        \ echomsg "color_coded unavailable: requires Vim 7.4p330+" |
-        \ echohl None
-  finish
-endif
 if !has('ruby')
   echohl WarningMsg |
         \ echomsg "color_coded unavailable: requires ruby" |
