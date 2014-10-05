@@ -105,6 +105,7 @@ log
 
 log_start "Updating submodules..."
 log_start " jest"
+git submodule update --recursive --init lib/juble 2>&1 > /dev/null
 pushd lib/juble && ./configure --disable-chai 2>&1 > /dev/null && popd
 log_end " done"
 
