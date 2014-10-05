@@ -1,14 +1,19 @@
-CXX = c++
+CXX ?= c++
 CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
 CXX_MISC = -fpic
-CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include -Ilib/juble/lib/ruby/.ext/include/x86_64-linux
-CXX_PLATFORM_FLAGS =
-CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
+CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include \
+							-Ilib/juble/lib/ruby/.ext/include/x86_64-linux
+CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
+CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
+						${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
 
-LD_PLATFORM_LIBS =
-LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static -lboost_filesystem ${LD_PLATFORM_LIBS}
+LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
+LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static -lboost_filesystem \
+					${LD_PLATFORM_LIBS}
+
+PROJECT = %PROJECT%
 
 OUT_DIR = bin/
 OBJ_DIR = ${OUT_DIR}obj/
@@ -18,10 +23,6 @@ OBJS := $(patsubst %.cpp,%.cpp.o,$(wildcard src/*.cpp))
 OBJS := $(filter-out ${EXCLUDE},${OBJS})
 SRCS := ${OBJS:.cpp.o=.cpp}
 OUT_OBJS := $(foreach obj,${OBJS}, ${OBJ_DIR}${obj})
-
-.PHONY: all setup run ${TARGET}_setup
-
-.SILENT:
 
 log = echo "$(1)" 1>&2
 
@@ -37,13 +38,18 @@ ${TARGET}: ${TARGET}_setup ${OBJS}
 setup:
 	mkdir -p ${OBJ_DIR} ${OUT_DIR}
 
+%.cpp.o: %.cpp
+	$(call log,"  Compiling $<")
+	mkdir -p ${OBJ_DIR}$(dir $<)
+	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
+
+# For internal use only
 run:
 	gvim --noplugin -c ":source ${PWD}/plugin/color_coded.vim" test.cpp
 
 run_full:
 	gvim --noplugin -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
 
-%.cpp.o: %.cpp
-	$(call log,"  Compiling $<")
-	mkdir -p ${OBJ_DIR}$(dir $<)
-	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
+.SILENT:
+
+.PHONY: all setup ${TARGET}_setup run run_full
