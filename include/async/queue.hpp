@@ -36,7 +36,7 @@ namespace color_coded
         std::pair<Result, bool> pull()
         {
           std::lock_guard<std::mutex> const lock{ result_mutex_ };
-          return { result_, has_result_.load() };
+          return { result_, has_result_.exchange(false) };
         }
 
       private:

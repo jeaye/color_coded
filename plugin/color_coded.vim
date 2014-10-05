@@ -31,6 +31,18 @@ endif
 let s:path = expand('<sfile>:p:h')
 ruby << EOF
   require VIM::evaluate('s:path') + '/../bin/color_coded.so'
+
+  def color_coded_buffer_details()
+    name = VIM::Buffer.current.name
+    name = VIM::Buffer.current.number.to_s if name.nil?
+
+    line_count = VIM::Buffer.current.count
+    data = ''
+    for i in 1..line_count do
+      data += VIM::Buffer.current[i] + "\n"
+    end
+    return name, data.nil? ? "" : data
+  end
 EOF
 
 function! s:color_coded_push()
@@ -38,14 +50,8 @@ function! s:color_coded_push()
     return
   endif
 ruby << EOF
-  line_count = VIM::Buffer.current.count
-  data = ''
-  for i in 1..line_count do
-    data += VIM::Buffer.current[i] + "\n"
-  end
-  name = VIM::Buffer.current.name
-  name = VIM::Buffer.current.number.to_s if name.nil?
-  color_coded_push(name, data.nil? ? "" : data)
+  name, data = color_coded_buffer_details
+  color_coded_push(name, data)
 EOF
 endfunction!
 
@@ -58,9 +64,19 @@ ruby << EOF
 EOF
 endfunction!
 
+function! s:color_coded_enter()
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
+ruby << EOF
+  name, data = color_coded_buffer_details
+  color_coded_enter(name, data)
+EOF
+endfunction!
+
 augroup color_coded
-  au BufEnter * call s:color_coded_push()
-  au VimEnter * call s:color_coded_push()
+  au BufEnter * call s:color_coded_enter()
+  au VimEnter * call s:color_coded_enter()
   au TextChanged * call s:color_coded_push()
   au TextChangedI * call s:color_coded_push()
   au CursorMoved * call s:color_coded_pull()

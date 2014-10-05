@@ -2,7 +2,8 @@
 
 #include <string>
 #include <fstream>
-#include <cstdio>
+
+#include <boost/filesystem.hpp>
 
 namespace color_coded
 {
@@ -15,7 +16,7 @@ namespace color_coded
         : name{ filename }
       { std::ofstream{ name } << data << std::endl; }
       ~temp_file()
-      { std::remove(name.c_str()); }
+      { boost::filesystem::remove(name); }
 
       std::string const name;
     };
