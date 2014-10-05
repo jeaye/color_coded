@@ -43,17 +43,30 @@ cxx_platform_flags=
 ld_platform_libs=
 
 # Project-specific flags
+clang=0
+gcc=0
 
-if [ "1" -eq "$uname_linux" ];
-then
-  log "Platform: Linux"
-elif [ "1" -eq "$uname_osx" ];
-then
-  log "Platform: OS X"
-elif [ "1" -eq "$uname_cygwin" ];
-then
-  log "Platform: Cygwin (NOT TESTED)"
-fi
+set +o errexit
+  c++ -v |& grep "clang version" 2>&1 > /dev/null
+  if [ $? -eq 0 ];
+  then
+    clang=1
+    cxx_platform_flags="-stdlib=libc++ "$cxx_platform_flags
+    ld_platform_libs=$ld_platform_libs"-lc++ "
+  fi
+
+  c++ -v |& grep "gcc version" 2>&1 > /dev/null
+  if [ $? -eq 0 ];
+  then
+    gcc=1
+  fi
+
+  [[ $clang -eq 0 && $gcc -eq 0 ]] && log_exit "unknown compiler: c++"
+set -o errexit
+
+[ 1 -eq $uname_linux ] && log "Platform: Linux"
+[ 1 -eq $uname_osx ] && log "Platform: OS X"
+[ 1 -eq $uname_cygwin ] && log "Platform: Cygwin (NOT TESTED)"
 
 function show_help
 {
@@ -83,6 +96,12 @@ do
 done
 
 # Update after params
+log
+[ 1 -eq $gcc ] && log "Compiler: gcc"
+[ 1 -eq $clang ] && log "Compiler: clang"
+log "CXX platform flags: ${cxx_platform_flags}"
+log "LD platform flags: ${ld_platform_libs}"
+log
 
 log_start "Updating submodules..."
 log_start " jest"
