@@ -25,7 +25,6 @@ namespace color_coded
 
   static void enter(std::string const &file, std::string const &data)
   {
-    std::cout << "enter" << std::endl;
     ruby::vim::clearmatches();
     core::queue().push({ file, data });
   }
