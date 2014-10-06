@@ -4,6 +4,9 @@
 #include <string>
 #include <fstream>
 #include <stdexcept>
+#include <regex>
+
+#include <boost/filesystem.hpp>
 
 #include "defaults.hpp"
 
@@ -11,6 +14,23 @@ namespace color_coded
 {
   namespace conf
   {
+    namespace detail
+    {
+      inline std::string make_absolute(std::string line)
+      {
+        static std::regex reg{ "\\s*(-I|-isystem|-iquote|--sysroot=)\\s*(.*)" };
+        static std::smatch match;
+        if(std::regex_search(line, match, reg))
+        {
+          auto const &str(match[2].str());
+          if(str.size() && str[0] != '/')
+          { line = match[1].str() + boost::filesystem::absolute(str).string(); }
+        }
+        
+        return line;
+      }
+    }
+
     inline args_t load(std::string const &file)
     {
       if(file.empty())
@@ -23,7 +43,7 @@ namespace color_coded
       args_t args;
       std::string tmp;
       while(std::getline(ifs, tmp))
-      { args.emplace_back(std::move(tmp)); }
+      { args.emplace_back(detail::make_absolute(std::move(tmp))); }
 
       /* Add some constant defaults. */
       static auto const additions(constants());

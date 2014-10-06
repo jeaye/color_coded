@@ -3,10 +3,11 @@
 #include <string>
 #include <stdexcept>
 
+#include <boost/filesystem.hpp>
+
 #include <clang-c/Index.h>
 
 #include "translation_unit.hpp"
-#include "detail/filesystem.hpp"
 
 namespace color_coded
 {
@@ -19,7 +20,7 @@ namespace color_coded
       auto &tu(trans_unit.impl);
 
       CXFile const file{ clang_getFile(tu, trans_unit.filename.c_str()) };
-      std::size_t const size{ filesystem::file_size(trans_unit.filename) };
+      std::size_t const size{ boost::filesystem::file_size(trans_unit.filename) };
 
       CXSourceLocation const top(clang_getLocationForOffset(tu, file, 0));
       CXSourceLocation const bottom(clang_getLocationForOffset(tu, file, size));
