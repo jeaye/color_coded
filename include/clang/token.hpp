@@ -269,10 +269,8 @@ namespace color_coded
               case CXCursor_PreprocessingDirective:
                 return "MacroDefinition";
               case CXType_Unexposed:
-                return "";
               default:
-                throw std::runtime_error{ "unknown literal: " +
-                                          std::to_string(cursor_kind) };
+                return "Type";
             }
           case CXToken_Comment:
             return "Comment";
