@@ -24,9 +24,10 @@ namespace color_coded
 {
   namespace core
   {
+    namespace fs = boost::filesystem;
+
     static std::string temp_dir()
     {
-      namespace fs = boost::filesystem;
       static auto dir(fs::temp_directory_path() / "color_coded/");
       static auto make_dir(fs::create_directory(dir));
       static_cast<void>(make_dir);
@@ -40,7 +41,8 @@ namespace color_coded
         [](async::task const &t)
         {
           static conf::args_t config_args{ conf::load(conf::find(".")) };
-          std::string const filename{ temp_dir() + t.file };
+          std::string const filename
+          { temp_dir() + fs::path{ t.file }.filename().string() };
           async::temp_file tmp{ filename, t.code };
           try
           {
