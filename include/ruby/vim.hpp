@@ -21,6 +21,9 @@ namespace color_coded
              + std::to_string(len)
              + "]], -1)\")");
       }
+
+      inline void message(std::string const &str)
+      { eval("VIM::message(\"" + str + "\")"); }
     }
   }
 }
