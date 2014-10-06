@@ -23,7 +23,7 @@ namespace color_coded
       }
 
       inline void message(std::string const &str)
-      { eval("VIM::message(\"" + str + "\")"); }
+      { eval("VIM::message(%{" + str + "})"); }
     }
   }
 }
