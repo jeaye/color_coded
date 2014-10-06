@@ -22,10 +22,18 @@ namespace color_coded
     pull();
     core::queue().push({ file, data });
   }
+
+  static void enter(std::string const &file, std::string const &data)
+  {
+    std::cout << "enter" << std::endl;
+    ruby::vim::clearmatches();
+    core::queue().push({ file, data });
+  }
 }
 
 extern "C" void Init_color_coded()
 {
   script::registrar::add(script::func(&color_coded::pull, "color_coded_pull"));
   script::registrar::add(script::func(&color_coded::push, "color_coded_push"));
+  script::registrar::add(script::func(&color_coded::enter, "color_coded_enter"));
 }
