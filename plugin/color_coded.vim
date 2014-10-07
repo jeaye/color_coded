@@ -68,7 +68,9 @@ ruby << EOF
 EOF
 endfunction!
 
+let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
+  au BufNewFile,BufRead * source $VIMHOME/after/color_coded.vim
   au BufEnter * call s:color_coded_enter()
   au VimEnter * call s:color_coded_enter()
   au TextChanged * call s:color_coded_push()
