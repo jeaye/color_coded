@@ -81,6 +81,8 @@ augroup color_coded
   au TextChangedI * call s:color_coded_push()
   au CursorMoved * call s:color_coded_pull()
   au CursorMovedI * call s:color_coded_pull()
+  au CursorHold * call s:color_coded_pull()
+  au CursorHoldI * call s:color_coded_pull()
 augroup END
 
 " ------------------------------------------------------------------------------
