@@ -38,10 +38,10 @@ setup:
 	mkdir -p ${OBJ_DIR} ${OUT_DIR}
 
 run:
-	gvim --noplugin -c ":source ${PWD}/plugin/color_coded.vim" test.cpp
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test.cpp
 
 run_full:
-	gvim --noplugin -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
 
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
