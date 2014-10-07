@@ -76,7 +76,7 @@ Compilation of color_coded requires a modern compiler:
   * Clang ≥ 3.4
 
 Usage of color_coded requires vim:
-  * Version: unknown, tested with 7.4 1-459
+  * Version: 7.4p330+
   * Compiled with Ruby support
 
 License
