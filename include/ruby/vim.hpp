@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include "eval.hpp"
 
 namespace color_coded
@@ -22,8 +24,12 @@ namespace color_coded
              + "]], -1)\")");
       }
 
-      inline void message(std::string const &str)
-      { eval("VIM::message(%{" + str + "})"); }
+      inline void message(std::string str)
+      {
+        std::transform(std::begin(str), std::end(str), std::begin(str),
+        [](char const c){ return c == '"' ? '\'' : c; });
+        eval("VIM::message(\"" + str + "\")");
+      }
     }
   }
 }
