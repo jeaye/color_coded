@@ -71,14 +71,10 @@ endfunction!
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
   au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
-  au BufEnter * call s:color_coded_enter()
-  au VimEnter * call s:color_coded_enter()
-  au TextChanged * call s:color_coded_push()
-  au TextChangedI * call s:color_coded_push()
-  au CursorMoved * call s:color_coded_pull()
-  au CursorMovedI * call s:color_coded_pull()
-  au CursorHold * call s:color_coded_pull()
-  au CursorHoldI * call s:color_coded_pull()
+  au VimEnter,BufEnter * call s:color_coded_enter()
+  au TextChanged,TextChangedI * call s:color_coded_push()
+  au CursorMoved,CursorMovedI * call s:color_coded_pull()
+  au CursorHold,CursorHoldI * call s:color_coded_pull()
 augroup END
 
 " ------------------------------------------------------------------------------
