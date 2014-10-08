@@ -27,17 +27,22 @@ namespace color_coded
       auto &tu(trans_unit.impl);
 
       std::size_t const diags{ clang_getNumDiagnostics(tu) };
-      if(diags || !tu)
+      if(!tu || diags)
       {
         std::stringstream ss;
         for(std::size_t i{}; i != diags; ++i)
         {
           CXDiagnostic const diag{ clang_getDiagnostic(tu, i) };
-          string const str{ clang_formatDiagnostic(diag,
-                            clang_defaultDiagnosticDisplayOptions()) };
-          ss << str.c_str() << std::endl;
+          if(clang_getDiagnosticSeverity(diag) >= CXDiagnostic_Error)
+          {
+            string const str{ clang_formatDiagnostic(diag,
+                              clang_defaultDiagnosticDisplayOptions()) };
+            ss << str.c_str() << std::endl;
+          }
         }
-        throw compilation_error{ ss.str() };
+        auto const str(ss.str());
+        if(str.size())
+        { throw compilation_error{ str }; }
       }
 
       return trans_unit;
