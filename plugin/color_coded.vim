@@ -80,6 +80,17 @@ ruby << EOF
 EOF
 endfunction!
 
+function! s:color_coded_destroy(file)
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
+  let s:file = a:file
+ruby << EOF
+  name = VIM::evaluate('s:file')
+  color_coded_destroy(name)
+EOF
+endfunction!
+
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
   " BufEnter
@@ -91,6 +102,7 @@ augroup color_coded
   au TextChanged,TextChangedI * call s:color_coded_push()
   au CursorMoved,CursorMovedI * call s:color_coded_pull()
   au CursorHold,CursorHoldI * call s:color_coded_pull()
+  au BufDelete * call s:color_coded_destroy(expand('<afile>'))
 augroup END
 
 " ------------------------------------------------------------------------------
