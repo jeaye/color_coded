@@ -11,10 +11,13 @@ namespace color_coded
   {
     struct task
     {
-      std::string file;
+      std::string name;
       std::string code;
     };
     struct result
-    { vim::highlight_group group; };
+    {
+      std::string name;
+      vim::highlight_group group;
+    };
   }
 }

@@ -11,24 +11,36 @@
 
 namespace color_coded
 {
-  void pull()
+  static void pull(std::string const &file)
   {
     auto const pulled(core::queue().pull());
     if(pulled.second)
-    { vim::apply(pulled.first.group); }
+    {
+      auto &buf(core::buffers()[pulled.first.name]);
+      buf.group = std::move(pulled.first.group);
+      if(file == pulled.first.name)
+      { vim::apply(buf.group); }
+    }
   }
 
-  void push(std::string const &file, std::string const &data)
+  static void push(std::string const &file, std::string const &data)
   {
-    pull();
+    pull(file);
     core::queue().push({ file, data });
   }
 
-  void enter(std::string const &file, std::string const &data)
+  static void enter(std::string const &file, std::string const &data)
   {
-    ruby::vim::clearmatches();
+    auto &buf(core::buffers()[file]);
+    if(buf.group.size())
+    { vim::apply(buf.group); }
+    else
+    { ruby::vim::clearmatches(); }
     core::queue().push({ file, data });
   }
+
+  static void destroy(std::string const &file)
+  { core::buffers().erase(file); }
 }
 
 extern "C" void Init_color_coded()
@@ -42,4 +54,7 @@ extern "C" void Init_color_coded()
   script::registrar::add(script::func
     (color_coded::safe_func<decltype(&color_coded::enter), &color_coded::enter>(),
     "color_coded_enter"));
+  script::registrar::add(script::func
+    (color_coded::safe_func<decltype(&color_coded::destroy), &color_coded::destroy>(),
+    "color_coded_destroy"));
 }

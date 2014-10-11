@@ -27,9 +27,9 @@ namespace color_coded
         , token{ tok }
       { }
 
-      std::string const type;
-      std::size_t const line, column;
-      std::string const token;
+      std::string type;
+      std::size_t line, column;
+      std::string token;
     };
 
     class highlight_group

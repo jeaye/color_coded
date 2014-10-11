@@ -26,9 +26,14 @@ let s:path = expand('<sfile>:p:h')
 ruby << EOF
   require VIM::evaluate('s:path') + '/../bin/color_coded.so'
 
-  def color_coded_buffer_details()
+  def color_coded_buffer_name
     name = VIM::Buffer.current.name
     name = VIM::Buffer.current.number.to_s if name.nil?
+    return name
+  end
+
+  def color_coded_buffer_details
+    name = color_coded_buffer_name
 
     line_count = VIM::Buffer.current.count
     data = ''
@@ -54,7 +59,8 @@ function! s:color_coded_pull()
     return
   endif
 ruby << EOF
-  color_coded_pull
+  name = color_coded_buffer_name
+  color_coded_pull(name)
 EOF
 endfunction!
 
@@ -65,6 +71,17 @@ function! s:color_coded_enter()
 ruby << EOF
   name, data = color_coded_buffer_details
   color_coded_enter(name, data)
+EOF
+endfunction!
+
+function! s:color_coded_destroy(file)
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
+  let s:file = a:file
+ruby << EOF
+  name = VIM::evaluate('s:file')
+  color_coded_destroy(name)
 EOF
 endfunction!
 
@@ -79,6 +96,7 @@ augroup color_coded
   au TextChanged,TextChangedI * call s:color_coded_push()
   au CursorMoved,CursorMovedI * call s:color_coded_pull()
   au CursorHold,CursorHoldI * call s:color_coded_pull()
+  au BufDelete * call s:color_coded_destroy(expand('<afile>'))
 augroup END
 
 " ------------------------------------------------------------------------------
