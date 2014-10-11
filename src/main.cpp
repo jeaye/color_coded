@@ -11,22 +11,31 @@
 
 namespace color_coded
 {
-  void pull()
+  void pull(std::string const &file)
   {
     auto const pulled(core::queue().pull());
     if(pulled.second)
-    { vim::apply(pulled.first.group); }
+    {
+      auto &buf(core::buffers()[pulled.first.name]);
+      buf.group = std::move(pulled.first.group);
+      if(file == pulled.first.name)
+      { vim::apply(buf.group); }
+    }
   }
 
   void push(std::string const &file, std::string const &data)
   {
-    pull();
+    pull(file);
     core::queue().push({ file, data });
   }
 
   void enter(std::string const &file, std::string const &data)
   {
-    ruby::vim::clearmatches();
+    auto &buf(core::buffers()[file]);
+    if(buf.group.size())
+    { vim::apply(buf.group); }
+    else
+    { ruby::vim::clearmatches(); }
     core::queue().push({ file, data });
   }
 }

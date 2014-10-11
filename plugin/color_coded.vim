@@ -32,9 +32,14 @@ let s:path = expand('<sfile>:p:h')
 ruby << EOF
   require VIM::evaluate('s:path') + '/../bin/color_coded.so'
 
-  def color_coded_buffer_details()
+  def color_coded_buffer_name
     name = VIM::Buffer.current.name
     name = VIM::Buffer.current.number.to_s if name.nil?
+    return name
+  end
+
+  def color_coded_buffer_details
+    name = color_coded_buffer_name
 
     line_count = VIM::Buffer.current.count
     data = ''
@@ -60,7 +65,8 @@ function! s:color_coded_pull()
     return
   endif
 ruby << EOF
-  color_coded_pull
+  name = color_coded_buffer_name
+  color_coded_pull(name)
 EOF
 endfunction!
 
