@@ -70,6 +70,10 @@ endfunction!
 
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
+  " BufEnter
+  " BufDelete
+  " BufLeave
+  " VimResized
   au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
   au VimEnter,BufEnter * call s:color_coded_enter()
   au TextChanged,TextChangedI * call s:color_coded_push()

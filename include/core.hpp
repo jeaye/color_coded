@@ -60,6 +60,11 @@ namespace color_coded
             ruby::vim::message(e.what());
             return async::result{{}};
           }
+          catch(...)
+          {
+            ruby::vim::message("unknown compilation error");
+            return async::result{{}};
+          }
         }
       };
       return q;
