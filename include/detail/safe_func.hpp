@@ -21,9 +21,15 @@ namespace color_coded
       try
       { return F(std::forward<Args_>(args)...); }
       catch(std::exception const &e)
-      { ruby::vim::message(std::string{"exception: "} + e.what()); }
+      {
+        ruby::vim::message(std::string{"exception: "} + e.what());
+        std::exit(1);
+      }
       catch(...)
-      { ruby::vim::message("unknown error"); }
+      {
+        ruby::vim::message("unknown error");
+        std::exit(1);
+      }
     };
 
     template <typename T, T F>
