@@ -114,7 +114,7 @@ ruby << EOF
 EOF
 endfunction!
 
-command! CCError call s:color_coded_last_error()
+command! CCerror call s:color_coded_last_error()
 
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
