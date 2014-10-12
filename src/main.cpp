@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "core.hpp"
 #include "detail/safe_func.hpp"
 
 namespace color_coded
@@ -53,6 +52,9 @@ namespace color_coded
 
   static void destroy(std::string const &file)
   { core::buffers().erase(file); }
+
+  static std::string last_error()
+  { return core::last_error(); }
 }
 
 extern "C" void Init_color_coded()
@@ -77,4 +79,8 @@ extern "C" void Init_color_coded()
     (color_coded::safe_func<decltype(&color_coded::destroy),
                             &color_coded::destroy>(),
     "color_coded_destroy"));
+  script::registrar::add(script::func
+    (color_coded::safe_func<decltype(&color_coded::last_error),
+                            &color_coded::last_error>(),
+    "color_coded_last_error"));
 }

@@ -23,13 +23,6 @@ namespace color_coded
              + std::to_string(len)
              + "]], -1)\")");
       }
-
-      inline void message(std::string str)
-      {
-        std::transform(std::begin(str), std::end(str), std::begin(str),
-        [](char const c){ return c == '"' ? '\'' : c; });
-        eval("VIM::message(\"" + str + "\")");
-      }
     }
   }
 }
