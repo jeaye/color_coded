@@ -89,15 +89,5 @@ namespace color_coded
       private:
         std::vector<highlight> group_;
     };
-
-    inline void apply(highlight_group const &group)
-    {
-      if(group.empty())
-      { return; }
-
-      ruby::vim::clearmatches();
-      for(auto const &h : group)
-      { ruby::vim::matchaddpos(h.type, h.line, h.column, h.token.size()); }
-    }
   }
 }

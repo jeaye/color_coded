@@ -1,4 +1,4 @@
-CXX ?= c++
+CXX ?= clang++
 CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
@@ -45,11 +45,18 @@ setup:
 
 # For internal use only
 run:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test.cpp
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/simple.cpp
 
-run_full:
+run_real:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
 
 .SILENT:
 
-.PHONY: all setup ${TARGET}_setup run run_full
+.PHONY: all setup ${TARGET}_setup run run_real run_stress
+run_stress:
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/stress.hpp
+
+%.cpp.o: %.cpp
+	$(call log,"  Compiling $<")
+	mkdir -p ${OBJ_DIR}$(dir $<)
+	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
