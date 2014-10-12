@@ -69,6 +69,12 @@ hi link EnumDecl Type
 
 For more information on all of the supported groups, see `plugin/color_coded.vim` and the [clang documentation](http://clang.llvm.org/doxygen/group__CINDEX.html#gaaccc432245b4cd9f2d470913f9ef0013).
 
+Commands
+---
+
+#### `:CCerror`
+This command outputs the last compilation error message from libclang. If your highlighting is not working properly, you may have a misconfigured `.color_coded` file or you may have syntax errors in your source. When in doubt, check here first.
+
 Dependencies
 ---
 Compilation of color_coded requires a modern compiler:
