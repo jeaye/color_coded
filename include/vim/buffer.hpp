@@ -15,7 +15,7 @@ namespace color_coded
       std::size_t line{}, lines{};
       std::size_t begin{}, end{};
       std::size_t height{};
-      std::size_t visibility{ 50 }; /* TODO: make configurable. */
+      std::size_t visibility{ 30 }; /* TODO: make configurable. */
     };
 
     inline void apply(buffer &buf)

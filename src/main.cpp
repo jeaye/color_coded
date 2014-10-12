@@ -58,18 +58,23 @@ namespace color_coded
 extern "C" void Init_color_coded()
 {
   script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::pull), &color_coded::pull>(),
+    (color_coded::safe_func<decltype(&color_coded::pull),
+                            &color_coded::pull>(),
     "color_coded_pull"));
   script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::push), &color_coded::push>(),
+    (color_coded::safe_func<decltype(&color_coded::push),
+                            &color_coded::push>(),
     "color_coded_push"));
   script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::moved), &color_coded::moved>(),
+    (color_coded::safe_func<decltype(&color_coded::moved),
+                            &color_coded::moved>(),
     "color_coded_moved"));
   script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::enter), &color_coded::enter>(),
+    (color_coded::safe_func<decltype(&color_coded::enter),
+                            &color_coded::enter>(),
     "color_coded_enter"));
   script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::destroy), &color_coded::destroy>(),
+    (color_coded::safe_func<decltype(&color_coded::destroy),
+                            &color_coded::destroy>(),
     "color_coded_destroy"));
 }
