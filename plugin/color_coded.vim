@@ -70,6 +70,18 @@ ruby << EOF
 EOF
 endfunction!
 
+function! s:color_coded_moved()
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
+ruby << EOF
+  name = color_coded_buffer_name
+  color_coded_moved(name,
+                    VIM::Window.current.cursor[0],
+                    VIM::Buffer.current.count)
+EOF
+endfunction!
+
 function! s:color_coded_enter()
   if index(g:color_coded_filetypes, &ft) < 0
     return
@@ -89,18 +101,15 @@ ruby << EOF
   name = VIM::evaluate('s:file')
   color_coded_destroy(name)
 EOF
+  unlet s:file
 endfunction!
 
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
-  " BufEnter
-  " BufDelete
-  " BufLeave
-  " VimResized
   au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
   au VimEnter,BufEnter * call s:color_coded_enter()
   au TextChanged,TextChangedI * call s:color_coded_push()
-  au CursorMoved,CursorMovedI * call s:color_coded_pull()
+  au CursorMoved,CursorMovedI * call s:color_coded_moved()
   au CursorHold,CursorHoldI * call s:color_coded_pull()
   au BufDelete * call s:color_coded_destroy(expand('<afile>'))
 augroup END

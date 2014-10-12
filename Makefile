@@ -1,4 +1,4 @@
-CXX = c++
+CXX = clang++
 CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
@@ -19,7 +19,7 @@ OBJS := $(filter-out ${EXCLUDE},${OBJS})
 SRCS := ${OBJS:.cpp.o=.cpp}
 OUT_OBJS := $(foreach obj,${OBJS}, ${OBJ_DIR}${obj})
 
-.PHONY: all setup run ${TARGET}_setup
+.PHONY: all setup run run_real run_stress ${TARGET}_setup
 
 .SILENT:
 
@@ -38,10 +38,13 @@ setup:
 	mkdir -p ${OBJ_DIR} ${OUT_DIR}
 
 run:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test.cpp
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/simple.cpp
 
-run_full:
+run_real:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
+
+run_stress:
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/stress.hpp
 
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
