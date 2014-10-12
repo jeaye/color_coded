@@ -99,6 +99,17 @@ EOF
   unlet s:file
 endfunction!
 
+function! s:color_coded_last_error()
+  if index(g:color_coded_filetypes, &ft) < 0
+    return
+  endif
+ruby << EOF
+  VIM::command("echo \"" + color_coded_last_error().gsub("\"", "'") + "\"")
+EOF
+endfunction!
+
+command! CCerror call s:color_coded_last_error()
+
 let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
   au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim

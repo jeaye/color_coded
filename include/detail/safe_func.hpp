@@ -4,6 +4,7 @@
 #include <utility>
 #include <stdexcept>
 
+#include "core.hpp"
 #include "ruby/vim.hpp"
 
 namespace color_coded
@@ -22,12 +23,12 @@ namespace color_coded
       { return F(std::forward<Args_>(args)...); }
       catch(std::exception const &e)
       {
-        ruby::vim::message(std::string{"exception: "} + e.what());
+        core::last_error(std::string{"exception: "} + e.what());
         std::exit(1);
       }
       catch(...)
       {
-        ruby::vim::message("unknown error");
+        core::last_error("unknown error");
         std::exit(1);
       }
     };

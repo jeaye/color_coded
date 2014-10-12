@@ -36,6 +36,14 @@ namespace color_coded
       return dir.string();
     }
 
+    static std::string const& last_error(std::string const &e = "")
+    {
+      static std::string error;
+      if(e.size())
+      { error = e; }
+      return error;
+    }
+
     static auto& queue()
     {
       static async::queue<async::task, async::result> q
@@ -59,12 +67,12 @@ namespace color_coded
           {
             /* TODO: We shouldn't just blindly log every error, but this
              * will be helpful for meow. */
-            ruby::vim::message(e.what());
+            last_error(e.what());
             return async::result{{}, {}};
           }
           catch(...)
           {
-            ruby::vim::message("unknown compilation error");
+            last_error("unknown compilation error");
             return async::result{{}, {}};
           }
         }
