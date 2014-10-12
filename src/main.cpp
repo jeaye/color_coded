@@ -31,13 +31,14 @@ namespace color_coded
   }
 
   static void moved(std::string const &file, std::size_t const line,
-                    std::size_t const end)
+                    std::size_t const lines, std::size_t const height)
   {
+    pull(file);
     auto &buf(core::buffers()[file]);
     buf.line = line;
-    buf.end = end;
-    pull(file);
-    vim::apply(buf);
+    buf.lines = lines;
+    buf.height = height;
+    vim::try_apply(buf);
   }
 
   static void enter(std::string const &file, std::string const &data)

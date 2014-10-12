@@ -78,7 +78,8 @@ ruby << EOF
   name = color_coded_buffer_name
   color_coded_moved(name,
                     VIM::Window.current.cursor[0],
-                    VIM::Buffer.current.count)
+                    VIM::Buffer.current.count,
+                    VIM::Window.current.height)
 EOF
 endfunction!
 
