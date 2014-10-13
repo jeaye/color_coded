@@ -41,14 +41,14 @@ namespace color_coded
       { return defaults(); }
 
       args_t args;
-      std::string tmp;
-      while(std::getline(ifs, tmp))
-      { args.emplace_back(detail::make_absolute(std::move(tmp))); }
-
       /* Add some constant defaults. */
       static auto const additions(constants());
       std::copy(std::begin(additions), std::end(additions),
                 std::back_inserter(args));
+
+      std::string tmp;
+      while(std::getline(ifs, tmp))
+      { args.emplace_back(detail::make_absolute(std::move(tmp))); }
 
       return args;
     }
