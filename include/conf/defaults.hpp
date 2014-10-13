@@ -13,6 +13,7 @@ namespace color_coded
     {
       return
       { 
+        "-x", "c++",
         "-stdlib=libc++",
         "-I/usr/include",
         "-I/usr/lib/clang/3.5.0/include",
