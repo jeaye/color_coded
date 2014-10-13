@@ -3,7 +3,6 @@ color_coded: semantic highlighting with vim
 color_coded is a vim plugin that provides realtime (fast), tagless code highlighting using libclang.
 
   * Fast compilation, using native C++14
-  * Ruby bindings (using [juble](https://github.com/jeaye/juble), a "C++14 embedded scripting framework")
   * Exhaustive customization possibilities
 
 Installation
