@@ -18,7 +18,8 @@ namespace color_coded
       std::size_t visibility{ 30 }; /* TODO: make configurable. */
     };
 
-    inline void apply(buffer &buf)
+    /* Forcefully clears all highlighting and applies the latest. */
+    void apply(buffer &buf)
     {
       if(buf.group.empty())
       { return; }
@@ -34,7 +35,8 @@ namespace color_coded
       }
     }
 
-    inline void try_apply(buffer &buf)
+    /* Will only highlight if we're outside of the previous highlight range. */
+    void try_apply(buffer &buf)
     {
       if(buf.line - std::min(buf.height, buf.line) < buf.begin ||
          std::min(buf.line + buf.height, buf.lines) > buf.end)

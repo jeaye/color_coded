@@ -44,7 +44,7 @@ ruby << EOF
     line_count = VIM::Buffer.current.count
     data = ''
     for i in 1..line_count do
-      data += VIM::Buffer.current[i] + "\n"
+      data << VIM::Buffer.current[i] + "\n"
     end
     return name, data.nil? ? "" : data
   end

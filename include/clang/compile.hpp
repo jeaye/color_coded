@@ -19,8 +19,8 @@ namespace color_coded
     struct compilation_error : std::runtime_error
     { using std::runtime_error::runtime_error; };
 
-    inline translation_unit compile(conf::args_view args,
-                                    std::string const &filename)
+    translation_unit compile(conf::args_view args,
+                             std::string const &filename)
     {
       auto const index(std::make_shared<index>(clang_createIndex(false, false)));
       translation_unit const trans_unit{ args, index, filename };
@@ -37,7 +37,7 @@ namespace color_coded
           {
             string const str{ clang_formatDiagnostic(diag,
                               clang_defaultDiagnosticDisplayOptions()) };
-            ss << str.c_str() << std::endl;
+            ss << str.c_str() << '\n';
           }
         }
         auto const str(ss.str());

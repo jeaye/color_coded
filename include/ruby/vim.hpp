@@ -10,11 +10,11 @@ namespace color_coded
   {
     namespace vim
     {
-      inline void clearmatches()
+      void clearmatches()
       { eval("VIM::command(\"call clearmatches()\")"); }
 
-      inline void matchaddpos(std::string const &type, std::size_t const line,
-                              std::size_t const col, std::size_t const len)
+      void matchaddpos(std::string const &type, std::size_t const line,
+                       std::size_t const col, std::size_t const len)
       {
         eval("VIM::command(\"call matchaddpos('"
              + type + "', [["

@@ -15,7 +15,7 @@ namespace color_coded
   {
     using source_range_t = CXSourceRange;
 
-    inline source_range_t source_range(translation_unit const &trans_unit)
+    source_range_t source_range(translation_unit const &trans_unit)
     {
       auto &tu(trans_unit.impl);
 

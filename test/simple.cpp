@@ -22,10 +22,10 @@ class bar
     { return T{}; }
 };
 
-enum class boobs
+enum class kitten
 {
-  large,
-  small
+  meow,
+  purr
 };
 
 /* Oh, excellent. */
@@ -35,6 +35,6 @@ int main()
   f.name = "jeaye";
   f.age = 22;
   f.work();
-  auto const b(boobs::small);
-  std::cout << static_cast<int>(b) << std::endl;
+  auto const k(kitten::meow);
+  std::cout << static_cast<int>(k) << std::endl;
 }

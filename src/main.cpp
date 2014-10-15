@@ -15,6 +15,8 @@ namespace color_coded
     auto const pulled(core::queue().pull());
     if(pulled.second)
     {
+      /* Check if any compilations have finished, resulting in
+       * new highlighting groups. */
       auto &buf(core::buffers()[pulled.first.name]);
       buf.group = std::move(pulled.first.group);
       return file == pulled.first.name;
@@ -23,29 +25,30 @@ namespace color_coded
   }
 
   static void push(std::string const &file, std::string const &data)
-  {
-    if(pull(file))
-    { vim::apply(core::buffers()[file]); }
-    core::queue().push({ file, data });
-  }
+  { core::queue().push({ file, data }); }
 
   static void moved(std::string const &file, std::size_t const line,
                     std::size_t const lines, std::size_t const height)
   {
     auto &buf(core::buffers()[file]);
+    buf.line = line;
+    buf.lines = lines;
+    buf.height = height;
+
+    /* Moving may result in re-highlighting given two cases:
+     *  1. New highlighting information was pulled (a compilation finished)
+     *  2. We approach the edge of our highlighting range
+     */
     if(pull(file))
     { vim::apply(buf); }
     else
-    {
-      buf.line = line;
-      buf.lines = lines;
-      buf.height = height;
-      vim::try_apply(buf);
-    }
+    { vim::try_apply(buf); }
   }
 
   static void enter(std::string const &file, std::string const &data)
   {
+    /* When entering a new buffer, check if we have highlight data for
+     * it already. If not, clear any highlighting in the file. */
     auto &buf(core::buffers()[file]);
     if(buf.group.size())
     { vim::apply(buf); }

@@ -7,6 +7,7 @@ namespace color_coded
 {
   namespace detail
   {
+    /* RAII wrapper for non-pointer resources. */
     template <typename T>
     class resource
     {
@@ -18,7 +19,7 @@ namespace color_coded
           : dtor_{ dtor }
         { }
         resource(resource const&) = delete;
-        resource(resource &&) = default; /* TODO: noexcept */
+        resource(resource &&) = default;
         resource(T &&t, dtor_t const &dtor)
           : data_(std::move(t)), dtor_{ dtor }
         { }

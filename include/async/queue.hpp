@@ -48,6 +48,7 @@ namespace color_coded
           {
             if(!has_work_.load())
             {
+              /* TODO: A condition variable should work instead. */
               std::this_thread::sleep_for(std::chrono::milliseconds{ 500 });
               continue;
             }
