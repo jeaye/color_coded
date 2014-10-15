@@ -5,7 +5,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
   * Fast compilation, using native C++14
   * Exhaustive customization possibilities
 
-**NOTE:** color_coded is currently _alpha_ software; use it knowing it may break shit (but it'll be colorfully broken).
+**NOTE:** color_coded is currently _alpha_ software; use it knowing shit may break (but it'll be colorfully broken).
 
 Installation
 ---
