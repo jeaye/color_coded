@@ -5,9 +5,17 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
   * Fast compilation, using native C++14
   * Exhaustive customization possibilities
 
+**NOTE:** color_coded is currently _alpha_ software; use it knowing it may break shit (but it'll be colorfully broken).
+
 Installation
 ---
-Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle:
+Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:BundleInstall`):
+
+```viml
+Bundle 'jeaye/color_coded'
+```
+
+Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle:
 
 ```bash
 cd ~/.vim/bundle/color_coded
@@ -18,7 +26,7 @@ cd ~/.vim/bundle/color_coded
 
 Usage
 ---
-Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you may need to create a file describing the required comiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage.
+Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you _may_ need to create a file describing the required compiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage (it favors C++ in this regard).
 
 That said, in any non-trivial case, you'll find yourself needing to supply a `.color_coded` file for your project. color_coded will search from the current working directory all the way up to the root of the filesystem looking for a `.color_coded` file. This makes it possible for you to have one in your home directory, for example, and then in each of your projects' directories. If you don't specify one in a project directory, the one in your home directory is used. Again, if no such files are found, sane defaults will be applied.
 
