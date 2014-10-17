@@ -24,6 +24,8 @@ cd ~/.vim/bundle/color_coded
 ./configure && make
 ```
 
+For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
+
 **NOTE:** color_coded, to my knowledge, has not been tested on Windows.
 
 Usage

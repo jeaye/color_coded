@@ -16,6 +16,7 @@ set -o nounset
 uname_linux=0
 uname_cygwin=0
 uname_osx=0
+uname_arch=$(uname -m)
 uname=$(uname)
 if [ "$uname" = "Linux" ];
 then
@@ -108,6 +109,59 @@ log_start " juble (can take a while)"
 git submodule update --recursive --init lib/juble 2>&1 > /dev/null
 pushd lib/juble && ./configure --disable-chai 2>&1 > /dev/null && popd
 log_end " done"
+
+
+log_start "Downloading clang..."
+clang_url="http://llvm.org/releases/3.4"
+
+if [ 1 -eq $uname_osx ];
+then
+  clang_dirname="clang+llvm-3.4-x86_64-apple-darwin10.9"
+  clang_md5="4f43ea0e87090ae5e7bec12373ca4927"
+  clang_filename="${clang_dirname}.tar.gz"
+else
+  if [ "x86_64" == "${uname_arch}" ];
+  then
+    clang_dirname="clang+llvm-3.4-x86_64-unknown-ubuntu12.04"
+    clang_md5="6077459d20a7ff412eefc6ce3b9f5c85"
+    clang_filename="${clang_dirname}.tar.xz"
+  else
+    log "No pre-built Clang 3.4 binaries for 32 bit linux, downloading Clang 3.3"
+    clang_url="http://llvm.org/releases/3.3"
+    clang_dirname="clang+llvm-3.3-i386-debian6"
+    clang_md5="415d033b60659433d4631df894673802"
+    clang_filename="${clang_dirname}.tar.bz2"
+  fi
+fi
+
+clang_final_filename="./lib/${clang_filename}"
+if [ ! -f $clang_final_filename ];
+then
+  log_end
+  curl -o $clang_final_filename -# "${clang_url}/${clang_filename}" 
+  log_start "Extracting..."
+  tar xf $clang_final_filename
+  log_end " done"
+
+  log_start "Validating md5..."
+  rm -f clang_md5
+  echo "$clang_md5 $clang_final_filename" > clang_md5
+  set +o errexit
+    md5sum -c clang_md5 2>&1 > /dev/null
+    result=$?
+  set -o errexit
+  if [ $result -ne 0 ];
+  then
+    rm -f $clang_final_filename
+    log_exit " failed! (removed; try to configure again)"
+  fi
+  rm -f clang_md5
+  log_end " done"
+else
+  log_end " already downloaded!"
+fi
+cxx_platform_flags="-I${clang_dirname}/include "$cxx_platform_flags
+ld_platform_libs="-L${clang_dirname}/lib "$ld_platform_libs
 
 # Configure the makefile
 log_start "Populating Makefile..."

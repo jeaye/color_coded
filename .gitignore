@@ -7,5 +7,9 @@ bin
 # YCM
 *.pyc
 
+# Clang
+/clang*
+/lib/clang*
+
 # Personal notes
 NOTES

@@ -7,7 +7,7 @@ CXX_INCLUDE = -Iinclude -Ilib/juble/include -Ilib/juble/lib/ruby/include \
 							-Ilib/juble/lib/ruby/.ext/include/x86_64-linux
 CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
 CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
-						${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
+						${CXX_MISC} ${CXX_PLATFORM_FLAGS} ${CXX_INCLUDE} 
 
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
 LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static -lboost_filesystem \
