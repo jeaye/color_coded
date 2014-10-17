@@ -48,15 +48,15 @@ clang=0
 gcc=0
 
 set +o errexit
-  c++ -v |& grep "clang version" 2>&1 > /dev/null
+  c++ -v 2>&1 | egrep "clang version|LLVM" 2>&1 > /dev/null
   if [ $? -eq 0 ];
   then
     clang=1
     cxx_platform_flags="-stdlib=libc++ "$cxx_platform_flags
-    ld_platform_libs=$ld_platform_libs"-lc++ "
+    ld_platform_libs=$ld_platform_libs"-lc++ -framework CoreFoundation"
   fi
 
-  c++ -v |& grep "gcc version" 2>&1 > /dev/null
+  c++ -v 2>&1 | grep "gcc version" 2>&1 > /dev/null
   if [ $? -eq 0 ];
   then
     gcc=1
@@ -139,9 +139,6 @@ if [ ! -f $clang_final_filename ];
 then
   log_end
   curl -o $clang_final_filename -# "${clang_url}/${clang_filename}" 
-  log_start "Extracting..."
-  tar xf $clang_final_filename
-  log_end " done"
 
   log_start "Validating md5..."
   rm -f clang_md5
@@ -149,16 +146,24 @@ then
   set +o errexit
     md5sum -c clang_md5 2>&1 > /dev/null
     result=$?
-  set -o errexit
-  if [ $result -ne 0 ];
+  if [ $result -ne 0 -a "$(md5 -q $clang_final_filename)" != $clang_md5 ];
   then
-    rm -f $clang_final_filename
-    log_exit " failed! (removed; try to configure again)"
+    log_exit " failed! (remove $clang_final_filename and try to configure again)"
   fi
+  set -o errexit
   rm -f clang_md5
+  log_end " done"
+
+  log_start "Extracting..."
+  tar xf $clang_final_filename
   log_end " done"
 else
   log_end " already downloaded!"
+fi
+if [ ! -d $clang_dirname ];
+then
+  log "Invalid clang setup!"
+  log_exit "Remove $clang_final_filename and try to configure again"
 fi
 cxx_platform_flags="-I${clang_dirname}/include "$cxx_platform_flags
 ld_platform_libs="-L${clang_dirname}/lib "$ld_platform_libs
