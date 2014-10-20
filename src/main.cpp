@@ -6,11 +6,18 @@
 #include <fstream>
 #include <iostream>
 
+extern "C"
+{
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
+}
+
 #include "detail/safe_func.hpp"
 
 namespace color_coded
 {
-  static bool pull(std::string const &file)
+  static bool pull_impl(std::string const &file)
   {
     auto const pulled(core::queue().pull());
     if(pulled.second)
@@ -22,18 +29,33 @@ namespace color_coded
     return false;
   }
 
-  static void push(std::string const &file, std::string const &data)
+  static int pull(lua_State * const lua)
   {
-    if(pull(file))
+    auto const file(lua_tostring(lua, -1));
+    lua_pushboolean(lua, pull_impl(file));
+    return 1;
+  }
+
+  static void push_impl(std::string const &file, std::string const &data)
+  {
+    if(pull_impl(file))
     { vim::apply(core::buffers()[file]); }
     core::queue().push({ file, data });
   }
 
-  static void moved(std::string const &file, std::size_t const line,
-                    std::size_t const lines, std::size_t const height)
+  static int push(lua_State * const lua)
+  {
+    auto const file(lua_tostring(lua, -2));
+    auto const data(lua_tostring(lua, -1));
+    push_impl(file, data);
+    return 0;
+  }
+
+  static void moved_impl(std::string const &file, std::size_t const line,
+                         std::size_t const lines, std::size_t const height)
   {
     auto &buf(core::buffers()[file]);
-    if(pull(file))
+    if(pull_impl(file))
     { vim::apply(buf); }
     else
     {
@@ -44,7 +66,17 @@ namespace color_coded
     }
   }
 
-  static void enter(std::string const &file, std::string const &data)
+  static int moved(lua_State * const lua)
+  {
+    auto const file(lua_tostring(lua, -4));
+    auto const line(lua_tonumber(lua, -3));
+    auto const lines(lua_tonumber(lua, -2));
+    auto const height(lua_tonumber(lua, -1));
+    moved_impl(file, line, lines, height);
+    return 0;
+  }
+
+  static void enter_impl(std::string const &file, std::string const &data)
   {
     auto &buf(core::buffers()[file]);
     if(buf.group.size())
@@ -54,37 +86,42 @@ namespace color_coded
     core::queue().push({ file, data });
   }
 
-  static void destroy(std::string const &file)
+  static int enter(lua_State * const lua)
+  {
+    auto const data(lua_tostring(lua, -1));
+    auto const file(lua_tostring(lua, -2));
+    enter_impl(file, data);
+    return 0;
+  }
+
+  static void destroy_impl(std::string const &file)
   { core::buffers().erase(file); }
 
-  static std::string last_error()
+  static int destroy(lua_State * const lua)
+  {
+    auto const file(lua_tostring(lua, -1));
+    destroy_impl(file);
+    return 0;
+  }
+
+  static std::string last_error_impl()
   { return core::last_error(); }
+
+  static int last_error(lua_State * const lua)
+  {
+    lua_pushstring(lua, last_error_impl().c_str());
+    return 1;
+  }
 }
 
-extern "C" void Init_color_coded()
+extern "C" int luaopen_color_coded(lua_State * const lua)
 {
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::pull),
-                            &color_coded::pull>(),
-    "color_coded_pull"));
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::push),
-                            &color_coded::push>(),
-    "color_coded_push"));
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::moved),
-                            &color_coded::moved>(),
-    "color_coded_moved"));
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::enter),
-                            &color_coded::enter>(),
-    "color_coded_enter"));
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::destroy),
-                            &color_coded::destroy>(),
-    "color_coded_destroy"));
-  script::registrar::add(script::func
-    (color_coded::safe_func<decltype(&color_coded::last_error),
-                            &color_coded::last_error>(),
-    "color_coded_last_error"));
+  color_coded::ruby::lua_state(lua);
+  lua_register(lua, "color_coded_pull", &color_coded::pull);
+  lua_register(lua, "color_coded_push", &color_coded::push);
+  lua_register(lua, "color_coded_moved", &color_coded::moved);
+  lua_register(lua, "color_coded_enter", &color_coded::enter);
+  lua_register(lua, "color_coded_destroy", &color_coded::destroy);
+  lua_register(lua, "color_coded_last_error", &color_coded::last_error);
+  return 0;
 }

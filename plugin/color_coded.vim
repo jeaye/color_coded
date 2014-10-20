@@ -8,9 +8,9 @@ if v:version < 704 || !exists("*matchaddpos")
         \ echohl None
   finish
 endif
-if !has('ruby')
+if !has('lua')
   echohl WarningMsg |
-        \ echomsg "color_coded unavailable: requires ruby" |
+        \ echomsg "color_coded unavailable: requires lua" |
         \ echohl None
   finish
 endif
@@ -29,24 +29,25 @@ if !exists("g:color_coded_filetypes")
 endif
 
 let s:path = expand('<sfile>:p:h')
-ruby << EOF
-  require VIM::evaluate('s:path') + '/../bin/color_coded.so'
-
-  def color_coded_buffer_name
-    name = VIM::Buffer.current.name
-    name = VIM::Buffer.current.number.to_s if name.nil?
+lua << EOF
+  require("color_coded")
+  function color_coded_buffer_name()
+    name = vim.buffer().name
+    if (name == nil or name == '') then
+      name = tostring(vim.buffer().number)
+    end
     return name
   end
 
-  def color_coded_buffer_details
-    name = color_coded_buffer_name
+  function color_coded_buffer_details()
+    name = color_coded_buffer_name()
 
-    line_count = VIM::Buffer.current.count
+    line_count = #vim.buffer()
     data = ''
-    for i in 1..line_count do
-      data += VIM::Buffer.current[i] + "\n"
+    for i = 1,line_count do
+      data = data .. vim.buffer()[i] .. "\n"
     end
-    return name, data.nil? ? "" : data
+    return name, data
   end
 EOF
 
@@ -54,8 +55,8 @@ function! s:color_coded_push()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
-ruby << EOF
-  name, data = color_coded_buffer_details
+lua << EOF
+  name, data = color_coded_buffer_details()
   color_coded_push(name, data)
 EOF
 endfunction!
@@ -64,8 +65,8 @@ function! s:color_coded_pull()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
-ruby << EOF
-  name = color_coded_buffer_name
+lua << EOF
+  name = color_coded_buffer_name()
   color_coded_pull(name)
 EOF
 endfunction!
@@ -74,12 +75,9 @@ function! s:color_coded_moved()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
-ruby << EOF
-  name = color_coded_buffer_name
-  color_coded_moved(name,
-                    VIM::Window.current.cursor[0],
-                    VIM::Buffer.current.count,
-                    VIM::Window.current.height)
+lua << EOF
+  name = color_coded_buffer_name()
+  color_coded_moved(name, vim.window().line, #vim.buffer(), vim.window().height)
 EOF
 endfunction!
 
@@ -87,8 +85,8 @@ function! s:color_coded_enter()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
-ruby << EOF
-  name, data = color_coded_buffer_details
+lua << EOF
+  name, data = color_coded_buffer_details()
   color_coded_enter(name, data)
 EOF
 endfunction!
@@ -98,8 +96,8 @@ function! s:color_coded_destroy(file)
     return
   endif
   let s:file = a:file
-ruby << EOF
-  name = VIM::evaluate('s:file')
+lua << EOF
+  name = vim.evaluate('s:file')
   color_coded_destroy(name)
 EOF
   unlet s:file
@@ -109,8 +107,8 @@ function! s:color_coded_last_error()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
-ruby << EOF
-  VIM::command("echo \"" + color_coded_last_error().gsub("\"", "'") + "\"")
+lua << EOF
+  vim.command("echo \"" .. string.gsub(color_coded_last_error(), "\"", "'") .. "\"")
 EOF
 endfunction!
 

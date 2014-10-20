@@ -11,7 +11,7 @@ CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
 						${CXX_MISC} ${CXX_PLATFORM_FLAGS} ${CXX_INCLUDE} 
 
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
-LD_LIBS = -lclang -Llib/juble/lib/ruby -lruby-static -lboost_system -lboost_filesystem \
+LD_LIBS = -lclang -llua -lboost_system -lboost_filesystem \
 					${LD_PLATFORM_LIBS}
 
 PROJECT = %PROJECT%

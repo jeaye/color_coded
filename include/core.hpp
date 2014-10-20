@@ -21,6 +21,9 @@
 #include "conf/load.hpp"
 #include "conf/defaults.hpp"
 
+#include <string>
+#include <map>
+
 /* XXX: It's a shared object to a C lib; I need globals. :| */
 namespace color_coded
 {
