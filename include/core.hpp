@@ -30,7 +30,7 @@ namespace color_coded
   {
     namespace fs = boost::filesystem;
 
-    static std::string temp_dir()
+    std::string temp_dir()
     {
       static auto dir(fs::temp_directory_path() / "color_coded/");
       static auto make_dir(fs::create_directory(dir));
@@ -38,7 +38,7 @@ namespace color_coded
       return dir.string();
     }
 
-    static std::string const& last_error(std::string const &e = "")
+    std::string const& last_error(std::string const &e = "")
     {
       static std::string error;
       if(e.size())
@@ -46,7 +46,7 @@ namespace color_coded
       return error;
     }
 
-    static auto& queue()
+    auto& queue()
     {
       static async::queue<async::task, async::result> q
       {
@@ -82,7 +82,7 @@ namespace color_coded
       return q;
     }
 
-    static auto& buffers()
+    auto& buffers()
     {
       static std::map<std::string, vim::buffer> buffers;
       return buffers;

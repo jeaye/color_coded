@@ -1,8 +1,8 @@
 extern "C"
 {
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+  #include <lua.h>
+  #include <lauxlib.h>
+  #include <lualib.h>
 }
 
 #include "events.hpp"
@@ -24,7 +24,7 @@ namespace color_coded
     return 0;
   }
 
-  static int moved(lua_State * const lua)
+  int moved(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -4));
     auto const line(lua_tonumber(lua, -3));
@@ -34,7 +34,7 @@ namespace color_coded
     return 0;
   }
 
-  static int enter(lua_State * const lua)
+  int enter(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -2));
     auto const data(lua_tostring(lua, -1));
@@ -42,14 +42,14 @@ namespace color_coded
     return 0;
   }
 
-  static int destroy(lua_State * const lua)
+  int destroy(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -1));
     event::destroy(file);
     return 0;
   }
 
-  static int last_error(lua_State * const lua)
+  int last_error(lua_State * const lua)
   {
     lua_pushstring(lua, event::last_error().c_str());
     return 1;

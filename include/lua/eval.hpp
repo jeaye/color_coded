@@ -13,7 +13,7 @@ namespace color_coded
 {
   namespace lua
   {
-    static lua_State* state(lua_State * const lua = nullptr)
+    lua_State* state(lua_State * const lua = nullptr)
     {
       static lua_State *lua_{};
       if(lua)
