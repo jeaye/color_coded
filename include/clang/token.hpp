@@ -11,9 +11,9 @@ namespace color_coded
   {
     namespace token
     {
-      inline std::string to_string(CXTokenKind const token_kind,
-                                   CXCursorKind const cursor_kind,
-                                   CXTypeKind const cursor_type)
+      std::string to_string(CXTokenKind const token_kind,
+                            CXCursorKind const cursor_kind,
+                            CXTypeKind const cursor_type)
       {
         switch (token_kind)
         {

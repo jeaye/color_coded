@@ -9,7 +9,7 @@ namespace color_coded
   {
     using args_t = std::vector<std::string>;
 
-    inline args_t constants()
+    args_t constants()
     {
       return
       { 
@@ -22,7 +22,7 @@ namespace color_coded
       };
     }
 
-    inline args_t defaults()
+    args_t defaults()
     {
       static auto const additions(constants());
       args_t args{ "-std=c++1y", "-I.", "-Iinclude" };

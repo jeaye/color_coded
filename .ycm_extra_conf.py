@@ -11,7 +11,6 @@ flags = [
 'c++',
 '-Isrc',
 '-Iinclude',
-'-Ilib/juble/include',
 
 '-isystem',
 '../BoostParts',

@@ -10,7 +10,7 @@
 #include "clang/translation_unit.hpp"
 #include "clang/token.hpp"
 
-#include "ruby/vim.hpp"
+#include "vim/commands.hpp"
 
 namespace color_coded
 {

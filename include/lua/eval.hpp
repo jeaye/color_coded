@@ -11,9 +11,9 @@ extern "C"
 
 namespace color_coded
 {
-  namespace ruby
+  namespace lua
   {
-    static lua_State* lua_state(lua_State * const lua = nullptr)
+    static lua_State* state(lua_State * const lua = nullptr)
     {
       static lua_State *lua_{};
       if(lua)
@@ -22,6 +22,6 @@ namespace color_coded
     }
 
     void eval(std::string const &str)
-    { luaL_dostring(lua_state(), str.c_str()); }
+    { luaL_dostring(state(), str.c_str()); }
   }
 }

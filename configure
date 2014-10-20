@@ -105,11 +105,7 @@ log "LD platform flags: ${ld_platform_libs}"
 log
 
 log_start "Updating submodules..."
-log_start " juble (can take a while)"
-git submodule update --recursive --init lib/juble 2>&1 > /dev/null
-pushd lib/juble && ./configure --disable-chai 2>&1 > /dev/null && popd
 log_end " done"
-
 
 log_start "Downloading clang..."
 clang_url="http://llvm.org/releases/3.4"

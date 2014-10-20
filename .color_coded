@@ -1,5 +1,2 @@
 -std=c++14
 -Iinclude
--Ilib/juble/include
--Ilib/juble/lib/ruby/include
--Ilib/juble/lib/ruby/.ext/include/x86_64-linux

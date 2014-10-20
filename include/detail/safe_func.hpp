@@ -5,7 +5,6 @@
 #include <stdexcept>
 
 #include "core.hpp"
-#include "ruby/vim.hpp"
 
 namespace color_coded
 {

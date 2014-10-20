@@ -16,7 +16,7 @@ namespace color_coded
   {
     namespace detail
     {
-      inline std::string make_absolute(std::string line)
+      std::string make_absolute(std::string line)
       {
         static std::regex reg{ "\\s*(-I|-isystem|-iquote|--sysroot=)\\s*(.*)" };
         static std::smatch match;
@@ -31,7 +31,7 @@ namespace color_coded
       }
     }
 
-    inline args_t load(std::string const &file)
+    args_t load(std::string const &file)
     {
       if(file.empty())
       { return defaults(); }

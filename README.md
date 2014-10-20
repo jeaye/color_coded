@@ -40,9 +40,6 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 ```
 -std=c++14
 -Iinclude
--Ilib/juble/include
--Ilib/juble/lib/ruby/include
--Ilib/juble/lib/ruby/.ext/include/x86_64-linux
 ```
 
 **NOTE:** Out of simplicity, no other data is permitted in the `.color_coded` file. That is to say, comments are not supported.
@@ -94,7 +91,7 @@ Compilation of color_coded requires a modern compiler:
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
-  * Compiled with Ruby support
+  * Compiled with Lua support
 
 License
 ---
