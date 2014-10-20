@@ -142,7 +142,7 @@ then
   set +o errexit
     md5sum -c clang_md5 2>&1 > /dev/null
     result=$?
-  if [ $result -ne 0 -a "$(md5 -q $clang_final_filename)" != $clang_md5 ];
+  if [ $result -ne 0 -a "$(md5 -q $clang_final_filename 2> /dev/null || true)" != $clang_md5 ];
   then
     log_exit " failed! (remove $clang_final_filename and try to configure again)"
   fi
