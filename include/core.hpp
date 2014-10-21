@@ -52,17 +52,17 @@ namespace color_coded
       {
         [](async::task const &t)
         {
-          /* Build the compiler arguments. */
-          static conf::args_t const config_args_impl{ conf::load(conf::find(".")) };
-          fs::path const path{ t.name };
-          conf::args_t config_args{ config_args_impl };
-          config_args.emplace_back("-I" + fs::absolute(path.parent_path()).string());
-          std::string const filename{ temp_dir() + path.filename().string() };
-          async::temp_file tmp{ filename, t.code };
-
-          /* Attempt compilation. */
           try
           {
+            /* Build the compiler arguments. */
+            static conf::args_t const config_args_impl{ conf::load(conf::find(".")) };
+            fs::path const path{ t.name };
+            conf::args_t config_args{ config_args_impl };
+            config_args.emplace_back("-I" + fs::absolute(path.parent_path()).string());
+            std::string const filename{ temp_dir() + path.filename().string() };
+            async::temp_file tmp{ filename, t.code };
+
+            /* Attempt compilation. */
             clang::translation_unit trans_unit{ clang::compile({ config_args },
                                                                filename) };
             clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
