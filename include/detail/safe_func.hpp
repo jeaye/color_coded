@@ -23,12 +23,12 @@ namespace color_coded
       catch(std::exception const &e)
       {
         core::last_error(std::string{"exception: "} + e.what());
-        std::exit(1);
+        return {};
       }
       catch(...)
       {
         core::last_error("unknown error");
-        std::exit(1);
+        return {};
       }
     };
 
