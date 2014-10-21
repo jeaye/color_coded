@@ -30,7 +30,7 @@ endif
 
 let s:path = expand('<sfile>:p:h')
 lua << EOF
-  package.path = package.path .. ";" .. vim.eval("s:path") .. "../bin"
+  package.cpath = package.cpath .. ";" .. vim.eval("s:path") .. "/../bin"
   require("color_coded")
   function color_coded_buffer_name()
     name = vim.buffer().name
