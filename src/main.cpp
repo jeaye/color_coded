@@ -61,16 +61,22 @@ extern "C" int luaopen_color_coded(lua_State * const lua)
 {
   color_coded::lua::state(lua);
   lua_register(lua, "color_coded_pull",
-    (color_coded::safe_func<decltype(&color_coded::pull), &color_coded::pull>()));
+    (color_coded::safe_func<decltype(&color_coded::pull),
+                            &color_coded::pull>()));
   lua_register(lua, "color_coded_push",
-    (color_coded::safe_func<decltype(&color_coded::push), &color_coded::push>()));
+    (color_coded::safe_func<decltype(&color_coded::push),
+                            &color_coded::push>()));
   lua_register(lua, "color_coded_moved",
-    (color_coded::safe_func<decltype(&color_coded::moved), &color_coded::moved>()));
+    (color_coded::safe_func<decltype(&color_coded::moved),
+                            &color_coded::moved>()));
   lua_register(lua, "color_coded_enter",
-    (color_coded::safe_func<decltype(&color_coded::enter), &color_coded::enter>()));
+    (color_coded::safe_func<decltype(&color_coded::enter),
+                            &color_coded::enter>()));
   lua_register(lua, "color_coded_destroy",
-    (color_coded::safe_func<decltype(&color_coded::destroy), &color_coded::destroy>()));
+    (color_coded::safe_func<decltype(&color_coded::destroy),
+                            &color_coded::destroy>()));
   lua_register(lua, "color_coded_last_error",
-    (color_coded::safe_func<decltype(&color_coded::last_error), &color_coded::last_error>()));
+    (color_coded::safe_func<decltype(&color_coded::last_error),
+                            &color_coded::last_error>()));
   return 0;
 }
