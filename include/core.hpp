@@ -52,12 +52,15 @@ namespace color_coded
       {
         [](async::task const &t)
         {
+          /* Build the compiler arguments. */
           static conf::args_t const config_args_impl{ conf::load(conf::find(".")) };
           fs::path const path{ t.name };
           conf::args_t config_args{ config_args_impl };
           config_args.emplace_back("-I" + fs::absolute(path.parent_path()).string());
           std::string const filename{ temp_dir() + path.filename().string() };
           async::temp_file tmp{ filename, t.code };
+
+          /* Attempt compilation. */
           try
           {
             clang::translation_unit trans_unit{ clang::compile({ config_args },
@@ -67,8 +70,6 @@ namespace color_coded
           }
           catch(clang::compilation_error const &e)
           {
-            /* TODO: We shouldn't just blindly log every error, but this
-             * will be helpful for meow. */
             last_error(e.what());
             return async::result{{}, {}};
           }

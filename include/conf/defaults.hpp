@@ -9,6 +9,7 @@ namespace color_coded
   {
     using args_t = std::vector<std::string>;
 
+    /* Prefixed onto every set of args to make life easier. */
     args_t constants()
     {
       return
@@ -22,6 +23,7 @@ namespace color_coded
       };
     }
 
+    /* If no .color_coded file is provided, these are used. */
     args_t defaults()
     {
       static auto const additions(constants());

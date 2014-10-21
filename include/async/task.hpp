@@ -14,6 +14,7 @@ namespace color_coded
       std::string name;
       std::string code;
     };
+
     struct result
     {
       std::string name;

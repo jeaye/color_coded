@@ -11,6 +11,7 @@ namespace color_coded
   {
     namespace token
     {
+      /* Clang token/cursor -> Vim highlight group. */
       std::string to_string(CXTokenKind const token_kind,
                             CXCursorKind const cursor_kind,
                             CXTypeKind const cursor_type)

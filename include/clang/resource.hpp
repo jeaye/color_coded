@@ -19,20 +19,23 @@ namespace color_coded
       };
     }
 
+    /* Extends detail::resource by providing the ability to specialize
+     * the resource_impl and provide custom deleters; this is in lieu
+     * of embedding them in the type during each instantiation. */
     template <typename T>
     class resource : public detail::resource_impl<T>
     {
       public:
         resource() = default;
         resource(resource const&) = default;
-        resource(resource &&) = default; /* TODO: noexcept */
+        resource(resource &&) = default;
         resource(T &&data)
           : data_{ std::move(data), &detail::resource_impl<T>::deleter }
         { }
 
         resource& operator =(resource const&) = default;
-        resource& operator =(resource &&) noexcept = default;
-        resource& operator =(T &&data) noexcept
+        resource& operator =(resource &&) = default;
+        resource& operator =(T &&data)
         {
           data_ = std::move(data);
           return *this;

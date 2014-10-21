@@ -37,7 +37,7 @@ namespace color_coded
           {
             string const str{ clang_formatDiagnostic(diag,
                               clang_defaultDiagnosticDisplayOptions()) };
-            ss << str.c_str() << std::endl;
+            ss << str.c_str() << '\n';
           }
         }
         auto const str(ss.str());

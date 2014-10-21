@@ -40,9 +40,8 @@ namespace color_coded
       if(!ifs.is_open())
       { return defaults(); }
 
-      args_t args;
-      /* Add some constant defaults. */
       static auto const additions(constants());
+      args_t args;
       std::copy(std::begin(additions), std::end(additions),
                 std::back_inserter(args));
 
