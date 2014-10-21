@@ -7,6 +7,10 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 
 **NOTE:** color_coded is currently _alpha_ software; use it knowing shit may break (but it'll be colorfully broken).
 
+color_coded | normal
+:----------:|:-----:
+<img width="100%" src="https://github.com/jeaye/color_coded/tree/0.1/res/col_1.png"/> | <img width="100%" src="https://github.com/jeaye/color_coded/tree/0.1/res/no_col_1.png"/>
+
 Installation
 ---
 Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:BundleInstall`):
