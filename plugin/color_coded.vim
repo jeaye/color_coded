@@ -34,7 +34,7 @@ lua << EOF
                   ";" .. vim.eval("s:path") .. "/../bin/color_coded.so"
   require("color_coded")
   function color_coded_buffer_name()
-    name = vim.buffer().name
+    name = vim.buffer().fname
     if (name == nil or name == '') then
       name = tostring(vim.buffer().number)
     end
