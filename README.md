@@ -38,7 +38,7 @@ That said, in any non-trivial case, you'll find yourself needing to supply a `.c
 The contents of a `.color_coded` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
 
 ```
--std=c++14
+-std=c++1y
 -Iinclude
 ```
 

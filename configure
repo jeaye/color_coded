@@ -130,7 +130,7 @@ else
   fi
 fi
 
-clang_final_filename="./lib/${clang_filename}"
+clang_final_filename="./${clang_filename}"
 if [ ! -f $clang_final_filename ];
 then
   log_end
