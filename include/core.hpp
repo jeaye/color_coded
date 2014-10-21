@@ -69,10 +69,7 @@ namespace color_coded
             return async::result{ t.name, { trans_unit, tp } };
           }
           catch(clang::compilation_error const &e)
-          {
-            last_error(e.what());
-            return async::result{{}, {}};
-          }
+          { return async::result{{}, {}}; }
           catch(...)
           {
             last_error("unknown compilation error");

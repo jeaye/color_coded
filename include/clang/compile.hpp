@@ -14,6 +14,9 @@
 
 namespace color_coded
 {
+  namespace core
+  { std::string const& last_error(std::string const &e); }
+
   namespace clang
   {
     struct compilation_error : std::runtime_error
@@ -27,7 +30,7 @@ namespace color_coded
       auto &tu(trans_unit.impl);
 
       std::size_t const diags{ clang_getNumDiagnostics(tu) };
-      if(!tu || diags)
+      if(diags)
       {
         std::stringstream ss;
         for(std::size_t i{}; i != diags; ++i)
@@ -42,7 +45,11 @@ namespace color_coded
         }
         auto const str(ss.str());
         if(str.size())
-        { throw compilation_error{ str }; }
+        {
+          core::last_error(str);
+          if(!tu)
+          { throw compilation_error{ str }; }
+        }
       }
 
       return trans_unit;
