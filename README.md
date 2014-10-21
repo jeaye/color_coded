@@ -77,7 +77,7 @@ hi link ClassDecl Type
 hi link EnumDecl Type
 ```
 
-For more information on all of the supported groups, see `plugin/color_coded.vim` and the [clang documentation](http://clang.llvm.org/doxygen/group__CINDEX.html#gaaccc432245b4cd9f2d470913f9ef0013).
+For more information on all of the supported groups, see `after/syntax/color_coded.vim` and the [clang documentation](http://clang.llvm.org/doxygen/group__CINDEX.html#gaaccc432245b4cd9f2d470913f9ef0013).
 
 Commands
 ---
