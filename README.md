@@ -3,6 +3,7 @@ color_coded: semantic highlighting with vim
 color_coded is a vim plugin that provides realtime (fast), tagless code highlighting using libclang.
 
   * Fast compilation, using native C++14
+  * Lua binding for VimL -> C++
   * Exhaustive customization possibilities
 
 **NOTE:** color_coded is currently _alpha_ software; use it knowing shit may break (but it'll be colorfully broken).
@@ -10,6 +11,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 color_coded | normal
 :----------:|:-----:
 <img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/col_1.png"/> | <img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/no_col_1.png"/>
+<img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/col_2.png"/> | <img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/no_col_2.png"/>
 
 Installation
 ---
