@@ -16,10 +16,12 @@ namespace color_coded
     template <typename R, typename... Args, R (*F)(Args...)>
     struct safe_func<R (*)(Args...), F>
     {
+      /* XXX: Function pointers and forwarding refs don't
+       * play nicely together. Copy in and move out. */
       template <typename... Args_>
       static R call(Args_... args)
       try
-      { return F(std::forward<Args_>(args)...); }
+      { return F(std::move(args)...); }
       catch(std::exception const &e)
       {
         core::last_error(std::string{"exception: "} + e.what());
