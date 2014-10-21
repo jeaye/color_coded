@@ -9,7 +9,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 
 color_coded | normal
 :----------:|:-----:
-<img width="100%" src="https://github.com/jeaye/color_coded/tree/0.1/res/col_1.png"/> | <img width="100%" src="https://github.com/jeaye/color_coded/tree/0.1/res/no_col_1.png"/>
+<img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/col_1.png"/> | <img width="100%" src="https://raw.githubusercontent.com/jeaye/color_coded/0.1/res/no_col_1.png"/>
 
 Installation
 ---
