@@ -30,6 +30,7 @@ endif
 
 let s:path = expand('<sfile>:p:h')
 lua << EOF
+  package.path = package.path .. ";" .. vim.eval("s:path") .. "../bin"
   require("color_coded")
   function color_coded_buffer_name()
     name = vim.buffer().name
@@ -97,7 +98,7 @@ function! s:color_coded_destroy(file)
   endif
   let s:file = a:file
 lua << EOF
-  name = vim.evaluate('s:file')
+  name = vim.eval('s:file')
   color_coded_destroy(name)
 EOF
   unlet s:file
