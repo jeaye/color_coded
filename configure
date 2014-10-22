@@ -131,10 +131,12 @@ else
 fi
 
 clang_final_filename="./${clang_filename}"
-if [ ! -f $clang_final_filename ];
+if [ ! -f $clang_final_filename -o -f .downloading_clang ];
 then
   log_end
-  curl -o $clang_final_filename -# "${clang_url}/${clang_filename}" 
+  touch .downloading_clang
+  curl -C - -o $clang_final_filename -# "${clang_url}/${clang_filename}" 
+  rm -f .downloading_clang
 
   log_start "Validating md5..."
   rm -f clang_md5

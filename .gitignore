@@ -3,6 +3,7 @@ bin
 
 # Generated build files
 /Makefile
+/.downloading_clang
 
 # YCM
 *.pyc
