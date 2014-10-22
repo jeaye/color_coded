@@ -44,36 +44,29 @@ cxx_platform_flags=
 ld_platform_libs=
 
 # Project-specific flags
+cxx=c++
 clang=0
 gcc=0
 
-set +o errexit
-  c++ -v 2>&1 | egrep "clang version|LLVM" 2>&1 > /dev/null
-  if [ $? -eq 0 ];
-  then
-    clang=1
-    cxx_platform_flags="-stdlib=libc++ -I/opt/local/include"$cxx_platform_flags
-    ld_platform_libs="-L/opt/local/lib "$ld_platform_libs"-lc++ -framework CoreFoundation"
-  fi
-
-  c++ -v 2>&1 | grep "gcc version" 2>&1 > /dev/null
-  if [ $? -eq 0 ];
-  then
-    gcc=1
-  fi
-
-  [[ $clang -eq 0 && $gcc -eq 0 ]] && log_exit "unknown compiler: c++"
-set -o errexit
-
-[ 1 -eq $uname_linux ] && log "Platform: Linux"
-[ 1 -eq $uname_osx ] && log "Platform: OS X"
-[ 1 -eq $uname_cygwin ] && log "Platform: Cygwin (NOT TESTED)"
+if [ "1" -eq "$uname_linux" ];
+then
+  log "Platform: Linux"
+elif [ "1" -eq "$uname_osx" ];
+then
+  log "Platform: OS X"
+  cxx_platform_flags=$cxx_platform_flags"  -I/opt/local/include "
+  ld_platform_libs="-L/opt/local/lib -framework CoreFoundation "$ld_platform_libs
+elif [ "1" -eq "$uname_cygwin" ];
+then
+  log "Platform: Cygwin (NOT TESTED)"
+fi
 
 function show_help
 {
   log "Usage: $0 [OPTION...]"
   log
-  log "General:"
+  log "Options:"
+  log "  --with-cxx=[c++]                             Set C++ compiler"
   log "  -h, --help                                   Show this help message"
   log
   exit 0
@@ -90,6 +83,16 @@ do
       show_help
       ;;
 
+    --with-cxx)
+      shift
+      cxx="$1"
+      shift
+      ;;
+    --with-cxx=*)
+      cxx="${i#*=}"
+      shift
+      ;;
+
     *)
       # Unknown option
       ;;
@@ -98,8 +101,30 @@ done
 
 # Update after params
 log
-[ 1 -eq $gcc ] && log "Compiler: gcc"
-[ 1 -eq $clang ] && log "Compiler: clang"
+
+# Recount the compiler settings
+if [ $clang -eq 0 -a $gcc -eq 0 ];
+then
+  set +o errexit
+    "$cxx" -v 2>&1 | egrep "clang version|LLVM" 2>&1 > /dev/null
+    if [ $? -eq 0 ];
+    then
+      clang=1
+      cxx_platform_flags="-stdlib=libc++ "$cxx_platform_flags
+      ld_platform_libs=$ld_platform_libs"-lc++"
+    fi
+
+    "$cxx" -v 2>&1 | grep "gcc version" 2>&1 > /dev/null
+    if [ $? -eq 0 ];
+    then
+      gcc=1
+    fi
+
+    [[ $clang -eq 0 && $gcc -eq 0 ]] && log_exit "unknown compiler: $cxx"
+  set -o errexit
+fi
+
+log "Compiler: $cxx"
 log "CXX platform flags: ${cxx_platform_flags:-"none"}"
 log "LD platform flags: ${ld_platform_libs:-"none"}"
 log
@@ -170,6 +195,7 @@ ld_platform_libs="-L${clang_dirname}/lib "$ld_platform_libs
 log_start "Populating Makefile..."
 rm -f Makefile
 sed "s#%CXX_PLATFORM_FLAGS%#${cxx_platform_flags}#" ./Makefile.in |\
+sed "s#%CXX%#${cxx}#" |\
 sed "s#%LD_PLATFORM_LIBS%#${ld_platform_libs}#" > Makefile
 log_end " done"
 

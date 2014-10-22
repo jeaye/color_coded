@@ -1,4 +1,4 @@
-CXX ?= c++
+CXX = %CXX%
 CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3

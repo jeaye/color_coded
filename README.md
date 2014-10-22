@@ -98,7 +98,7 @@ Dependencies
 Compilation of color_coded requires a modern compiler:
   * GCC ≥ 4.9
   * Clang ≥ 3.4
-  * Boost ≥ 1.56
+  * Boost ≥ 1.54
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
