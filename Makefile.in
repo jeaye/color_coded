@@ -42,6 +42,9 @@ setup:
 	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
 
 # For internal use only
+open:
+	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim"
+
 run:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/simple.cpp
 
@@ -50,7 +53,7 @@ run_real:
 
 .SILENT:
 
-.PHONY: all setup ${TARGET}_setup run run_real run_stress
+.PHONY: all setup ${TARGET}_setup open run run_real run_stress
 run_stress:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/stress.hpp
 
