@@ -42,7 +42,9 @@ That said, in any non-trivial case, you'll find yourself needing to supply a `.c
 
 **color_coded will try its hardest to highlight your code for you, even if there are errors in the translation unit.** This allows for better highlighting while typing and highlighting of valid code when color_coded doesn't know everything about your project.
 
-### .color_coded file
+You can test that color_coded is working properly after installation by running `make run`, which will open a small C++ file known to be valid. Highlighting compilation may take a second, but, after moving the cursor, you should see the code becomes highlighted.
+
+### `.color_coded` file contents
 The contents of a `.color_coded` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
 
 ```
@@ -96,10 +98,21 @@ Dependencies
 Compilation of color_coded requires a modern compiler:
   * GCC ≥ 4.9
   * Clang ≥ 3.4
+  * Boost ≥ 1.56
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
   * Compiled with Lua support
+
+Troubleshooting
+---
+
+#### OS X: Help, color_coded just crashes at startup
+There is an issue on OS X with incompatible boost versions and color_coded. To resolve the issue, make sure color_coded is compiled using the same compiler and library as boost. To be certain, you should likely:
+```shell
+brew uninstall boost
+brew install boost --c++11
+```
 
 License
 ---
