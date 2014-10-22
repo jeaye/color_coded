@@ -42,7 +42,7 @@ That said, in any non-trivial case, you'll find yourself needing to supply a `.c
 
 You can test that color_coded is working properly after installation by running `make run`, which will open a small C++ file known to be valid. Highlighting compilation may take a second, but, after moving the cursor, you should see the code becomes highlighted.
 
-### `.color_coded` file contents
+### .color_coded file contents
 The contents of a `.color_coded` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
 
 ```
@@ -105,7 +105,7 @@ Usage of color_coded requires vim:
 Troubleshooting
 ---
 
-#### OS X: Help, color_coded just crashes at startup
+#### OS X: Help, color_coded just crashes at startup!
 There is an issue on OS X with incompatible boost versions and color_coded. To resolve the issue, make sure color_coded is compiled using the same compiler and library as boost. To be certain, you should likely:
 ```shell
 brew uninstall boost
