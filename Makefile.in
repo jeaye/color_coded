@@ -3,14 +3,13 @@ CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
 CXX_MISC = -fpic
-CXX_INCLUDE = -Iinclude -I/usr/local/include
+CXX_INCLUDE = -Iinclude
 CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
 CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
 						${CXX_MISC} ${CXX_PLATFORM_FLAGS} ${CXX_INCLUDE} 
 
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
-LD_LIBS = -lclang -llua -lboost_system -lboost_filesystem \
-					${LD_PLATFORM_LIBS}
+LD_LIBS = ${LD_PLATFORM_LIBS} -lclang -llua -lboost_system -lboost_filesystem
 
 PROJECT = %PROJECT%
 
