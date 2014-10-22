@@ -21,8 +21,6 @@ Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim
 Bundle 'jeaye/color_coded'
 ```
 
-**NOTE:** Cloning color_coded (or, more specifically, its submodules) may take quite a bit of time on slow connections. If your `:BundleInstall` command is blocking for some time, maybe go grab a beverage.
-
 Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle:
 
 ```bash
