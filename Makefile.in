@@ -3,19 +3,38 @@ CXX_WARN = -Wall -Wextra -pedantic
 CXX_NOWARN =
 CXX_OPT = -O3
 CXX_MISC = -fpic
-CXX_INCLUDE = -Iinclude
+CXX_INCLUDE = -Iinclude \
+							-I${PWD}/lib/boost/config/include \
+							-I${PWD}/lib/boost/system/include \
+							-I${PWD}/lib/boost/detail/include \
+							-I${PWD}/lib/boost/utility/include \
+							-I${PWD}/lib/boost/core/include \
+							-I${PWD}/lib/boost/type_traits/include \
+							-I${PWD}/lib/boost/mpl/include \
+							-I${PWD}/lib/boost/preprocessor/include \
+							-I${PWD}/lib/boost/predef/include \
+							-I${PWD}/lib/boost/iterator/include \
+							-I${PWD}/lib/boost/smart_ptr/include \
+							-I${PWD}/lib/boost/exception/include \
+							-I${PWD}/lib/boost/io/include \
+							-I${PWD}/lib/boost/functional/include \
+							-I${PWD}/lib/boost/range/include \
+							-I${PWD}/lib/boost/include \
+							-I${PWD}/lib/boost/filesystem/include
 CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
 CXX_FLAGS = -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
 						${CXX_MISC} ${CXX_PLATFORM_FLAGS} ${CXX_INCLUDE} 
 
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
-LD_LIBS = ${LD_PLATFORM_LIBS} -lclang -llua -lboost_system -lboost_filesystem
+LD_LIBS = ${LD_PLATFORM_LIBS} -lclang -llua
 
 PROJECT = %PROJECT%
 
 OUT_DIR = bin/
 OBJ_DIR = ${OUT_DIR}obj/
 TARGET = ${OUT_DIR}color_coded.so
+BOOST_SYSTEM = ${OUT_DIR}libcolor_coded_boost_system.a
+BOOST_FILESYSTEM = ${OUT_DIR}libcolor_coded_boost_filesystem.a
 
 OBJS := $(patsubst %.cpp,%.cpp.o,$(wildcard src/*.cpp))
 OBJS := $(filter-out ${EXCLUDE},${OBJS})
@@ -26,15 +45,27 @@ log = echo "$(1)" 1>&2
 
 all: ${TARGET}
 
-${TARGET}_setup: setup
+${TARGET}_setup: setup ${BOOST_SYSTEM} ${BOOST_FILESYSTEM}
 	$(call log,"Building ${TARGET}")
 
 ${TARGET}: ${TARGET}_setup ${OBJS}
 	$(call log,"Linking $@")
-	${CXX} -shared ${CXX_FLAGS} ${OUT_OBJS} ${LD_LIBS} -o $@
+	${CXX} -shared -o $@ ${CXX_FLAGS} ${OUT_OBJS} ${LD_LIBS} -Llib/boost/system/bin -Llib/boost/filesystem/bin -lcolor_coded_boost_system -lcolor_coded_boost_filesystem
 
 setup:
 	mkdir -p ${OBJ_DIR} ${OUT_DIR}
+
+clean:
+	rm -f ${TARGET} ${OUT_OBJS}
+	${MAKE} -C lib/boost/system CXX=${CXX} OUT_DIR=${OUT_DIR} clean
+	${MAKE} -C lib/boost/filesystem CXX=${CXX} OUT_DIR=${OUT_DIR} clean
+	$(call log,"Cleaned ${TARGET}")
+
+${BOOST_SYSTEM}: setup
+	${MAKE} -C lib/boost/system CXX="${CXX}" OUT_DIR="${OUT_DIR}" CXX_FLAGS="${CXX_FLAGS}"
+
+${BOOST_FILESYSTEM}: setup ${BOOST_SYSTEM}
+	${MAKE} -C lib/boost/filesystem CXX="${CXX}" OUT_DIR="${OUT_DIR}" CXX_FLAGS="${CXX_FLAGS}"
 
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
@@ -51,13 +82,9 @@ run:
 run_real:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
 
-.SILENT:
-
-.PHONY: all setup ${TARGET}_setup open run run_real run_stress
 run_stress:
 	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/stress.hpp
 
-%.cpp.o: %.cpp
-	$(call log,"  Compiling $<")
-	mkdir -p ${OBJ_DIR}$(dir $<)
-	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
+.SILENT:
+
+.PHONY: all setup ${TARGET}_setup clean open run run_real run_stress
