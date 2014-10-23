@@ -48,6 +48,7 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 ```
 -std=c++1y
 -Iinclude
+-I/usr/lib/clang/3.5.0/include
 ```
 
 **NOTE:** Out of simplicity, no other data is permitted in the `.color_coded` file. That is to say, comments are not supported.
@@ -111,6 +112,9 @@ There is an issue on OS X with incompatible boost versions and color_coded. To r
 brew uninstall boost
 brew install boost --c++11
 ```
+
+#### The highlighting isn't refreshed in a new buffer until I move the cursor
+This is intentional. The first time you open a buffer, color_coded doesn't know if it's going to compile properly and it doesn't want you to wait while it tries to figure this out. color_coded will always compile in the background and events like moving the cursor or changing text will poll for updates. **Note, however,** that, once a buffer has highlighting, leaving that buffer and coming back to it will synchronously apply the previous highlighting.
 
 License
 ---

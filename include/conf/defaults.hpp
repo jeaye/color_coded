@@ -17,8 +17,7 @@ namespace color_coded
         "-x", "c++",
         "-stdlib=libc++",
         "-I/usr/include",
-        "-I/usr/lib/clang/3.5.0/include",
-        "-I/usr/lib/clang/3.4/include",
+        "-I/opt/local/include",
         "-w"
       };
     }
