@@ -1,5 +1,7 @@
 # Binaries
 bin
+*.o
+*.a
 
 # Generated build files
 /Makefile

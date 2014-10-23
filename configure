@@ -54,8 +54,9 @@ then
 elif [ "1" -eq "$uname_osx" ];
 then
   log "Platform: OS X"
-  cxx_platform_flags=$cxx_platform_flags"  -I/opt/local/include "
-  ld_platform_libs="-L/opt/local/lib -framework CoreFoundation "$ld_platform_libs
+  [ -d "/opt/local/include" ] && cxx_platform_flags=$cxx_platform_flags"  -I/opt/local/include "
+  [ -d "/opt/local/lib" ] && ld_platform_libs="-L/opt/local/lib "$ld_platform_libs
+  ld_platform_libs="-framework CoreFoundation "$ld_platform_libs
 elif [ "1" -eq "$uname_cygwin" ];
 then
   log "Platform: Cygwin (NOT TESTED)"

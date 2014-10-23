@@ -26,7 +26,7 @@ clean:
 %.cpp.o: %.cpp
 	$(call log,"  Compiling $<")
 	mkdir -p ${OBJ_DIR}$(dir $<)
-	${CXX} -c ${CXX_FLAGS} $< -o ${OBJ_DIR}$@
+	${CXX} -c ${CXX_FLAGS} -w $< -o ${OBJ_DIR}$@
 
 .SILENT:
 
