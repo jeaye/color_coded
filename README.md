@@ -97,7 +97,6 @@ Dependencies
 Compilation of color_coded requires a modern compiler:
   * GCC ≥ 4.9
   * Clang ≥ 3.4
-  * Boost ≥ 1.54
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
@@ -105,13 +104,6 @@ Usage of color_coded requires vim:
 
 Troubleshooting
 ---
-
-#### OS X: Help, color_coded just crashes at startup!
-There is an issue on OS X with incompatible boost versions and color_coded. To resolve the issue, make sure color_coded is compiled using the same compiler and library as boost. To be certain, you should likely:
-```shell
-brew uninstall boost
-brew install boost --c++11
-```
 
 #### The highlighting isn't refreshed in a new buffer until I move the cursor
 This is intentional. The first time you open a buffer, color_coded doesn't know if it's going to compile properly and it doesn't want you to wait while it tries to figure this out. color_coded will always compile in the background and events like moving the cursor or changing text will poll for updates. **Note, however,** that, once a buffer has highlighting, leaving that buffer and coming back to it will synchronously apply the previous highlighting.
