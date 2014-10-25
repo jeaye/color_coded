@@ -8,6 +8,7 @@ extern "C"
 #include "events.hpp"
 #include "detail/safe_func.hpp"
 
+/* Small API exposed to Lua. */
 namespace color_coded
 {
   int pull(lua_State * const lua)
@@ -55,6 +56,13 @@ namespace color_coded
     lua_pushstring(lua, event::last_error().c_str());
     return 1;
   }
+
+  int api_version(lua_State * const lua)
+  {
+    std::size_t constexpr const version{ 7 };
+    lua_pushinteger(lua, version);
+    return 1;
+  }
 }
 
 extern "C" int luaopen_color_coded(lua_State * const lua)
@@ -78,5 +86,8 @@ extern "C" int luaopen_color_coded(lua_State * const lua)
   lua_register(lua, "color_coded_last_error",
     (color_coded::safe_func<decltype(&color_coded::last_error),
                             &color_coded::last_error>()));
+  lua_register(lua, "color_coded_api_version",
+    (color_coded::safe_func<decltype(&color_coded::api_version),
+                            &color_coded::api_version>()));
   return 0;
 }

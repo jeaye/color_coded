@@ -21,6 +21,7 @@ endif
 
 let g:loaded_color_coded = 1
 let s:color_coded_valid = 1
+let s:color_coded_api_version = 7
 let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
@@ -41,6 +42,15 @@ lua << EOF
           'echohl None')
     vim.command("let s:color_coded_valid = 0")
     return
+  else
+    local version = color_coded_api_version()
+    if version ~= vim.eval("s:color_coded_api_version") then
+      vim.command('echohl WarningMsg | ' ..
+            'echomsg "color_coded has been updated: you need to recompile it ' ..
+            '(see README.md)" | ' ..
+            'echohl None')
+      vim.command("let s:color_coded_valid = 0")
+    end
   end
   function color_coded_buffer_name()
     local name = vim.buffer().fname

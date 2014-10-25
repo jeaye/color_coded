@@ -100,7 +100,7 @@ Compilation of color_coded requires a modern compiler:
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
-  * Compiled with Lua support
+  * Compiled with Lua support (+lua)
 
 Troubleshooting
 ---
@@ -110,6 +110,9 @@ This is intentional. The first time you open a buffer, color_coded doesn't know 
 
 #### "color_coded unavailable: you need to compile it"
 See the above installation docs. When you install color_coded, you need to manually `./configure && make` (any errors will be reported) before you can successfully use it.
+
+#### "color_coded has been updated: you need to recompile it"
+Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this means just `./configure && make`.
 
 License
 ---
