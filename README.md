@@ -108,6 +108,9 @@ Troubleshooting
 #### The highlighting isn't refreshed in a new buffer until I move the cursor
 This is intentional. The first time you open a buffer, color_coded doesn't know if it's going to compile properly and it doesn't want you to wait while it tries to figure this out. color_coded will always compile in the background and events like moving the cursor or changing text will poll for updates. **Note, however,** that, once a buffer has highlighting, leaving that buffer and coming back to it will synchronously apply the previous highlighting.
 
+#### "color_coded unavailable: you need to compile it"
+See the above installation docs. When you install color_coded, you need to manually `./configure && make` (any errors will be reported) before you can successfully use it.
+
 License
 ---
 color_coded is under the MIT open-source license.  
