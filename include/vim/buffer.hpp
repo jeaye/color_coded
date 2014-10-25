@@ -15,7 +15,6 @@ namespace color_coded
       std::size_t line{}, lines{};
       std::size_t begin{}, end{};
       std::size_t height{};
-      std::size_t visibility{ 30 }; /* TODO: make configurable. */
     };
 
     /* Forcefully clears all highlighting and applies the latest. */
@@ -26,8 +25,8 @@ namespace color_coded
 
       vim::clearmatches();
 
-      buf.begin = buf.line - std::min(buf.visibility, buf.line);
-      buf.end = std::min(buf.line + buf.visibility, buf.lines);
+      buf.begin = buf.line - std::min(buf.height, buf.line);
+      buf.end = std::min(buf.line + buf.height, buf.lines);
       for(auto const &h : buf.group)
       {
         if(h.line >= buf.begin && h.line <= buf.end)
