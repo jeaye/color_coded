@@ -20,6 +20,7 @@ endif
 " ------------------------------------------------------------------------------
 
 let g:loaded_color_coded = 1
+let s:color_coded_valid = 1
 let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
@@ -32,9 +33,17 @@ let s:path = expand('<sfile>:p:h')
 lua << EOF
   package.cpath = package.cpath ..
                   ";" .. vim.eval("s:path") .. "/../bin/color_coded.so"
-  require("color_coded")
+  local loaded = pcall(require, "color_coded")
+  if not loaded then
+    vim.command('echohl WarningMsg | ' ..
+          'echomsg "color_coded unavailable: you need to compile it ' ..
+          '(see README.md)" | ' ..
+          'echohl None')
+    vim.command("let s:color_coded_valid = 0")
+    return
+  end
   function color_coded_buffer_name()
-    name = vim.buffer().fname
+    local name = vim.buffer().fname
     if (name == nil or name == '') then
       name = tostring(vim.buffer().number)
     end
@@ -42,10 +51,10 @@ lua << EOF
   end
 
   function color_coded_buffer_details()
-    name = color_coded_buffer_name()
+    local name = color_coded_buffer_name()
 
-    line_count = #vim.buffer()
-    data = ''
+    local line_count = #vim.buffer()
+    local data = ''
     for i = 1,line_count do
       data = data .. vim.buffer()[i] .. "\n"
     end
@@ -53,12 +62,17 @@ lua << EOF
   end
 EOF
 
+" Verify everything is ok
+if s:color_coded_valid == 0
+  finish
+endif
+
 function! s:color_coded_push()
   if index(g:color_coded_filetypes, &ft) < 0
     return
   endif
 lua << EOF
-  name, data = color_coded_buffer_details()
+  local name, data = color_coded_buffer_details()
   color_coded_push(name, data)
 EOF
 endfunction!
@@ -68,7 +82,7 @@ function! s:color_coded_pull()
     return
   endif
 lua << EOF
-  name = color_coded_buffer_name()
+  local name = color_coded_buffer_name()
   color_coded_pull(name)
 EOF
 endfunction!
@@ -78,7 +92,7 @@ function! s:color_coded_moved()
     return
   endif
 lua << EOF
-  name = color_coded_buffer_name()
+  local name = color_coded_buffer_name()
   color_coded_moved(name, vim.window().line, #vim.buffer(), vim.window().height)
 EOF
 endfunction!
@@ -88,7 +102,7 @@ function! s:color_coded_enter()
     return
   endif
 lua << EOF
-  name, data = color_coded_buffer_details()
+  local name, data = color_coded_buffer_details()
   color_coded_enter(name, data)
 EOF
 endfunction!
@@ -99,7 +113,7 @@ function! s:color_coded_destroy(file)
   endif
   let s:file = a:file
 lua << EOF
-  name = vim.eval('s:file')
+  local name = vim.eval('s:file')
   color_coded_destroy(name)
 EOF
   unlet s:file
