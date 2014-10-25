@@ -112,7 +112,7 @@ This is intentional. The first time you open a buffer, color_coded doesn't know 
 See the above installation docs. When you install color_coded, you need to manually `./configure && make` (any errors will be reported) before you can successfully use it.
 
 #### "color_coded has been updated: you need to recompile it"
-Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this means just `./configure && make`.
+Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this just means `./configure && make`.
 
 License
 ---

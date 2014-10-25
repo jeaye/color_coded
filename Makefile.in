@@ -74,16 +74,27 @@ ${BOOST_FILESYSTEM}: setup ${BOOST_SYSTEM}
 
 # For internal use only
 open:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim"
+	gvim --noplugin \
+		-c "set runtimepath^=${PWD}" \
+		-c ":source ${PWD}/plugin/color_coded.vim"
 
 run:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/simple.cpp
+	gvim --noplugin \
+		-c "set runtimepath^=${PWD}" \
+		-c ":source ${PWD}/plugin/color_coded.vim" \
+		test/simple.cpp
 
 run_real:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" src/main.cpp
+	gvim --noplugin \
+		-c "set runtimepath^=${PWD}" \
+		-c ":source ${PWD}/plugin/color_coded.vim" \
+		src/main.cpp
 
 run_stress:
-	gvim --noplugin -c "let g:color_coded_debug=1" -c ":source ${PWD}/plugin/color_coded.vim" test/stress.hpp
+	gvim --noplugin \
+		-c "set runtimepath^=${PWD}" \
+		-c ":source ${PWD}/plugin/color_coded.vim" \
+		test/stress.hpp
 
 .SILENT:
 
