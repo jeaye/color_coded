@@ -35,7 +35,7 @@ if s:color_coded_valid == 1
     au VimEnter,BufEnter * call color_coded#enter()
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#moved()
-    au CursorHold,CursorHoldI * call color_coded#pull()
+    au CursorHold,CursorHoldI * call color_coded#moved()
     au BufLeave * call clearmatches()
     au BufDelete * call color_coded#destroy(expand('<afile>'))
   augroup END

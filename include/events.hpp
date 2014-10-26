@@ -29,15 +29,14 @@ namespace color_coded
                            std::size_t const lines, std::size_t const height)
     {
       auto &buf(core::buffers()[file]);
+      buf.line = line;
+      buf.lines = lines;
+      buf.height = height;
+
       if(pull(file))
       { vim::apply(buf); }
       else
-      {
-        buf.line = line;
-        buf.lines = lines;
-        buf.height = height;
-        vim::try_apply(buf);
-      }
+      { vim::try_apply(buf); }
     }
 
     void enter(std::string const &file, std::string const &data)
