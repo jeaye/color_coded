@@ -54,6 +54,7 @@ ${TARGET}: ${TARGET}_setup ${OBJS}
 
 setup:
 	mkdir -p ${OBJ_DIR} ${OUT_DIR}
+	./lib/track_api # Update the API version before compiling
 
 clean:
 	rm -f ${TARGET} ${OUT_OBJS}

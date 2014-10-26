@@ -28,14 +28,14 @@ elif [ "$(uname -o)" = "Cygwin" ];
 then
   uname_cygwin=1
 else
-  echo "Invalid uname ($uname): unsuppported platform" 1>&2
+  printf "Invalid uname ($uname): unsuppported platform\n" 1>&2
   exit 1
 fi
 
-log() { echo "$@" 1>&2; }
+log() { printf "$@\n" 1>&2; }
 log_start() { printf "$@" 1>&2; }
-log_end() { echo "$@" 1>&2; }
-log_exit() { echo "$@" 1>&2; exit 1; }
+log_end() { printf "$@\n" 1>&2; }
+log_exit() { printf "$@\n" 1>&2; exit 1; }
 
 project=color_coded
 log "Configuring ${project}"
@@ -166,7 +166,7 @@ then
 
   log_start "Validating md5..."
   rm -f clang_md5
-  echo "$clang_md5 $clang_final_filename" > clang_md5
+  printf "$clang_md5 $clang_final_filename\n" > clang_md5
   set +o errexit
     md5sum -c clang_md5 2>&1 > /dev/null
     result=$?

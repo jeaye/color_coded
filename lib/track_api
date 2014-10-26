@@ -1,0 +1,27 @@
+#!/bin/bash
+# Tracks changes in the native code each build
+# and updates the API versions as required.
+
+set -o errexit
+set -o nounset
+
+log_start() { printf "$@" 1>&2; }
+log_end() { printf "$@\n" 1>&2; }
+
+log_start "Tracking API changes..."
+
+# Check for changes to native code
+set +o errexit
+  git status --porcelain -uno | egrep 'src|include' 2>&1 > /dev/null
+  ret=$?
+  [ ! $ret -eq 0 ] && log_end "\n" && exit 0
+set -o errexit
+
+# Patch the VimL and C++ with the new API version (the commit hash)
+commit=$(git rev-parse --short HEAD)
+vim_pattern="s/\\(let s:color_coded_api_version = \\).*/\\10x$commit/"
+cpp_pattern="s/\\(std::size_t constexpr const version\\).*/\\1\\{ 0x$commit \\};/"
+sed -i "$vim_pattern" ./autoload/color_coded.vim
+sed -i "$cpp_pattern" ./src/main.cpp
+
+log_end " new version (0x$commit)\n"
