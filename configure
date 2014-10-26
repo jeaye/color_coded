@@ -140,7 +140,7 @@ if [ 1 -eq $uname_osx ];
 then
   clang_dirname="clang+llvm-3.5.0-macosx-apple-darwin"
   clang_md5="e580c8b8c64ca5442ac15a4343447500"
-  clang_filename="${clang_dirname}.tar.gz"
+  clang_filename="${clang_dirname}.tar.xz"
 else
   if [ "x86_64" == "${uname_arch}" ];
   then
