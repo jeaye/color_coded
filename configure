@@ -180,6 +180,8 @@ then
 
   log_start "Extracting..."
   mkdir -p $clang_dirname
+  type xz 2>&1 > /dev/null || \
+    log_exit " (error) xz is required to unpack clang; see README.md"
   tar xf $clang_final_filename -C $clang_dirname --strip-components 1
   log_end " done"
 else

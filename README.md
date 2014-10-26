@@ -114,6 +114,25 @@ See the above installation docs. When you install color_coded, you need to manua
 #### "color_coded has been updated: you need to recompile it"
 Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this just means `./configure && make`.
 
+#### "xz is required to unpack clang"
+As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):  
+###### OS X (homebrew)
+```bash
+brew install xz
+```
+###### OS X (port)
+```bash
+port install xz
+```
+###### Ubuntu/Debian
+```bash
+sudo apt-get install xz-utils
+```
+###### Arch
+```bash
+sudo pacman -S xz
+```
+
 License
 ---
 color_coded is under the MIT open-source license.  
