@@ -125,10 +125,6 @@ port install xz # for macports
 ```bash
 sudo apt-get install xz-utils
 ```
-###### Arch
-```bash
-sudo pacman -S xz
-```
 
 License
 ---
