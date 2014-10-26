@@ -134,21 +134,21 @@ log_start "Updating submodules..."
 log_end " done"
 
 log_start "Downloading clang..."
-clang_url="http://llvm.org/releases/3.4"
+clang_url="http://llvm.org/releases/3.5.0"
 
 if [ 1 -eq $uname_osx ];
 then
-  clang_dirname="clang+llvm-3.4-x86_64-apple-darwin10.9"
-  clang_md5="4f43ea0e87090ae5e7bec12373ca4927"
+  clang_dirname="clang+llvm-3.5.0-macosx-apple-darwin"
+  clang_md5="e580c8b8c64ca5442ac15a4343447500"
   clang_filename="${clang_dirname}.tar.gz"
 else
   if [ "x86_64" == "${uname_arch}" ];
   then
-    clang_dirname="clang+llvm-3.4-x86_64-unknown-ubuntu12.04"
-    clang_md5="6077459d20a7ff412eefc6ce3b9f5c85"
+    clang_dirname="clang+llvm-3.5.0-x86_64-linux-gnu-ubuntu-14.04"
+    clang_md5="904e96e6f51e57b58de546a7324910c3"
     clang_filename="${clang_dirname}.tar.xz"
   else
-    log "No pre-built Clang 3.4 binaries for 32 bit linux, downloading Clang 3.3"
+    log "WARNING: No pre-built Clang 3.5 binaries for 32 bit linux, downloading Clang 3.3"
     clang_url="http://llvm.org/releases/3.3"
     clang_dirname="clang+llvm-3.3-i386-debian6"
     clang_md5="415d033b60659433d4631df894673802"
@@ -179,7 +179,7 @@ then
   log_end " done"
 
   log_start "Extracting..."
-  tar xf $clang_final_filename
+  tar xf $clang_final_filename --one-top-level=$clang_dirname --strip-components=1
   log_end " done"
 else
   log_end " already downloaded!"

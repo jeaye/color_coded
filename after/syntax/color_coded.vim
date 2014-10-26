@@ -72,5 +72,3 @@ hi link ImaginaryLiteral Number
 hi link StringLiteral String
 hi link CharacterLiteral Character
 hi link Punctuation Normal
-
-
