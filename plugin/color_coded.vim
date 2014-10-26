@@ -20,6 +20,7 @@ endif
 " ------------------------------------------------------------------------------
 
 let g:loaded_color_coded = 1
+let $VIMHOME = expand('<sfile>:p:h:h')
 let s:keepcpo = &cpo
 set cpo&vim
 " ------------------------------------------------------------------------------
@@ -32,7 +33,6 @@ endif
 
 command! CCerror call color_coded#last_error()
 
-let $VIMHOME=expand('<sfile>:p:h:h')
 augroup color_coded
   au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
   au VimEnter,BufEnter * call color_coded#enter()
