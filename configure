@@ -179,7 +179,8 @@ then
   log_end " done"
 
   log_start "Extracting..."
-  tar xf $clang_final_filename --one-top-level=$clang_dirname --strip-components=1
+  mkdir -p $clang_dirname
+  tar xf $clang_final_filename -C $clang_dirname --strip-components 1
   log_end " done"
 else
   log_end " already downloaded!"
