@@ -81,19 +81,19 @@ open:
 run:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
-		-c ":source ${PWD}/plugin/color_coded.vim" \
+		-c "source ${PWD}/plugin/color_coded.vim" \
 		test/simple.cpp
 
 run_real:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
-		-c ":source ${PWD}/plugin/color_coded.vim" \
+		-c "source ${PWD}/plugin/color_coded.vim" \
 		src/main.cpp
 
 run_stress:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
-		-c ":source ${PWD}/plugin/color_coded.vim" \
+		-c "source ${PWD}/plugin/color_coded.vim" \
 		test/stress.hpp
 
 .SILENT:
