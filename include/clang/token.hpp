@@ -38,7 +38,8 @@ namespace color_coded
                 /* An enumeration. */
                 return "EnumDecl";
               case CXCursor_FieldDecl: 	
-                /* A field (in C) or non-static data member (in C++) in a struct, union, or C++ class. */
+                /* A field (in C) or non-static data member (in C++) in a
+                 * struct, union, or C++ class. */
                 return "FieldDecl";
               case CXCursor_EnumConstantDecl: 	
                 /* An enumerator constant. */
@@ -148,26 +149,35 @@ namespace color_coded
               case CXCursor_TypeRef:
                 /* A reference to a type declaration.
 
-                   A type reference occurs anywhere where a type is named but not declared. For example, given:
+                   A type reference occurs anywhere where a type is
+                   named but not declared. For example, given:
 
                    typedef unsigned size_type;
                    size_type size;
-                   The typedef is a declaration of size_type (CXCursor_TypedefDecl), while the type of the variable "size" is referenced. The cursor referenced by the type of size is the typedef for size_type.  */
+                   The typedef is a declaration of size_type
+                   (CXCursor_TypedefDecl), while the type of the variable
+                   "size" is referenced. The cursor referenced by the
+                   type of size is the typedef for size_type.  */
                 return "TypeRef";
               case CXCursor_CXXBaseSpecifier: 	
-                /* 
-              A reference to a class template, function template, template template parameter, or class template partial specialization. */
+                /* A reference to a class template, function template,
+                 * template template parameter, or class template partial
+                 * specialization. */
                 return "CXXBaseSpecifier";
               case CXCursor_NamespaceRef: 	
                 /* A reference to a namespace or namespace alias. */
                 return "NamespaceRef";
               case CXCursor_MemberRef: 	
-                /* A reference to a member of a struct, union, or class that occurs in some non-expression context, e.g., a designated initializer. */
+                /* A reference to a member of a struct, union, or
+                 * class that occurs in some non-expression context,
+                 * e.g., a designated initializer. */
                 return "MemberRef";
               case CXCursor_LabelRef: 	
                 /* A reference to a labeled statement.
 
-                   This cursor kind is used to describe the jump to "start_over" in the goto statement in the following example:
+                   This cursor kind is used to describe the jump
+                   to "start_over" in the goto statement in the
+                   following example:
 
                    start_over:
                      ++counter;
@@ -177,9 +187,13 @@ namespace color_coded
                    A label reference cursor refers to a label statement. */
                 return "LabelRef";
               case CXCursor_OverloadedDeclRef: 	
-                /* A reference to a set of overloaded functions or function templates that has not yet been resolved to a specific function or function template.
+                /* A reference to a set of overloaded functions or
+                   function templates that has not yet been resolved
+                   to a specific function or function template.
 
-                   An overloaded declaration reference cursor occurs in C++ templates where a dependent name refers to a function. For example:
+                   An overloaded declaration reference cursor occurs
+                   in C++ templates where a dependent name refers to a
+                   function. For example:
 
                    template<typename T> void swap(T&, T&);
 
@@ -197,12 +211,22 @@ namespace color_coded
                    struct Y { };
                    void swap(Y&, Y&);
 
-                   Here, the identifier "swap" is associated with an overloaded declaration reference. In the template definition, "swap" refers to either of the two "swap" functions declared above, so both results will be available. At instantiation time, "swap" may also refer to other functions found via argument-dependent lookup (e.g., the "swap" function at the end of the example).
+                   Here, the identifier "swap" is associated with an
+                   overloaded declaration reference. In the template
+                   definition, "swap" refers to either of the two
+                   "swap" functions declared above, so both results
+                   will be available. At instantiation time, "swap"
+                   may also refer to other functions found via
+                   argument-dependent lookup (e.g., the "swap" function
+                   at the end of the example).
 
-                   The functions clang_getNumOverloadedDecls() and clang_getOverloadedDecl() can be used to retrieve the definitions referenced by this cursor. */
+                   The functions clang_getNumOverloadedDecls() and
+                   clang_getOverloadedDecl() can be used to retrieve the
+                   definitions referenced by this cursor. */
                 return "OverloadedDeclRef";
               case CXCursor_VariableRef: 	
-                /* A reference to a variable that occurs in some non-expression context, e.g., a C++ lambda capture list. */
+                /* A reference to a variable that occurs in some
+                 * non-expression context, e.g., a C++ lambda capture list. */
                 return "VariableRef";
               case CXCursor_FirstInvalid:
                 return "FirstInvalid";
@@ -213,12 +237,17 @@ namespace color_coded
               case CXCursor_InvalidCode:
                 return "InvalidCode";
               case CXCursor_FirstExpr:
-                /* An expression whose specific kind is not exposed via this interface.
+                /* An expression whose specific kind is not exposed via
+                 * this interface.
 
-                   Unexposed expressions have the same operations as any other kind of expression; one can extract their location information, spelling, children, etc. However, the specific kind of the expression is not reported. */
+                   Unexposed expressions have the same operations as any
+                   other kind of expression; one can extract their location
+                   information, spelling, children, etc. However, the
+                   specific kind of the expression is not reported. */
                 return "FirstExpr";
               case CXCursor_DeclRefExpr: 	
-                /* An expression that refers to some value declaration, such as a function, variable, or enumerator. */
+                /* An expression that refers to some value declaration,
+                 * such as a function, variable, or enumerator. */
                 switch(cursor_type)
                 {
                   case CXType_Enum:
@@ -235,13 +264,15 @@ namespace color_coded
                 }
                 return "DeclRefExpr";
               case CXCursor_MemberRefExpr: 	
-                /* An expression that refers to a member of a struct, union, class, Objective-C class, etc. */
+                /* An expression that refers to a member of a struct,
+                 * union, class, Objective-C class, etc. */
                 return "MemberRefExpr";
               case CXCursor_CallExpr: 	
                 /* An expression that calls a function. */
                 return "CallExpr";
               case CXCursor_ObjCMessageExpr: 	
-                /* An expression that sends a message to an Objective-C object or class. */
+                /* An expression that sends a message to an Objective-C
+                 * object or class. */
                 return "ObjCMessageExpr";
               case CXCursor_BlockExpr: 	
                 /* An expression that represents a block literal. */
@@ -250,9 +281,23 @@ namespace color_coded
                 return "MacroDefinition";
               case CXCursor_MacroInstantiation:
                 return "MacroInstantiation";
+              case CXCursor_PreprocessingDirective:
+                return "MacroDefinition";
+              case CXCursor_InclusionDirective:
+                return "MacroDefinition";
+              case CXCursor_ParenExpr:
+                return "Variable"; /* TODO wrong? */
+              case CXCursor_LambdaExpr:
+                return "Normal"; /* TODO wrong */
+              case CXCursor_CXXForRangeStmt:
+                return "Normal"; /* TODO wrong */
+              case CXCursor_DeclStmt: /* TODO What's this? */
+                return "Type";
+              case CXCursor_TemplateRef:
+                return "Type";
 
               default:
-                return "Type";
+                return "Error";
             }
           case CXToken_Literal:
             switch(cursor_kind)
@@ -271,12 +316,12 @@ namespace color_coded
                 return "MacroDefinition";
               case CXType_Unexposed:
               default:
-                return "Type";
+                return "Normal"; /* TODO: Why have unhandled things? */
             }
           case CXToken_Comment:
             return "Comment";
           default:
-            return "Normal";
+            return "Error";
         }
       }
     }
