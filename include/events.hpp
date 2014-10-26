@@ -45,8 +45,6 @@ namespace color_coded
       auto &buf(core::buffers()[file]);
       if(buf.group.size())
       { vim::apply(buf); }
-      else
-      { vim::clearmatches(); }
       core::queue().push({ file, data });
     }
 

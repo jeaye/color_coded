@@ -36,6 +36,7 @@ if s:color_coded_valid == 1
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#moved()
     au CursorHold,CursorHoldI * call color_coded#pull()
+    au BufLeave * call clearmatches()
     au BufDelete * call color_coded#destroy(expand('<afile>'))
   augroup END
 endif
