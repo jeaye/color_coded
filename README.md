@@ -116,13 +116,10 @@ Assuming you've updated a working installation of color_coded, you'll get this e
 
 #### "xz is required to unpack clang"
 As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):  
-###### OS X (homebrew)
+###### OS X
 ```bash
-brew install xz
-```
-###### OS X (port)
-```bash
-port install xz
+brew install xz # for homebrew
+port install xz # for macports
 ```
 ###### Ubuntu/Debian
 ```bash
