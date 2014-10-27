@@ -38,8 +38,7 @@ endfunction!
 function! color_coded#setup()
   " Try to get the lua binding working
   lua << EOF
-    package.cpath = package.cpath ..
-                    ";" .. vim.eval("$VIMHOME") .. "/bin/color_coded.so"
+    package.cpath = vim.eval("$VIMHOME") .. "/bin/color_coded.so"
     local loaded = pcall(require, "color_coded")
     if not loaded then
       vim.command('echohl WarningMsg | ' ..
