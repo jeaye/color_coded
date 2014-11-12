@@ -1,10 +1,10 @@
 " Vim global plugin for semantic highlighting using libclang
 " Maintainer: Jeaye <contact@jeaye.com>
 
-hi Member ctermfg=Cyan guifg=Cyan
-hi Variable ctermfg=Grey guifg=Grey
-hi Namespace ctermfg=DarkYellow guifg=DarkYellow
-hi EnumConstant ctermfg=LightGreen guifg=LightGreen
+hi default Member ctermfg=Cyan guifg=Cyan
+hi default Variable ctermfg=Grey guifg=Grey
+hi default Namespace ctermfg=DarkYellow guifg=DarkYellow
+hi default EnumConstant ctermfg=LightGreen guifg=LightGreen
 
 hi link StructDecl Type
 hi link UnionDecl Type
