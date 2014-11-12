@@ -79,6 +79,9 @@ hi link ClassDecl Type
 hi link EnumDecl Type
 ```
 
+#### Sample colorscheme
+color_coded ships with a sample color scheme demonstrating support for the extended groups. To use it, invoke `:colorscheme twilighted`. As the name may suggest, the colorscheme is forked from vim's own twilight theme and has been appropriately punned into that which you'll see in the repo. To examine the implementation, visit `colors/twilighted.vim`. Note that color_coded can work with any colorscheme; this is just a sample.
+
 For more information on all of the supported groups, see `after/syntax/color_coded.vim` and the [clang documentation](http://clang.llvm.org/doxygen/group__CINDEX.html#gaaccc432245b4cd9f2d470913f9ef0013).
 
 Commands
