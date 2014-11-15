@@ -49,6 +49,7 @@ hi link ObjCProtocolRef Normal
 hi link ObjCClassRef Normal
 hi link TypeRef Type
 hi link CXXBaseSpecifier Type
+hi link TemplateRef Type
 hi link NamespaceRef Namespace
 hi link MemberRef Member
 hi link LabelRef Label

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include <clang-c/Index.h>
 
@@ -46,25 +47,28 @@ namespace color_coded
         {
           auto &tu(trans_unit.impl);
           std::vector<CXCursor> cursors(tokens.size());
-          clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
           auto cursor(cursors.cbegin());
-          for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
+          for(auto token(tokens.cbegin()); token != tokens.cend(); ++token)
           {
             CXTokenKind const kind{ clang_getTokenKind(*token) };
             clang::string const spell{ clang_getTokenSpelling(tu, *token) };
             auto const loc(clang_getTokenLocation(tu, *token));
 
-            auto const cursor_kind(cursor->kind);
-            auto const cursor_type(clang_getCursorType(*cursor).kind);
-
             CXFile file{};
             unsigned line{}, column{}, offset{};
             clang_getFileLocation(loc, &file, &line, &column, &offset);
 
-            group_.emplace_back(clang::token::to_string(kind, cursor_kind,
-                                                        cursor_type),
-                                line, column, spell.c_str());
+            auto const cur(clang_getCursor(tu, loc));
+            auto const cursor_kind(cur.kind);
+            auto const cursor_type(clang_getCursorType(cur).kind);
+
+            auto const mapped(clang::token::map_token_kind(kind, cursor_kind,
+                                                             cursor_type));
+            if(mapped.size())
+            {
+              std::cout << spell.c_str() << " : " << mapped << std::endl;
+              group_.emplace_back(mapped, line, column, spell.c_str()); }
           }
         }
 

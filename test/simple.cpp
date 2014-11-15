@@ -6,8 +6,8 @@ struct foo
   void work()
   { }
 
-  char const * name{};
-  int age{};
+  char const * name{ "jeaye" };
+  int age{ static_cast<int>(std::string{name}.size()) };
   static long count;
 };
 
@@ -27,6 +27,9 @@ enum class kitten
   meow,
   purr
 };
+
+typedef kitten meow;
+using meow2 = kitten;
 
 /* Oh, excellent. */
 int main()
