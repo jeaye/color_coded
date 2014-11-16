@@ -246,7 +246,7 @@ namespace color_coded
           case CXCursor_ImaginaryLiteral:
             return "Number";
           case CXCursor_StringLiteral:
-            return "String";
+            return ""; /* Allow vim to do this. */
           case CXCursor_CharacterLiteral:
             return "Character";
           case CXCursor_PreprocessingDirective:
@@ -273,7 +273,7 @@ namespace color_coded
           case CXToken_Literal:
             return map_literal_kind(cursor_kind);
           case CXToken_Comment:
-            return "Comment";
+            return ""; /* Allow vim to do this. */
           default:
             return "";
         }

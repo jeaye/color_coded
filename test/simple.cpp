@@ -8,6 +8,7 @@ struct foo
 
   char const * name{ "jeaye" };
   int age{ static_cast<int>(std::string{name}.size()) };
+  std::size_t age2{ std::string{name}.size() };
   static long count;
 };
 
