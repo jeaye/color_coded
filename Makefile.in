@@ -95,7 +95,7 @@ run_stress:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
 		-c "source ${PWD}/plugin/color_coded.vim" \
-		test/stress.hpp
+		test/stress.cpp
 
 .SILENT:
 
