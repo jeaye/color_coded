@@ -2,7 +2,7 @@ color_coded: semantic highlighting with vim
 ---
 color_coded is a vim plugin that provides realtime (fast), tagless code highlighting for C++, C, and Objective C using libclang.
 
-  * Fast compilation, using native C++14
+  * Environmentally friendly
   * Lua binding for VimL -> C++
   * Exhaustive customization possibilities
 

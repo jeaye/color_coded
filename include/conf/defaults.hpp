@@ -18,6 +18,7 @@ namespace color_coded
         "-stdlib=libc++",
         "-I/usr/include",
         "-I/opt/local/include",
+        "-I/usr/local/lib/clang/3.6.0/include",
         "-w"
       };
     }
