@@ -80,6 +80,7 @@ namespace color_coded
 
           default:
             return "";
+            //return "Error1 " + std::to_string(kind);
         }
       }
 
@@ -194,13 +195,13 @@ namespace color_coded
 
             /********* Errors **********/
           case CXCursor_InvalidFile:
-            return "InvalidFile";
+            return "";
           case CXCursor_NoDeclFound:
-            return "NoDeclFound";
+            return "";
           case CXCursor_NotImplemented:
-            return "NotImplemented";
+            return "";
           case CXCursor_InvalidCode:
-            return "InvalidCode";
+            return "";
 
             /********* Expressions **********/
           case CXCursor_UnexposedExpr:
@@ -229,10 +230,13 @@ namespace color_coded
           case CXCursor_LambdaExpr:
           case CXCursor_CXXForRangeStmt:
           case CXCursor_DeclStmt:
+            return "";
           default:
             return "";
+            //return "Error2 " + std::to_string(kind);
         }
         return "";
+        //return "Error3 " + std::to_string(kind);
       }
 
       inline std::string map_literal_kind(CXCursorKind const kind)
@@ -250,10 +254,13 @@ namespace color_coded
           case CXCursor_CharacterLiteral:
             return "Character";
           case CXCursor_PreprocessingDirective:
+          case CXCursor_InclusionDirective:
             return "MacroDefinition";
           case CXType_Unexposed:
+            return "";
           default:
             return "";
+            //return "Error4 " + std::to_string(kind);
         }
       }
 
@@ -276,6 +283,7 @@ namespace color_coded
             return ""; /* Allow vim to do this. */
           default:
             return "";
+            //return "Error5 " + std::to_string(token_kind);
         }
       }
     }

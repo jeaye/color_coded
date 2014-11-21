@@ -56,6 +56,7 @@ hi link LabelRef Label
 hi link OverloadedDeclRef Function
 hi link VariableRef Variable
 hi link FirstInvalid Normal
+hi link InvalidFile Error
 hi link NoDeclFound Error
 hi link NotImplemented Normal
 hi link InvalidCode Error

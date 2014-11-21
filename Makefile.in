@@ -1,5 +1,5 @@
 CXX = %CXX%
-CXX_WARN = -Wall -Wextra -pedantic
+CXX_WARN = -Wall -Wextra -pedantic -Wno-missing-field-initializers
 CXX_NOWARN =
 CXX_OPT = -O3
 CXX_MISC = -fpic
