@@ -105,6 +105,9 @@ Usage of color_coded requires vim:
 Troubleshooting
 ---
 
+#### Some bits aren't highlighted or are highlighted incorrectly
+Yup. Believe it or not, these are almost certainly libclang bugs. I've been sorting out a few of them and I'm maintaining my own fork of libclang. If you would like to report such an issue, check out [this ticket](https://github.com/jeaye/color_coded/issues/2).
+
 #### The highlighting isn't refreshed in a new buffer until I move the cursor
 This is intentional. The first time you open a buffer, color_coded doesn't know if it's going to compile properly and it doesn't want you to wait while it tries to figure this out. color_coded will always compile in the background and events like moving the cursor or changing text will poll for updates. **Note, however,** that, once a buffer has highlighting, leaving that buffer and coming back to it will synchronously apply the previous highlighting.
 
