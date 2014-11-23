@@ -72,6 +72,8 @@ namespace color_coded
               //std::cout << spell.c_str() << " : " << mapped << std::endl;
               emplace_back(mapped, line, column, spell.c_str());
             }
+            else
+            { /* std::cout << "unmapped: " << spell.c_str() << std::endl; */ }
           }
         }
 

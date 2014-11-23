@@ -32,7 +32,7 @@ enum class kitten
 typedef kitten meow;
 using meow2 = kitten;
 
-/* Oh, excellent. */
+/* TODO: XXX these should work FIXME */
 int main()
 {
   foo f;

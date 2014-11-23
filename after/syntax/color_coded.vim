@@ -32,7 +32,7 @@ hi link Constructor Function
 hi link Destructor Function
 hi link ConversionFunction Function
 hi link TemplateTypeParameter Type
-hi link NonTypeTemplateParameter Normal
+hi link NonTypeTemplateParameter Variable
 hi link TemplateTemplateParameter Type
 hi link FunctionTemplate Function
 hi link ClassTemplate Type
