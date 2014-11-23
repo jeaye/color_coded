@@ -11,10 +11,6 @@ namespace color_coded
   {
     namespace token
     {
-      /* TODO: This function actually is needed to have different outputs
-       * depending on some context. If we're talking about a type decl
-       * and our kind is CXType_Bool, we want to highlight as a Type,
-       * not a Variable. */
       inline std::string map_type_kind(CXTypeKind const kind)
       {
         switch(kind)
@@ -254,7 +250,6 @@ namespace color_coded
           case CXCursor_CharacterLiteral:
             return "Character";
           case CXCursor_PreprocessingDirective:
-          case CXCursor_InclusionDirective:
             return "MacroDefinition";
           case CXType_Unexposed:
             return "";
