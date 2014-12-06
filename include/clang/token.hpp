@@ -249,8 +249,6 @@ namespace color_coded
             return ""; /* Allow vim to do this. */
           case CXCursor_CharacterLiteral:
             return "Character";
-          case CXCursor_PreprocessingDirective:
-            return "MacroDefinition";
           case CXType_Unexposed:
             return "";
           default:
@@ -267,9 +265,9 @@ namespace color_coded
         switch (token_kind)
         {
           case CXToken_Punctuation:
-            return "Punctuation";
+            return ""; /* Allow vim to do this. */
           case CXToken_Keyword:
-            return "keyword";
+            return "Keyword";
           case CXToken_Identifier:
             return map_cursor_kind(cursor_kind, cursor_type);
           case CXToken_Literal:
