@@ -49,7 +49,7 @@ exe 'hi TODO guifg='.s:grey_blue .' guibg='.s:darkgrey .' gui=italic,bold'
 " ~~~ These are specific to color_coded ~~~
 exe 'hi Member guifg='.s:cyan .' guibg='.s:darkgrey .' gui=italic'
 exe 'hi Variable guifg='.s:light_grey_blue .' guibg='.s:darkgrey .' gui=none'
-exe 'hi Namespace guifg='.s:mid_grey_blue .' guibg='.s:darkgrey .' gui=none'
+exe 'hi Namespace guifg='.s:red .' guibg='.s:darkgrey .' gui=none'
 exe 'hi EnumConstant guifg='.s:lightgreen .' guibg='.s:darkgrey .' gui=none'
 " ====================== Important bits ======================
 
