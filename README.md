@@ -10,7 +10,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 
 Without color_coded | With color_coded
 :------------------:|:------------------:
-![](http://jeaye.com/cc/trimmed_cc_t_no_3.png) | ![](http://jeaye.com/cc/trimmed_cc_t_yes_3.png)
+<img src="http://jeaye.com/cc/trimmed_cc_t_no_3.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_3.png" width="100%"/>
 
 Installation
 ---
