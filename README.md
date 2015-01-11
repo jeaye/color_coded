@@ -48,7 +48,6 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 ```
 -std=c++1y
 -Iinclude
--I/usr/lib/clang/3.5.0/include
 ```
 
 **NOTE:** Out of simplicity, no other data is permitted in the `.color_coded` file. That is to say, comments are not supported.
