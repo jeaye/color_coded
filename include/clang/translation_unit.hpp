@@ -19,7 +19,8 @@ namespace color_coded
                        std::string const &file)
         : impl
           { clang_parseTranslationUnit(ind->get(), file.c_str(),
-            args.data(), args.size(), nullptr, 0, CXTranslationUnit_DetailedPreprocessingRecord) }
+            args.data(), args.size(), nullptr, 0,
+            CXTranslationUnit_DetailedPreprocessingRecord) }
         , filename{ file }
         , index{ ind }
       { }

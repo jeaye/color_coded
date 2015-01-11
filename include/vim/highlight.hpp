@@ -51,7 +51,8 @@ namespace color_coded
           clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
 
           auto cursor(cursors.cbegin());
-          for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
+          for(auto token(tokens.cbegin()); token != tokens.cend();
+              ++token, ++cursor)
           {
             CXTokenKind const kind{ clang_getTokenKind(*token) };
             clang::string const spell{ clang_getTokenSpelling(tu, *token) };
@@ -66,7 +67,7 @@ namespace color_coded
             auto const cursor_type(clang_getCursorType(cur).kind);
 
             auto const mapped(clang::token::map_token_kind(kind, cursor_kind,
-                                                             cursor_type));
+                                                           cursor_type));
             if(mapped.size())
             {
               //std::cout << spell.c_str() << " : " << mapped << std::endl;

@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 
+#include "env/environment.hpp"
+
 namespace color_coded
 {
   namespace conf
@@ -18,7 +20,7 @@ namespace color_coded
         "-stdlib=libc++",
         "-I/usr/include",
         "-I/opt/local/include",
-        "-I/usr/local/lib/clang/3.6.0/include",
+        environment<env::tag>::clang_include,
         "-w"
       };
     }

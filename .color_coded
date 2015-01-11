@@ -1,4 +1,2 @@
 -std=c++1y
 -Iinclude
--I/usr/lib/clang/3.5.0/include
--I/usr/local/lib/clang/3.6.0/include
