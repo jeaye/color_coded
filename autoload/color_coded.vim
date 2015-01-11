@@ -70,7 +70,7 @@ endfunction!
 " ------------------------------------------------------------------------------
 
 function! color_coded#push()
-  if index(g:color_coded_filetypes, &ft) < 0
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
 lua << EOF
@@ -80,7 +80,7 @@ EOF
 endfunction!
 
 function! color_coded#pull()
-  if index(g:color_coded_filetypes, &ft) < 0
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
 lua << EOF
@@ -90,7 +90,7 @@ EOF
 endfunction!
 
 function! color_coded#moved()
-  if index(g:color_coded_filetypes, &ft) < 0
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
 lua << EOF
@@ -100,7 +100,7 @@ EOF
 endfunction!
 
 function! color_coded#enter()
-  if index(g:color_coded_filetypes, &ft) < 0
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
 lua << EOF
@@ -110,7 +110,7 @@ EOF
 endfunction!
 
 function! color_coded#destroy(file)
-  if index(g:color_coded_filetypes, &ft) < 0
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
   let s:file = a:file
@@ -121,12 +121,21 @@ EOF
   unlet s:file
 endfunction!
 
+" Commands
+" ------------------------------------------------------------------------------
+
 function! color_coded#last_error()
-  if index(g:color_coded_filetypes, &ft) < 0
-    return
-  endif
 lua << EOF
   vim.command("echo \"" .. string.gsub(color_coded_last_error(), "\"", "'") ..
               "\"")
 EOF
+endfunction!
+
+function! color_coded#toggle()
+  let g:color_coded_enabled = g:color_coded_enabled ? 0 : 1
+  if g:color_coded_enabled == 0
+    call clearmatches()
+  else
+    call color_coded#enter()
+  endif
 endfunction!

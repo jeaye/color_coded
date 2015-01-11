@@ -55,6 +55,14 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 Options
 ---
 
+#### `g:color_coded_enabled`
+This option controls whether or not color_coded will function. Invoking the `:CCtoggle` command will modify this option to achieve its results. You may also specify it as `0` in your `~/.vimrc` to globally disable color_coded.
+
+Default:
+```viml
+let g:color_coded_enabled = 1
+```
+
 #### `g:color_coded_filetypes`
 This option controls the filetypes for which color_coded will try to compile.
 
@@ -69,14 +77,17 @@ There are many new highlighting groups which color_coded adds. They are designed
 
 #### Generic groups
 ```viml
-hi Member # Any non-static member variable
-hi Variable # Any non-member variable
+" To get full highlighting, specify these in your colorscheme.
+" See colors/twilighted.vim for example usage
+
+hi Member " Any non-static member variable
+hi Variable " Any non-member variable
 hi Namespace 
 hi EnumConstant
 ```
 
 #### Example of clang groups
-```
+```viml
 hi link StructDecl Type
 hi link UnionDecl Type
 hi link ClassDecl Type
@@ -93,6 +104,9 @@ Commands
 
 #### `:CCerror`
 This command outputs the last compilation error message from libclang. If your highlighting is not working properly, you may have a misconfigured `.color_coded` file or you may have syntax errors in your source. When in doubt, check here first.
+
+#### `:CCtoggle`
+This command enables color_coded, if it's currently disabled, or disables it, if it's currently enabled. This enable/disabling is done via the `g:color_coded_enabled` option.
 
 Dependencies
 ---

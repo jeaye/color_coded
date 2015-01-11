@@ -14,7 +14,14 @@ if !has('lua')
         \ echohl None
   finish
 endif
+
 if exists("g:loaded_color_coded") || &cp
+  finish
+endif
+
+if !exists("g:color_coded_enabled")
+  let g:color_coded_enabled = 1
+elseif g:color_coded_enabled == 0
   finish
 endif
 " ------------------------------------------------------------------------------
@@ -29,6 +36,7 @@ set cpo&vim
 let s:color_coded_valid = color_coded#setup()
 if s:color_coded_valid == 1
   command! CCerror call color_coded#last_error()
+  command! CCtoggle call color_coded#toggle()
 
   augroup color_coded
     au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
