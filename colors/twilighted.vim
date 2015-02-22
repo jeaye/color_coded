@@ -76,7 +76,7 @@ hi TabLineFill guifg=#a09998 guibg=#202020 gui=underline
 hi TabLineSel guifg=#a09998 guibg=#404850 gui=underline
 
 " P-Menu (auto-completion)
-hi Pmenu guifg=#605958 guibg=#303030 gui=underline
+hi Pmenu guifg=#a09998 guibg=#303030 gui=underline
 hi PmenuSel guifg=#a09998 guibg=#404040 gui=underline
 
 hi Visual guibg=#404040
