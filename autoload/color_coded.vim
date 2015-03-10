@@ -27,6 +27,8 @@ function! s:color_coded_define_lua_helpers()
       local name = color_coded_buffer_name()
       local line_count = #vim.buffer()
       local data = ''
+      -- TODO : I think this is slow as balls
+      -- Push to the stack and let C++ handle it?
       for i = 1,line_count do
         data = data .. vim.buffer()[i] .. "\n"
       end
