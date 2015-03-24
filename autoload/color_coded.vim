@@ -24,13 +24,14 @@ function! s:color_coded_define_lua_helpers()
     end
 
     function color_coded_buffer_details()
-      local name = color_coded_buffer_name()
       local line_count = #vim.buffer()
-      local data = ''
-      for i = 1,line_count do
-        data = data .. vim.buffer()[i] .. "\n"
+      local buffer = vim.buffer()
+      local data = {}
+      for i = 1,#buffer do
+        -- NOTE: buffer is a userdata; must be copied into array
+        data[i] = buffer[i]
       end
-      return name, data
+      return color_coded_buffer_name(), table.concat(data, '\n')
     end
 EOF
 endfunction!
