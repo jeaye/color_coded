@@ -6,7 +6,7 @@ namespace color_coded
 {
   namespace event
   {
-    bool pull(std::string const &file)
+    inline bool pull(std::string const &file)
     {
       auto const pulled(core::queue().pull());
       if(pulled.second)
@@ -18,28 +18,28 @@ namespace color_coded
       return false;
     }
 
-    void push(std::string const &file, std::string const &data)
+    inline void push(std::string const &file, std::string const &data)
     {
       if(pull(file))
       { vim::apply(core::buffers()[file]); }
       core::queue().push({ file, data });
     }
 
-    void moved(std::string const &file, std::size_t const line,
-                           std::size_t const lines, std::size_t const height)
+    inline void moved(std::string const &file, std::size_t const line,
+                      std::size_t const lines, std::size_t const height)
     {
       auto &buf(core::buffers()[file]);
       buf.line = line;
       buf.lines = lines;
       buf.height = height;
 
-      if(pull(file))
+      if(pull(file)) /* Pulled new info. */
       { vim::apply(buf); }
-      else
+      else /* See if the move requires another application. */
       { vim::try_apply(buf); }
     }
 
-    void enter(std::string const &file, std::string const &data)
+    inline void enter(std::string const &file, std::string const &data)
     {
       auto &buf(core::buffers()[file]);
       if(buf.group.size())
@@ -47,10 +47,10 @@ namespace color_coded
       core::queue().push({ file, data });
     }
 
-    void destroy(std::string const &file)
+    inline void destroy(std::string const &file)
     { core::buffers().erase(file); }
 
-    std::string last_error()
+    inline std::string last_error()
     { return core::last_error(); }
   }
 }

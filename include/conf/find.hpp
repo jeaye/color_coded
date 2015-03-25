@@ -10,7 +10,7 @@ namespace color_coded
   {
     namespace filesystem = boost::filesystem;
 
-    std::string find(filesystem::path curr)
+    inline std::string find(filesystem::path curr)
     {
       /* TODO: Configurable max depth. */
       filesystem::directory_iterator const end;
