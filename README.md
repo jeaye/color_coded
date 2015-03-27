@@ -5,6 +5,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
   * Environmentally friendly
   * Lua binding for VimL -> C++
   * Exhaustive customization possibilities
+  * Unintrusive highlighting; self-contained
 
 **NOTE:** color_coded is currently _alpha_ software; use it knowing shit may break (but it'll be colorfully broken). There are [known issues](https://github.com/jeaye/color_coded/issues) (mostly related to libclang). I'll likely wait until clang 3.6 is released (expect Feb. 2015) before releasing color_coded.
 
