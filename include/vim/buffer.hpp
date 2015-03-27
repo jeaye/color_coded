@@ -23,6 +23,8 @@ namespace color_coded
       if(buf.group.empty())
       { return; }
 
+      vim::clear_matches();
+
       buf.begin = buf.line - std::min(buf.height, buf.line);
       buf.end = std::min(buf.line + buf.height, buf.lines);
       for(auto const &h : buf.group)

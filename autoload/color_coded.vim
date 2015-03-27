@@ -4,8 +4,9 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xa3f111b
+let s:color_coded_api_version = 0x5058442
 let s:color_coded_valid = 1
+let g:color_coded_matches = {}
 
 function! s:color_coded_create_defaults()
   if !exists("g:color_coded_filetypes")
@@ -107,7 +108,9 @@ function! color_coded#enter()
 lua << EOF
   local name, data = color_coded_buffer_details()
   color_coded_enter(name, data)
+  vim.command("let s:file = '" .. name .. "'")
 EOF
+  let g:color_coded_matches[s:file] = []
 endfunction!
 
 function! color_coded#destroy(file)
@@ -135,8 +138,27 @@ endfunction!
 function! color_coded#toggle()
   let g:color_coded_enabled = g:color_coded_enabled ? 0 : 1
   if g:color_coded_enabled == 0
-    call clearmatches()
+    call color_coded#clear_matches()
   else
     call color_coded#enter()
   endif
+endfunction!
+
+function! color_coded#add_match(type, line, col, len)
+lua << EOF
+  vim.command("let s:file = '" .. color_coded_buffer_name() .. "'")
+EOF
+
+  call add(g:color_coded_matches[s:file],
+          \matchaddpos(a:type, [[ a:line, a:col, a:len ]], -1))
+endfunction!
+
+function! color_coded#clear_matches()
+lua << EOF
+  vim.command("let s:file = '" .. color_coded_buffer_name() .. "'")
+EOF
+  for id in g:color_coded_matches[s:file]
+    call matchdelete(id)
+  endfor
+  let g:color_coded_matches[s:file] = []
 endfunction!
