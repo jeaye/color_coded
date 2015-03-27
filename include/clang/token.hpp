@@ -88,81 +88,81 @@ namespace color_coded
           /********* Declarations **********/
           case CXCursor_UnexposedDecl: /* Unknown declaration */
             return "";
-          case CXCursor_StructDecl:
+          case CXCursor_StructDecl: 	
             return "StructDecl";
-          case CXCursor_UnionDecl:
+          case CXCursor_UnionDecl: 	
             return "UnionDecl";
-          case CXCursor_ClassDecl:
+          case CXCursor_ClassDecl: 	
             return "ClassDecl";
-          case CXCursor_EnumDecl:
+          case CXCursor_EnumDecl: 	
             return "EnumDecl";
-          case CXCursor_FieldDecl:
+          case CXCursor_FieldDecl: 	
             return "FieldDecl";
-          case CXCursor_EnumConstantDecl:
+          case CXCursor_EnumConstantDecl: 	
             return "EnumConstantDecl";
-          case CXCursor_FunctionDecl:
+          case CXCursor_FunctionDecl: 	
             return "FunctionDecl";
-          case CXCursor_VarDecl:
+          case CXCursor_VarDecl: 	
             return "VarDecl";
-          case CXCursor_ParmDecl:
+          case CXCursor_ParmDecl: 	
             return "ParmDecl";
-          case CXCursor_ObjCInterfaceDecl:
+          case CXCursor_ObjCInterfaceDecl: 	
             return "ObjCInterfaceDecl";
-          case CXCursor_ObjCCategoryDecl:
+          case CXCursor_ObjCCategoryDecl: 	
             return "ObjCCategoryDecl";
-          case CXCursor_ObjCProtocolDecl:
+          case CXCursor_ObjCProtocolDecl: 	
             return "ObjCProtocolDecl";
-          case CXCursor_ObjCPropertyDecl:
+          case CXCursor_ObjCPropertyDecl: 	
             return "ObjCPropertyDecl";
           case CXCursor_ObjCIvarDecl:
             return "ObjCIvarDecl";
-          case CXCursor_ObjCInstanceMethodDecl:
+          case CXCursor_ObjCInstanceMethodDecl: 	
             return "ObjCInstanceMethodDecl";
-          case CXCursor_ObjCClassMethodDecl:
+          case CXCursor_ObjCClassMethodDecl: 	
             return "ObjCClassMethodDecl";
-          case CXCursor_ObjCImplementationDecl:
+          case CXCursor_ObjCImplementationDecl: 	
             return "ObjCImplementationDecl";
-          case CXCursor_ObjCCategoryImplDecl:
+          case CXCursor_ObjCCategoryImplDecl: 	
             return "ObjCCategoryImplDecl";
           case CXCursor_TypedefDecl:
             return "TypedefDecl";
-          case CXCursor_CXXMethod:
+          case CXCursor_CXXMethod: 	
             return "CXXMethod";
-          case CXCursor_Namespace:
+          case CXCursor_Namespace: 	
             return "Namespace";
-          case CXCursor_LinkageSpec:
+          case CXCursor_LinkageSpec: 	
             return "LinkageSpec";
-          case CXCursor_Constructor:
+          case CXCursor_Constructor: 	
             return "Constructor";
-          case CXCursor_Destructor:
+          case CXCursor_Destructor: 	
             return "Destructor";
-          case CXCursor_ConversionFunction:
+          case CXCursor_ConversionFunction: 	
             return "ConversionFunction";
-          case CXCursor_TemplateTypeParameter:
+          case CXCursor_TemplateTypeParameter: 	
             return "TemplateTypeParameter";
-          case CXCursor_NonTypeTemplateParameter:
+          case CXCursor_NonTypeTemplateParameter: 	
             return "NonTypeTemplateParameter";
-          case CXCursor_TemplateTemplateParameter:
+          case CXCursor_TemplateTemplateParameter: 	
             return "TemplateTemplateParameter";
-          case CXCursor_FunctionTemplate:
+          case CXCursor_FunctionTemplate: 	
             return "FunctionTemplate";
-          case CXCursor_ClassTemplate:
+          case CXCursor_ClassTemplate: 	
             return "ClassTemplate";
-          case CXCursor_ClassTemplatePartialSpecialization:
+          case CXCursor_ClassTemplatePartialSpecialization: 	
             return "ClassTemplatePartialSpecialization";
-          case CXCursor_NamespaceAlias:
+          case CXCursor_NamespaceAlias: 	
             return "NamespaceAlias";
-          case CXCursor_UsingDirective:
+          case CXCursor_UsingDirective: 	
             return "UsingDirective";
-          case CXCursor_UsingDeclaration:
+          case CXCursor_UsingDeclaration: 	
             return "UsingDeclaration";
-          case CXCursor_TypeAliasDecl:
+          case CXCursor_TypeAliasDecl: 	
             return "TypeAliasDecl";
-          case CXCursor_ObjCSynthesizeDecl:
+          case CXCursor_ObjCSynthesizeDecl: 	
             return "ObjCSynthesizeDecl";
-          case CXCursor_ObjCDynamicDecl:
+          case CXCursor_ObjCDynamicDecl: 	
             return "ObjCDynamicDecl";
-          case CXCursor_CXXAccessSpecifier:
+          case CXCursor_CXXAccessSpecifier: 	
             return "CXXAccessSpecifier";
 
             /********* References **********/
@@ -174,19 +174,19 @@ namespace color_coded
             return "ObjCClassRef";
           case CXCursor_TypeRef:
             return "TypeRef";
-          case CXCursor_CXXBaseSpecifier:
+          case CXCursor_CXXBaseSpecifier: 	
             return "CXXBaseSpecifier";
           case CXCursor_TemplateRef:
             return "TemplateRef";
-          case CXCursor_NamespaceRef:
+          case CXCursor_NamespaceRef: 	
             return "NamespaceRef";
-          case CXCursor_MemberRef:
+          case CXCursor_MemberRef: 	
             return "MemberRef";
-          case CXCursor_LabelRef:
+          case CXCursor_LabelRef: 	
             return "LabelRef";
-          case CXCursor_OverloadedDeclRef:
+          case CXCursor_OverloadedDeclRef: 	
             return "OverloadedDeclRef";
-          case CXCursor_VariableRef:
+          case CXCursor_VariableRef: 	
             return "VariableRef";
 
             /********* Errors **********/
@@ -202,15 +202,15 @@ namespace color_coded
             /********* Expressions **********/
           case CXCursor_UnexposedExpr:
             break;
-          case CXCursor_DeclRefExpr:
+          case CXCursor_DeclRefExpr: 	
             return map_type_kind(type);
-          case CXCursor_MemberRefExpr:
+          case CXCursor_MemberRefExpr: 	
             return "MemberRefExpr";
-          case CXCursor_CallExpr:
+          case CXCursor_CallExpr: 	
             return "CallExpr";
-          case CXCursor_ObjCMessageExpr:
+          case CXCursor_ObjCMessageExpr: 	
             return "ObjCMessageExpr";
-          case CXCursor_BlockExpr:
+          case CXCursor_BlockExpr: 	
             return "BlockExpr";
           case CXCursor_MacroDefinition:
             return "MacroDefinition";

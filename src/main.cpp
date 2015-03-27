@@ -11,14 +11,14 @@ extern "C"
 /* Small API exposed to Lua. */
 namespace color_coded
 {
-  static int pull(lua_State * const lua)
+  int pull(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -1));
     lua_pushboolean(lua, event::pull(file));
     return 1;
   }
 
-  static int push(lua_State * const lua)
+  int push(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -2));
     auto const data(lua_tostring(lua, -1));
@@ -26,7 +26,7 @@ namespace color_coded
     return 0;
   }
 
-  static int moved(lua_State * const lua)
+  int moved(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -4));
     auto const line(lua_tonumber(lua, -3));
@@ -36,7 +36,7 @@ namespace color_coded
     return 0;
   }
 
-  static int enter(lua_State * const lua)
+  int enter(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -2));
     auto const data(lua_tostring(lua, -1));
@@ -44,22 +44,22 @@ namespace color_coded
     return 0;
   }
 
-  static int destroy(lua_State * const lua)
+  int destroy(lua_State * const lua)
   {
     auto const file(lua_tostring(lua, -1));
     event::destroy(file);
     return 0;
   }
 
-  static int last_error(lua_State * const lua)
+  int last_error(lua_State * const lua)
   {
     lua_pushstring(lua, event::last_error().c_str());
     return 1;
   }
 
-  static int api_version(lua_State * const lua)
+  int api_version(lua_State * const lua)
   {
-    std::size_t constexpr const version{ 0xa3f111b };
+    std::size_t constexpr const version{ 0x50aab00 };
     lua_pushinteger(lua, version);
     return 1;
   }

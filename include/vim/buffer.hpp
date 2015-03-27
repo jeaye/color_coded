@@ -18,10 +18,12 @@ namespace color_coded
     };
 
     /* Forcefully clears all highlighting and applies the latest. */
-    inline void apply(buffer &buf)
+    void apply(buffer &buf)
     {
       if(buf.group.empty())
       { return; }
+
+      vim::clearmatches();
 
       buf.begin = buf.line - std::min(buf.height, buf.line);
       buf.end = std::min(buf.line + buf.height, buf.lines);
@@ -33,7 +35,7 @@ namespace color_coded
     }
 
     /* Will only highlight if we're outside of the previous highlight range. */
-    inline void try_apply(buffer &buf)
+    void try_apply(buffer &buf)
     {
       if(buf.line - std::min(buf.height, buf.line) < buf.begin ||
          std::min(buf.line + buf.height, buf.lines) > buf.end)
