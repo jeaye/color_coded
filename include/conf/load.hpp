@@ -16,7 +16,7 @@ namespace color_coded
   {
     namespace detail
     {
-      std::string make_absolute(std::string line)
+      inline std::string make_absolute(std::string line)
       {
         static std::regex reg{ "\\s*(-I|-isystem|-iquote|--sysroot=)\\s*(.*)" };
         static std::smatch match;
@@ -26,12 +26,12 @@ namespace color_coded
           if(str.size() && str[0] != '/')
           { line = match[1].str() + boost::filesystem::absolute(str).string(); }
         }
-        
+
         return line;
       }
     }
 
-    args_t load(std::string const &file)
+    inline args_t load(std::string const &file)
     {
       if(file.empty())
       { return defaults(); }

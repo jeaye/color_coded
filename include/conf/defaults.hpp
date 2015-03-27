@@ -12,10 +12,10 @@ namespace color_coded
     using args_t = std::vector<std::string>;
 
     /* Prefixed onto every set of args to make life easier. */
-    args_t constants()
+    inline args_t constants()
     {
       return
-      { 
+      {
         "-x", "c++",
         "-stdlib=libc++",
         "-I/usr/include",
@@ -26,7 +26,7 @@ namespace color_coded
     }
 
     /* If no .color_coded file is provided, these are used. */
-    args_t defaults()
+    inline args_t defaults()
     {
       static auto const additions(constants());
       args_t args{ "-std=c++1y", "-I.", "-Iinclude" };

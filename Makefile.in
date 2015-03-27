@@ -79,6 +79,11 @@ open:
 		-c "set runtimepath^=${PWD}" \
 		-c ":source ${PWD}/plugin/color_coded.vim"
 
+open_with_plugins:
+	gvim \
+		-c "set runtimepath^=${PWD}" \
+		-c ":source ${PWD}/plugin/color_coded.vim"
+
 run:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
