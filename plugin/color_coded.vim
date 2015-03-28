@@ -45,6 +45,7 @@ if s:color_coded_valid == 1
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#moved()
     au CursorHold,CursorHoldI * call color_coded#moved()
+    " Leaving a color_coded buffer requires removing matched positions
     au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
     au BufDelete * call color_coded#destroy(expand('<afile>'))
   augroup END
