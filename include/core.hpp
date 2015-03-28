@@ -40,7 +40,7 @@ namespace color_coded
 
     inline std::string const& last_error(std::string const &e = "")
     {
-      static std::string error;
+      static std::string error{ "no errors" };
       if(e.size())
       { error = e; }
       return error;

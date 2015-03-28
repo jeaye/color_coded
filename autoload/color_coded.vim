@@ -4,8 +4,9 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0x5058442
+let s:color_coded_api_version = 0x948339e
 let s:color_coded_valid = 1
+let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
 
 function! s:color_coded_create_defaults()
@@ -105,12 +106,28 @@ function! color_coded#enter()
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
+
+  " Each new window controls highlighting separate from the buffer
+  if !exists("w:color_coded_own_syntax") || w:color_coded_name != color_coded#get_buffer_name()
+    execute 'ownsyntax ' . b:current_syntax
+    let w:color_coded_own_syntax = 1
+
+    " Each window has a unique ID
+    let w:color_coded_unique_counter = s:color_coded_unique_counter
+    let s:color_coded_unique_counter += 1
+
+    " Windows can be reused; clear it out if needed
+    if exists("w:color_coded_name")
+      call color_coded#clear_matches(w:color_coded_name)
+    endif
+    let w:color_coded_name = color_coded#get_buffer_name()
+    call color_coded#clear_matches(w:color_coded_name)
+  endif
+
 lua << EOF
   local name, data = color_coded_buffer_details()
   color_coded_enter(name, data)
-  vim.command("let s:file = '" .. name .. "'")
 EOF
-  let g:color_coded_matches[s:file] = []
 endfunction!
 
 function! color_coded#destroy(file)
@@ -122,6 +139,9 @@ lua << EOF
   local name = vim.eval('s:file')
   color_coded_destroy(name)
 EOF
+
+  let s:file = color_coded#get_buffer_name()
+  call color_coded#clear_matches(s:file)
   unlet s:file
 endfunction!
 
@@ -130,35 +150,60 @@ endfunction!
 
 function! color_coded#last_error()
 lua << EOF
-  vim.command("echo \"" .. string.gsub(color_coded_last_error(), "\"", "'") ..
-              "\"")
+  vim.command
+  (
+    "echo \"" .. string.gsub(color_coded_last_error(), "\"", "'") ..  "\""
+  )
 EOF
 endfunction!
 
 function! color_coded#toggle()
   let g:color_coded_enabled = g:color_coded_enabled ? 0 : 1
   if g:color_coded_enabled == 0
-    call color_coded#clear_matches()
+    call color_coded#clear_all_matches()
+    echo "color_coded: disabled"
   else
     call color_coded#enter()
+    echo "color_coded: enabled"
   endif
 endfunction!
 
-function! color_coded#add_match(type, line, col, len)
-lua << EOF
-  vim.command("let s:file = '" .. color_coded_buffer_name() .. "'")
-EOF
+" Utilities
+" ------------------------------------------------------------------------------
 
-  call add(g:color_coded_matches[s:file],
-          \matchaddpos(a:type, [[ a:line, a:col, a:len ]], -1))
+" We keep two sets of buffer names right now
+" 1) Lua's color_coded_buffer_name
+"   - Just the filename or buffer number
+"   - Used for interfacing with C++
+" 2) VimL's color_coded#get_buffer_name
+"   - A combination of 1) and a unique window counter
+"   - Used for storing per-window syntax matches
+function! color_coded#get_buffer_name()
+lua << EOF
+  local name = color_coded_buffer_name()
+  vim.command("let s:file = '" .. name .. "'")
+EOF
+  return s:file . w:color_coded_unique_counter
 endfunction!
 
-function! color_coded#clear_matches()
-lua << EOF
-  vim.command("let s:file = '" .. color_coded_buffer_name() .. "'")
-EOF
-  for id in g:color_coded_matches[s:file]
-    call matchdelete(id)
-  endfor
-  let g:color_coded_matches[s:file] = []
+function! color_coded#add_match(type, line, col, len)
+  let s:file = color_coded#get_buffer_name()
+  call add(g:color_coded_matches[s:file],
+          \matchaddpos(a:type, [[ a:line, a:col, a:len ]], -1))
+  unlet s:file
+endfunction!
+
+" Clears color_coded matches only in the current buffer
+function! color_coded#clear_matches(file)
+  if has_key(g:color_coded_matches, a:file) == 1
+    for id in g:color_coded_matches[a:file]
+      call matchdelete(id)
+    endfor
+  endif
+  let g:color_coded_matches[a:file] = []
+endfunction!
+
+" Clears color_coded matches in all open buffers
+function! color_coded#clear_all_matches()
+  let g:color_coded_matches = {}
 endfunction!
