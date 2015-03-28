@@ -183,7 +183,11 @@ lua << EOF
   local name = color_coded_buffer_name()
   vim.command("let s:file = '" .. name .. "'")
 EOF
-  return s:file . w:color_coded_unique_counter
+  if exists("w:color_coded_unique_counter")
+    return s:file . w:color_coded_unique_counter
+  else
+    return s:file
+  endif
 endfunction!
 
 function! color_coded#add_match(type, line, col, len)
