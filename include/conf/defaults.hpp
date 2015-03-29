@@ -17,7 +17,6 @@ namespace color_coded
       return
       {
         "-x", "c++",
-        "-stdlib=libc++",
         "-I/usr/include",
         "-I/opt/local/include",
         environment<env::tag>::clang_include,
