@@ -38,6 +38,8 @@ namespace color_coded
       return dir.string();
     }
 
+    inline void reset_last_error()
+    { last_error("no errors"); }
     inline std::string const& last_error(std::string const &e = "")
     {
       static std::string error{ "no errors" };

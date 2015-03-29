@@ -73,7 +73,7 @@ let g:color_coded_enabled = 1
 ```
 
 #### `g:color_coded_filetypes`
-This option controls the filetypes for which color_coded will try to compile.
+This option controls the filetypes which color_coded will try to compile.
 
 Default:
 ```viml
@@ -91,7 +91,7 @@ There are many new highlighting groups which color_coded adds. They are designed
 
 hi Member " Any non-static member variable
 hi Variable " Any non-member variable
-hi Namespace 
+hi Namespace
 hi EnumConstant
 ```
 

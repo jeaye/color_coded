@@ -15,7 +15,10 @@
 namespace color_coded
 {
   namespace core
-  { std::string const& last_error(std::string const &e); }
+  {
+    std::string const& last_error(std::string const &e);
+    void reset_last_error();
+  }
 
   namespace clang
   {
@@ -50,7 +53,11 @@ namespace color_coded
           if(!tu)
           { throw compilation_error{ str }; }
         }
+        else
+        { core::reset_last_error(); }
       }
+      else
+      { core::reset_last_error(); }
 
       return trans_unit;
     }
