@@ -53,6 +53,14 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 
 **NOTE:** Out of simplicity, no other data is permitted in the `.color_coded` file. That is to say, comments are not supported.
 
+### Using for languages other than C++
+#### Using for C
+Since color_coded defaults to using C++, you'll need to tell it if you're planning on using it for a C project. You can do this by adding these two lines to your `.color_coded` file:
+```
+-x
+c
+```
+
 Options
 ---
 
