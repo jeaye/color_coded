@@ -7,7 +7,7 @@ set cpo&vim
 
 syntax clear
 
-let b:current_syntax = &cpo 
+let b:current_syntax = &cpo
 set background=dark
 
 " Lay out our palette
