@@ -130,6 +130,11 @@ Usage of color_coded requires vim:
 Troubleshooting
 ---
 
+#### As I type, the highlighting becomes messed up
+color_coded tries to compile your coded as you type it. Also, because of how vim works, color_coded can only update the highlighting once you do something (move the cursor, make a change, etc). When you're done typing and the highlighting is still incorrect, assuming your `.color_coded` file is sufficient, moving the cursor (or causing events some other way) will allow color_coded to apply the new highlighting.
+
+Note, there is a hold event in vim which triggers *after* you stop typing and *after* some delay. color_coded also taps into this and will use it to apply highlighting if it's ready.
+
 #### Some bits aren't highlighted or are highlighted incorrectly
 Yup. Believe it or not, these are almost certainly libclang bugs. I've been sorting out a few of them and I'm maintaining my own fork of libclang. If you would like to report such an issue, check out [this ticket](https://github.com/jeaye/color_coded/issues/2).
 
@@ -143,7 +148,7 @@ See the above installation docs. When you install color_coded, you need to manua
 Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this just means `./configure && make`.
 
 #### "xz is required to unpack clang"
-As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):  
+As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):
 ###### OS X
 ```bash
 brew install xz # for homebrew
