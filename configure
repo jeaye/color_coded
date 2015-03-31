@@ -160,6 +160,11 @@ clang_final_filename="./${clang_filename}"
 if [ ! -f $clang_final_filename -o -f .downloading_clang ];
 then
   log_end
+
+  # Ensure we have xz installed
+  type xz 2>&1 > /dev/null || \
+    log_exit " (error) xz is required to unpack clang; see README.md"
+
   touch .downloading_clang
   curl -C - -o $clang_final_filename -# "${clang_url}/${clang_filename}" 
   rm -f .downloading_clang
@@ -180,8 +185,6 @@ then
 
   log_start "Extracting..."
   mkdir -p $clang_dirname
-  type xz 2>&1 > /dev/null || \
-    log_exit " (error) xz is required to unpack clang; see README.md"
   tar xf $clang_final_filename -C $clang_dirname --strip-components 1
   log_end " done"
 else
