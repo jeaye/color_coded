@@ -131,9 +131,9 @@ Troubleshooting
 ---
 
 #### As I type, the highlighting becomes messed up
-color_coded tries to compile your coded as you type it. Also, because of how vim works, color_coded can only update the highlighting once you do something (move the cursor, make a change, etc). When you're done typing and the highlighting is still incorrect, assuming your `.color_coded` file is sufficient, moving the cursor (or causing events some other way) will allow color_coded to apply the new highlighting.
+color_coded tries to compile your coded as you type it. Due to how vim works, color_coded can only update the highlighting once you do something (move the cursor, make a change, etc). When you're done typing and the highlighting has not finished updating, assuming your `.color_coded` file is sufficient, moving the cursor (or causing events some other way) will allow color_coded to finish.
 
-Note, there is a hold event in vim which triggers *after* you stop typing and *after* some delay. color_coded also taps into this and will use it to apply highlighting if it's ready.
+Note, there is a hold event in vim which triggers *after* you stop typing and *after* some delay. color_coded also hooks into this and will use it to apply highlighting if possible.
 
 #### Some bits aren't highlighted or are highlighted incorrectly
 Yup. Believe it or not, these are almost certainly libclang bugs. I've been sorting out a few of them and I'm maintaining my own fork of libclang. If you would like to report such an issue, check out [this ticket](https://github.com/jeaye/color_coded/issues/2).
