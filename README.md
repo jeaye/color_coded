@@ -33,6 +33,13 @@ For various compatibility reasons, color_coded will attempt to download a known 
 
 **NOTE:** color_coded, to my knowledge, has not been tested on Windows.
 
+#### OS X
+The vim that ships with (even the latest) OS X is not new enough to support color_coded. Furthermore, the default macvim from [homebrew](http://brew.sh/) doesn't have lua enabled. To ensure you have a valid macvim install on OS X, please do the following:
+```bash
+$ brew update
+$ brew install macvim --with-lua
+```
+
 Usage
 ---
 Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you _may_ need to create a file describing the required compiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage (it favors C++ in this regard).
