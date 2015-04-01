@@ -134,21 +134,21 @@ log_start "Updating submodules..."
 log_end " done"
 
 log_start "Downloading clang..."
-clang_url="http://llvm.org/releases/3.5.0"
+clang_url="http://llvm.org/releases/3.6.0"
 
 if [ 1 -eq $uname_osx ];
 then
-  clang_dirname="clang+llvm-3.5.0-macosx-apple-darwin"
-  clang_md5="e580c8b8c64ca5442ac15a4343447500"
+  clang_dirname="clang+llvm-3.6.0-x86_64-apple-darwin"
+  clang_md5="103e06006c88d391c9c369a4671e3363"
   clang_filename="${clang_dirname}.tar.xz"
 else
   if [ "x86_64" == "${uname_arch}" ];
   then
-    clang_dirname="clang+llvm-3.5.0-x86_64-linux-gnu-ubuntu-14.04"
-    clang_md5="904e96e6f51e57b58de546a7324910c3"
+    clang_dirname="clang+llvm-3.6.0-x86_64-linux-gnu-ubuntu-14.04"
+    clang_md5="cfb2ebc01573e666770b9c5f72deb04e"
     clang_filename="${clang_dirname}.tar.xz"
   else
-    log "WARNING: No pre-built Clang 3.5 binaries for 32 bit linux, downloading Clang 3.3"
+    log "WARNING: No pre-built Clang 3.6.0 binaries for 32 bit Linux, downloading Clang 3.3"
     clang_url="http://llvm.org/releases/3.3"
     clang_dirname="clang+llvm-3.3-i386-debian6"
     clang_md5="415d033b60659433d4631df894673802"
