@@ -17,10 +17,10 @@ Before color_coded | After color_coded
 
 Installation
 ---
-Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:BundleInstall`):
+Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:PluginInstall`):
 
 ```viml
-Bundle 'jeaye/color_coded'
+Plugin 'jeaye/color_coded'
 ```
 
 Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle:
