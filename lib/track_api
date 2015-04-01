@@ -5,6 +5,11 @@
 set -o errexit
 set -o nounset
 
+# sed acts differently on different platforms
+uname=$(uname)
+[ "$uname" = "Linux" ] && sed_infix=
+[ "$uname" = "Darwin" ] && sed_infix=''
+
 log_start() { printf "$@" 1>&2; }
 log_end() { printf "$@\n" 1>&2; }
 
@@ -21,7 +26,7 @@ set -o errexit
 commit=$(git rev-parse --short HEAD)
 vim_pattern="s/\\(let s:color_coded_api_version = \\).*/\\10x$commit/"
 cpp_pattern="s/\\(std::size_t constexpr const version\\).*/\\1\\{ 0x$commit \\};/"
-sed -i '' "$vim_pattern" ./autoload/color_coded.vim
-sed -i '' "$cpp_pattern" ./src/main.cpp
+sed -i $sed_infix "$vim_pattern" ./autoload/color_coded.vim
+sed -i $sed_infix "$cpp_pattern" ./src/main.cpp
 
 log_end " new version (0x$commit)\n"
