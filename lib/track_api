@@ -21,7 +21,7 @@ set -o errexit
 commit=$(git rev-parse --short HEAD)
 vim_pattern="s/\\(let s:color_coded_api_version = \\).*/\\10x$commit/"
 cpp_pattern="s/\\(std::size_t constexpr const version\\).*/\\1\\{ 0x$commit \\};/"
-sed -i "$vim_pattern" ./autoload/color_coded.vim
-sed -i "$cpp_pattern" ./src/main.cpp
+sed -i '' "$vim_pattern" ./autoload/color_coded.vim
+sed -i '' "$cpp_pattern" ./src/main.cpp
 
 log_end " new version (0x$commit)\n"

@@ -20,6 +20,8 @@ namespace color_coded
         "-I/usr/include",
         "-I/opt/local/include",
         environment<env::tag>::clang_include,
+        environment<env::tag>::clang_include_cpp,
+        environment<env::tag>::clang_lib_include,
         "-w"
       };
     }

@@ -220,6 +220,10 @@ namespace color_coded
   {
     static char constexpr const * const cwd{ "$PWD" };
     static char constexpr const * const clang_include
+    { "-I$PWD/$clang_dirname/include" };
+    static char constexpr const * const clang_include_cpp
+    { "-I$PWD/$clang_dirname/include/c++/v1" };
+    static char constexpr const * const clang_lib_include
     { "-I$PWD/$clang_dirname/lib/clang/3.5.0/include" };
   };
 }
