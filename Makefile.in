@@ -31,7 +31,6 @@ LD_LIBS = ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
           ${CLANG_DIR}/lib/libclang.a \
           ${CLANG_DIR}/lib/libclangIndex.a \
           ${CLANG_DIR}/lib/libclangFormat.a \
-          ${CLANG_DIR}/lib/libclangTooling.a \
           ${CLANG_DIR}/lib/libclangFrontendTool.a \
           ${CLANG_DIR}/lib/libclangFrontend.a \
           ${CLANG_DIR}/lib/libclangDriver.a \
@@ -48,17 +47,22 @@ LD_LIBS = ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
           ${CLANG_DIR}/lib/libclangRewrite.a \
           ${CLANG_DIR}/lib/libclangEdit.a \
           ${CLANG_DIR}/lib/libclangAST.a \
+          ${CLANG_DIR}/lib/libclangASTMatchers.a \
+          ${CLANG_DIR}/lib/libclangDynamicASTMatchers.a \
           ${CLANG_DIR}/lib/libclangLex.a \
           ${CLANG_DIR}/lib/libclangBasic.a \
+          ${CLANG_DIR}/lib/libclangTooling.a \
+          ${CLANG_DIR}/lib/libclangToolingCore.a \
           ${CLANG_DIR}/lib/libLLVMLTO.a \
           ${CLANG_DIR}/lib/libLLVMObjCARCOpts.a \
           ${CLANG_DIR}/lib/libLLVMLinker.a \
-          ${CLANG_DIR}/lib/libLLVMipo.a \
-          ${CLANG_DIR}/lib/libLLVMVectorize.a \
           ${CLANG_DIR}/lib/libLLVMBitWriter.a \
           ${CLANG_DIR}/lib/libLLVMIRReader.a \
           ${CLANG_DIR}/lib/libLLVMAsmParser.a \
           ${CLANG_DIR}/lib/libLLVMR600CodeGen.a \
+          ${CLANG_DIR}/lib/libLLVMipo.a \
+          ${CLANG_DIR}/lib/libLLVMVectorize.a \
+          ${CLANG_DIR}/lib/libLLVMR600AsmParser.a \
           ${CLANG_DIR}/lib/libLLVMR600Desc.a \
           ${CLANG_DIR}/lib/libLLVMR600Info.a \
           ${CLANG_DIR}/lib/libLLVMR600AsmPrinter.a \
@@ -68,8 +72,8 @@ LD_LIBS = ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
           ${CLANG_DIR}/lib/libLLVMSystemZDesc.a \
           ${CLANG_DIR}/lib/libLLVMSystemZInfo.a \
           ${CLANG_DIR}/lib/libLLVMSystemZAsmPrinter.a \
+          ${CLANG_DIR}/lib/libLLVMHexagonDisassembler.a \
           ${CLANG_DIR}/lib/libLLVMHexagonCodeGen.a \
-          ${CLANG_DIR}/lib/libLLVMHexagonAsmPrinter.a \
           ${CLANG_DIR}/lib/libLLVMHexagonDesc.a \
           ${CLANG_DIR}/lib/libLLVMHexagonInfo.a \
           ${CLANG_DIR}/lib/libLLVMNVPTXCodeGen.a \
@@ -127,32 +131,30 @@ LD_LIBS = ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
           ${CLANG_DIR}/lib/libLLVMSelectionDAG.a \
           ${CLANG_DIR}/lib/libLLVMAsmPrinter.a \
           ${CLANG_DIR}/lib/libLLVMX86Desc.a \
+          ${CLANG_DIR}/lib/libLLVMMCDisassembler.a \
           ${CLANG_DIR}/lib/libLLVMX86Info.a \
           ${CLANG_DIR}/lib/libLLVMX86AsmPrinter.a \
           ${CLANG_DIR}/lib/libLLVMX86Utils.a \
-          ${CLANG_DIR}/lib/libLLVMJIT.a \
+          ${CLANG_DIR}/lib/libLLVMMCJIT.a \
           ${CLANG_DIR}/lib/libLLVMLineEditor.a \
-          ${CLANG_DIR}/lib/libLLVMMCAnalysis.a \
-          ${CLANG_DIR}/lib/libLLVMMCDisassembler.a \
           ${CLANG_DIR}/lib/libLLVMInstrumentation.a \
           ${CLANG_DIR}/lib/libLLVMInterpreter.a \
+          ${CLANG_DIR}/lib/libLLVMExecutionEngine.a \
+          ${CLANG_DIR}/lib/libLLVMRuntimeDyld.a \
           ${CLANG_DIR}/lib/libLLVMCodeGen.a \
           ${CLANG_DIR}/lib/libLLVMScalarOpts.a \
+          ${CLANG_DIR}/lib/libLLVMProfileData.a \
+          ${CLANG_DIR}/lib/libLLVMObject.a \
+          ${CLANG_DIR}/lib/libLLVMMCParser.a \
+          ${CLANG_DIR}/lib/libLLVMBitReader.a \
           ${CLANG_DIR}/lib/libLLVMInstCombine.a \
           ${CLANG_DIR}/lib/libLLVMTransformUtils.a \
           ${CLANG_DIR}/lib/libLLVMipa.a \
           ${CLANG_DIR}/lib/libLLVMAnalysis.a \
-          ${CLANG_DIR}/lib/libLLVMProfileData.a \
-          ${CLANG_DIR}/lib/libLLVMMCJIT.a \
           ${CLANG_DIR}/lib/libLLVMTarget.a \
-          ${CLANG_DIR}/lib/libLLVMRuntimeDyld.a \
-          ${CLANG_DIR}/lib/libLLVMObject.a \
-          ${CLANG_DIR}/lib/libLLVMMCParser.a \
-          ${CLANG_DIR}/lib/libLLVMBitReader.a \
-          ${CLANG_DIR}/lib/libLLVMExecutionEngine.a \
           ${CLANG_DIR}/lib/libLLVMMC.a \
           ${CLANG_DIR}/lib/libLLVMCore.a \
-          ${CLANG_DIR}/lib/libLLVMSupport.a
+          ${CLANG_DIR}/lib/libLLVMSupport.a \
 
 PROJECT = %PROJECT%
 
