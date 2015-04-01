@@ -28,11 +28,10 @@ namespace color_coded
 
   static int moved(lua_State * const lua)
   {
-    auto const file(lua_tostring(lua, -4));
-    auto const line(lua_tonumber(lua, -3));
-    auto const lines(lua_tonumber(lua, -2));
-    auto const height(lua_tonumber(lua, -1));
-    event::moved(file, line, lines, height);
+    auto const file(lua_tostring(lua, -3));
+    auto const begin(lua_tonumber(lua, -2));
+    auto const end(lua_tonumber(lua, -1));
+    event::moved(file, begin, end);
     return 0;
   }
 
@@ -59,7 +58,7 @@ namespace color_coded
 
   static int api_version(lua_State * const lua)
   {
-    std::size_t constexpr const version{ 0xb6b9fcd };
+    std::size_t constexpr const version{ 0x2795809 };
     lua_pushinteger(lua, version);
     return 1;
   }

@@ -12,8 +12,8 @@ namespace color_coded
     {
       std::string name;
       highlight_group group;
-      std::size_t line{}, lines{};
-      std::size_t begin{}, end{};
+      std::size_t new_begin{}, new_end{};
+      std::size_t old_begin{}, old_end{};
       std::size_t height{};
     };
 
@@ -25,11 +25,11 @@ namespace color_coded
 
       vim::clear_matches();
 
-      buf.begin = buf.line - std::min(buf.height, buf.line);
-      buf.end = std::min(buf.line + buf.height, buf.lines);
+      buf.old_begin = buf.new_begin;
+      buf.old_end = buf.new_end;
       for(auto const &h : buf.group)
       {
-        if(h.line >= buf.begin && h.line <= buf.end)
+        if(h.line >= buf.new_begin && h.line <= buf.new_end)
         { vim::matchaddpos(h.type, h.line, h.column, h.token.size()); }
       }
     }
@@ -37,8 +37,7 @@ namespace color_coded
     /* Will only highlight if we're outside of the previous highlight range. */
     inline void try_apply(buffer &buf)
     {
-      if(buf.line - std::min(buf.height, buf.line) < buf.begin ||
-         std::min(buf.line + buf.height, buf.lines) > buf.end)
+      if((buf.new_begin != buf.old_begin) || (buf.new_end != buf.old_end))
       { apply(buf); }
     }
   }

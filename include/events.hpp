@@ -25,13 +25,12 @@ namespace color_coded
       core::queue().push({ file, data });
     }
 
-    inline void moved(std::string const &file, std::size_t const line,
-                      std::size_t const lines, std::size_t const height)
+    inline void moved(std::string const &file, std::size_t const begin,
+                      std::size_t const end)
     {
       auto &buf(core::buffers()[file]);
-      buf.line = line;
-      buf.lines = lines;
-      buf.height = height;
+      buf.new_begin = begin;
+      buf.new_end = end;
 
       if(pull(file)) /* Pulled new info. */
       { vim::apply(buf); }

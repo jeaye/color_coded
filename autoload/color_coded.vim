@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xb6b9fcd
+let s:color_coded_api_version = 0x2795809
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -98,7 +98,7 @@ function! color_coded#moved()
   endif
 lua << EOF
   local name = color_coded_buffer_name()
-  color_coded_moved(name, vim.window().line, #vim.buffer(), vim.window().height)
+  color_coded_moved(name, vim.eval("line(\"w0\")"), vim.eval("line(\"w$\")"))
 EOF
 endfunction!
 
