@@ -18,6 +18,7 @@ namespace color_coded
       {
         "-x", "c++",
         "-I/usr/include",
+        "-I/usr/local/include",
         "-I/opt/local/include",
         environment<env::tag>::clang_include,
         environment<env::tag>::clang_include_cpp,
