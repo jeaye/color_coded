@@ -17,13 +17,21 @@ Before color_coded | After color_coded
 
 Installation
 ---
+#### OS X
+Before installing color_coded on OS X, please read the following. The vim that ships with (even the latest) OS X is not new enough to support color_coded. Furthermore, the default macvim from [homebrew](http://brew.sh/) doesn't have lua enabled. To ensure you have a valid macvim install on OS X, please do the following:
+```bash
+brew update
+brew install macvim --with-lua
+```
+
+#### All
 Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:PluginInstall`):
 
 ```viml
 Plugin 'jeaye/color_coded'
 ```
 
-Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle:
+Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle (see the [dependencies](https://github.com/jeaye/color_coded#dependencies) section to ensure you can `make` properly):
 
 ```bash
 cd ~/.vim/bundle/color_coded
@@ -33,13 +41,6 @@ cd ~/.vim/bundle/color_coded
 For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
 
 **NOTE:** color_coded, to my knowledge, has not been tested on Windows.
-
-#### OS X
-The vim that ships with (even the latest) OS X is not new enough to support color_coded. Furthermore, the default macvim from [homebrew](http://brew.sh/) doesn't have lua enabled. To ensure you have a valid macvim install on OS X, please do the following:
-```bash
-brew update
-brew install macvim --with-lua
-```
 
 Usage
 ---
@@ -127,9 +128,9 @@ This command enables color_coded, if it's currently disabled, or disables it, if
 
 Dependencies
 ---
-Compilation of color_coded requires a modern compiler:
-  * GCC ≥ 4.9
-  * Clang ≥ 3.4
+Compilation of color_coded requires:
+  * GCC ≥ 4.9 OR Clang ≥ 3.4
+  * Lua ≥ 5.2.x
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
