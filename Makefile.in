@@ -20,7 +20,9 @@ CXX_INCLUDE = -Iinclude \
               -I${PWD}/lib/boost/functional/include \
               -I${PWD}/lib/boost/range/include \
               -I${PWD}/lib/boost/include \
-              -I${PWD}/lib/boost/filesystem/include
+              -I${PWD}/lib/boost/filesystem/include \
+              -I/usr/include/Lua5.2 \
+              -I/opt/local/include
 CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
 CXX_FLAGS += -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
              ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
