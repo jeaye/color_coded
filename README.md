@@ -136,7 +136,7 @@ Usage of color_coded requires vim:
   * Version: 7.4p330+
   * Compiled with Lua support (+lua)
 
-Troubleshooting
+Troubleshooting/FAQ
 ---
 
 #### As I type, the highlighting becomes messed up
@@ -167,6 +167,9 @@ port install xz # for macports
 ```bash
 sudo apt-get install xz-utils
 ```
+
+#### Does color_coded work with neovim?
+I doubt it. color_coded has not been tested on neovim and there has been significant work to the plugin API and the lua interface. For now, at least, color_coded is not supporting neovim.
 
 License
 ---
