@@ -60,6 +60,11 @@ then
   log "Platform: Cygwin (NOT TESTED)"
 fi
 
+[ -d "/opt/local/lib" ] && ld_platform_libs="-L/opt/local/lib "$ld_platform_libs
+[ -d "/opt/local/lib/lua/5.2" ] && ld_platform_libs="-L/opt/local/lib/lua/5.2 "$ld_platform_libs
+[ -d "/usr/local/lib/x86_64-linux-gnu" ] && ld_platform_libs="-L/usr/local/lib/x86_64-linux-gnu "$ld_platform_libs
+[ -d "/usr/lib/x86_64-linux-gnu" ] && ld_platform_libs="-L/usr/lib/x86_64-linux-gnu "$ld_platform_libs
+
 function show_help
 {
   log "Usage: $0 [OPTION...]"
