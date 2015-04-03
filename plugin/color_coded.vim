@@ -45,10 +45,38 @@ if s:color_coded_valid == 1
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#moved()
     au CursorHold,CursorHoldI * call color_coded#moved()
+    au VimResized * call color_coded#moved()
     " Leaving a color_coded buffer requires removing matched positions
     au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
     au BufDelete * call color_coded#destroy(expand('<afile>'))
   augroup END
+
+  nnoremap <silent> <ScrollWheelUp>
+        \ <ScrollWheelUp>:call color_coded#moved()<CR>
+  inoremap <silent> <ScrollWheelUp>
+        \ <ScrollWheelUp><ESC>:call color_coded#moved()<CR><INS>
+  nnoremap <silent> <ScrollWheelDown>
+        \ <ScrollWheelDown>:call color_coded#moved()<CR>
+  inoremap <silent> <ScrollWheelDown>
+        \ <ScrollWheelDown><ESC>:call color_coded#moved()<CR><INS>
+
+  nnoremap <silent> <S-ScrollWheelUp>
+        \ <S-ScrollWheelUp>:call color_coded#moved()<CR>
+  inoremap <silent> <S-ScrollWheelUp>
+        \ <S-ScrollWheelUp><ESC>:call color_coded#moved()<CR><INS>
+  nnoremap <silent> <S-ScrollWheelDown>
+        \ <S-ScrollWheelDown>:call color_coded#moved()<CR>
+  inoremap <silent> <S-ScrollWheelDown>
+        \ <S-ScrollWheelDown><ESC>:call color_coded#moved()<CR><INS>
+
+  nnoremap <silent> <C-ScrollWheelUp>
+        \ <C-ScrollWheelUp>:call color_coded#moved()<CR>
+  inoremap <silent> <C-ScrollWheelUp>
+        \ <C-ScrollWheelUp><ESC>:call color_coded#moved()<CR><INS>
+  nnoremap <silent> <C-ScrollWheelDown>
+        \ <C-ScrollWheelDown>:call color_coded#moved()<CR>
+  inoremap <silent> <C-ScrollWheelDown>
+        \ <C-ScrollWheelDown><ESC>:call color_coded#moved()<CR><INS>
 endif
 
 " ------------------------------------------------------------------------------
