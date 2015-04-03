@@ -17,12 +17,12 @@ namespace color_coded
       return
       {
         "-x", "c++",
-        "-I/usr/include",
-        "-I/usr/local/include",
-        "-I/opt/local/include",
         environment<env::tag>::clang_include,
         environment<env::tag>::clang_include_cpp,
         environment<env::tag>::clang_lib_include,
+        "-I/usr/local/include",
+        "-I/opt/local/include",
+        "-I/usr/include",
         "-w"
       };
     }
