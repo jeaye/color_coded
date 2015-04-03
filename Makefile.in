@@ -21,8 +21,11 @@ CXX_INCLUDE = -Iinclude \
               -I${PWD}/lib/boost/range/include \
               -I${PWD}/lib/boost/include \
               -I${PWD}/lib/boost/filesystem/include \
-              -I/usr/include/Lua5.2 \
-              -I/opt/local/include
+              -I/usr/local/include \
+              -I/opt/local/include/lua5.2 \
+              -I/opt/local/include \
+              -I/usr/include \
+              -I/usr/include/lua5.2
 CXX_PLATFORM_FLAGS = %CXX_PLATFORM_FLAGS%
 CXX_FLAGS += -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
              ${CXX_MISC} ${CXX_INCLUDE} ${CXX_PLATFORM_FLAGS}
@@ -30,6 +33,11 @@ CXX_FLAGS += -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
 CLANG_DIR = %CLANG_DIR%
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
 LD_LIBS += ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
+					 -L/opt/local/lib/lua/5.2 \
+					 -L/usr/local/lib \
+					 -L/usr/local/lib/x86_64-linux-gnu \
+					 -L/usr/lib \
+					 -L/usr/lib/x86_64-linux-gnu \
            ${CLANG_DIR}/lib/libclang.a \
            ${CLANG_DIR}/lib/libclangIndex.a \
            ${CLANG_DIR}/lib/libclangFormat.a \
