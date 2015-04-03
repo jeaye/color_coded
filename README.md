@@ -22,8 +22,11 @@ Before installing color_coded on OS X, please read the following. The vim that s
 ```bash
 brew update
 brew install macvim --with-lua --override-system-vim
+brew linkapps macvim
 # Spawn a new shell to use the new system vim
 ```
+
+**NOTE:** color_coded does not currently play nicely with luajit on OS X. For the most stability, please ensure you're using macvim as specified above.
 
 #### All
 Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:PluginInstall`):
