@@ -28,11 +28,10 @@ brew linkapps macvim
 
 **NOTE:** color_coded does not currently play nicely with luajit on OS X. For the most stability, please ensure you're using macvim as specified above.
 
-#### Debian
+#### Ubuntu/Debian
 
-Jessie: Install lua headers (``lua.h``) / shared libraries and ncurses' header files (``ncurses.h``).
 ```bash
-[sudo] apt-get install liblua5.2-dev lua5.2 libncurses-dev
+sudo apt-get install liblua5.2-dev lua5.2 libncurses-dev
 ```
 
 #### All
