@@ -29,9 +29,21 @@ brew linkapps macvim
 **NOTE:** color_coded does not currently play nicely with luajit on OS X. For the most stability, please ensure you're using macvim as specified above.
 
 #### Ubuntu/Debian
-
+First, install all required dependencies.
 ```bash
-sudo apt-get install liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev
+sudo apt-get install build-essential liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev
+```
+
+Next, you need to ensure you have GCC 4.9. If you don't, you can try the following (tested on Ubuntu 14.04).
+```bash
+# Install GCC 4.9
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo apt-get update
+sudo apt-get install g++-4.9
+
+# Prefer 4.9 to other versions
+sudo update-alternatives --remove-all g++
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 ```
 
 #### All
