@@ -32,7 +32,7 @@ CXX_FLAGS += -std=c++1y ${CXX_WARN} ${CXX_NOWARN} ${CXX_OPT} \
 
 CLANG_DIR = %CLANG_DIR%
 LD_PLATFORM_LIBS = %LD_PLATFORM_LIBS%
-LD_LIBS += ${LD_PLATFORM_LIBS} -pthread -llua -lz -lncurses \
+LD_LIBS += ${LD_PLATFORM_LIBS} -pthread -lz -lncurses \
 					 -L/usr/local/lib \
 					 -L/usr/lib \
            ${CLANG_DIR}/lib/libclang.a \

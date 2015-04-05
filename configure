@@ -51,6 +51,12 @@ gcc=0
 if [ "1" -eq "$uname_linux" ];
 then
   log "Platform: Linux"
+  if [ -f /etc/debian_version ];
+  then
+    ld_platform_libs=-llua5.2
+  else
+    ld_platform_libs=-llua
+  fi
 elif [ "1" -eq "$uname_osx" ];
 then
   log "Platform: OS X"
