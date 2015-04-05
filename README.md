@@ -31,7 +31,7 @@ brew linkapps macvim
 #### Ubuntu/Debian
 
 ```bash
-sudo apt-get install liblua5.2-dev lua5.2 libncurses-dev
+sudo apt-get install liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev
 ```
 
 #### All
