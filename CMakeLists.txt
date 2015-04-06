@@ -60,10 +60,7 @@ else()
     set(CLANG_MD5 "cfb2ebc01573e666770b9c5f72deb04e")
     set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
   else()
-    message(WARNING "No pre-built Clang 3.6.0 binaries for 32 bit Linux, downloading Clang 3.3")
-    set(CLANG_DIRNAME "clang+llvm-3.3-i386-debian6")
-    set(CLANG_MD5 "415d033b60659433d4631df894673802")
-    set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.bz2")
+    message(FATAL_ERROR "No pre-built Clang 3.6.0 binaries for 32 bit Linux; this system is not supported")
   endif()
 endif()
 
@@ -133,9 +130,9 @@ set_property(TARGET color_coded PROPERTY SUFFIX "")
 # See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
   set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-fPIC")
-  set(64_BIT_PLATFORM 0)
-else()
   set(64_BIT_PLATFORM 1)
+else()
+  set(64_BIT_PLATFORM 0)
 endif()
 
 # Clang
