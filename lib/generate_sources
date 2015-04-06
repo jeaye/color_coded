@@ -1,0 +1,26 @@
+#!/bin/sh
+
+pwd=$1
+clang_dir=$2
+target=$1/include/env/impl.hpp
+
+[ -f $target ] && rm -f $target
+cat <<EOF > $target
+/* XXX: Automagically generated. No touching. */
+#pragma once
+
+namespace color_coded
+{
+  template <>
+  struct environment<env::tag>
+  {
+    static char constexpr const * const pwd{ "$pwd" };
+    static char constexpr const * const clang_include
+    { "-I$pwd/$clang_dir/include" };
+    static char constexpr const * const clang_include_cpp
+    { "-I$pwd/$clang_dir/include/c++/v1" };
+    static char constexpr const * const clang_lib_include
+    { "-I$pwd/$clang_dir/lib/clang/3.6.0/include" };
+  };
+}
+EOF

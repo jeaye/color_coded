@@ -16,20 +16,20 @@ if(COMPILER_SUPPORTS_CXX14)
 elseif(COMPILER_SUPPORTS_CXX1Y)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 else()
-  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
+  message(FATAL_ERROR "${CMAKE_CXX_COMPILER} has no C++14 support")
 endif()
 
 # Lua
 find_package(Lua REQUIRED)
 if(${LUA_VERSION_STRING} VERSION_LESS "5.2")
-  message(FATAL_ERROR "Lua 5.2 required")
+  message(FATAL_ERROR "Lua 5.2 is required")
 endif()
 
 include_directories(${LUA_INCLUDE_DIR})
 
 # Boost
 include_directories(lib/boost)
-set(color_coded_BOOST_SRC
+set(BOOST_SRC
   lib/boost/filesystem/src/codecvt_error_category.cpp
   lib/boost/filesystem/src/operations.cpp
   lib/boost/filesystem/src/path.cpp
@@ -67,10 +67,10 @@ else()
     set(CLANG_MD5 "cfb2ebc01573e666770b9c5f72deb04e")
     set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
   else()
-    message(FATAL_ERROR
-      "No pre-built Clang 3.6 binaries for 32 bit linux. "
-      "You'll have to compile Clang 3.6 from source. "
-      "See the YCM docs for details on how to use a user-compiled libclang.")
+    message(WARNING "No pre-built Clang 3.6.0 binaries for 32 bit Linux, downloading Clang 3.3")
+    set(CLANG_DIRNAME "clang+llvm-3.3-i386-debian6")
+    set(CLANG_MD5 "415d033b60659433d4631df894673802")
+    set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.bz2")
   endif()
 endif()
 
@@ -122,7 +122,11 @@ include_directories(
   ${ZLIB_INCLUDE_PATH}
 )
 
-add_library(boost_parts STATIC ${color_coded_BOOST_SRC})
+message("Generating sources ...")
+execute_process(COMMAND
+  lib/generate_sources ${CMAKE_CURRENT_LIST_DIR} ${LLVM_ROOT_PATH})
+
+add_library(boost_parts STATIC ${BOOST_SRC})
 
 add_library(color_coded SHARED src/main.cpp)
 
