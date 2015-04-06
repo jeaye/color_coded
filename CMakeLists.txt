@@ -274,5 +274,5 @@ target_link_libraries(color_coded
 )
 
 # Install locally
-set(CMAKE_INSTALL_PREFIX "./")
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR})
 install(TARGETS color_coded DESTINATION bin)
