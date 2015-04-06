@@ -135,6 +135,7 @@ set_property(TARGET color_coded PROPERTY SUFFIX "")
 # used when making a shared object; recompile with -fPIC.
 # See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(64_BIT_PLATFORM)
+  set_property(TARGET boost_parts PROPERTY COMPILE_FLAGS "-fPIC")
   set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-fPIC")
 endif()
 
