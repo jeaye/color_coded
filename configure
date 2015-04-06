@@ -60,7 +60,7 @@ then
 elif [ "1" -eq "$uname_osx" ];
 then
   log "Platform: OS X"
-  ld_platform_libs="-framework CoreFoundation "$ld_platform_libs
+  ld_platform_libs="-framework CoreFoundation -llua "$ld_platform_libs
 elif [ "1" -eq "$uname_cygwin" ];
 then
   log "Platform: Cygwin (NOT TESTED)"
