@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.9)
+
+# Shut up the warning about CMake policy CMP0042.
+if(APPLE)
+  set(CMAKE_MACOSX_RPATH ON)
+endif()
 
 project(color_coded)
-
-set(color_coded_VERSION_MAJOR 0)
-set(color_coded_VERSION_MINOR 1)
 
 # C++14
 include(CheckCXXCompilerFlag)
@@ -19,6 +21,10 @@ endif()
 
 # Lua
 find_package(Lua REQUIRED)
+if(${LUA_VERSION_STRING} VERSION_LESS "5.2")
+  message(FATAL_ERROR "Lua 5.2 required")
+endif()
+
 include_directories(${LUA_INCLUDE_DIR})
 
 # Boost
@@ -41,10 +47,58 @@ find_package(Curses REQUIRED)
 find_package(ZLIB REQUIRED)
 
 # Clang
+message("Downloading Clang/LLVM 3.6.0 ...")
+
+# Check if platform is 64 bit
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(64_BIT_PLATFORM 0)
+else()
+  set(64_BIT_PLATFORM 1)
+endif()
+
+set(CLANG_URL "http://llvm.org/releases/3.6.0" )
+if(APPLE)
+  set(CLANG_DIRNAME "clang+llvm-3.6.0-x86_64-apple-darwin")
+  set(CLANG_MD5 "103e06006c88d391c9c369a4671e3363")
+  set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
+else()
+  if(64_BIT_PLATFORM)
+    set(CLANG_DIRNAME "clang+llvm-3.6.0-x86_64-linux-gnu-ubuntu-14.04")
+    set(CLANG_MD5 "cfb2ebc01573e666770b9c5f72deb04e")
+    set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
+  else()
+    message(FATAL_ERROR
+      "No pre-built Clang 3.6 binaries for 32 bit linux. "
+      "You'll have to compile Clang 3.6 from source. "
+      "See the YCM docs for details on how to use a user-compiled libclang.")
+  endif()
+endif()
+
+file(DOWNLOAD
+  "${CLANG_URL}/${CLANG_FILENAME}" "./${CLANG_FILENAME}"
+  SHOW_PROGRESS EXPECTED_MD5 "${CLANG_MD5}")
+
+message("Extracting Clang/LLVM 3.6.0 ...")
+
+if(CLANG_FILENAME MATCHES ".+bz2")
+  execute_process(COMMAND tar -xjf ${CLANG_FILENAME})
+elseif(CLANG_FILENAME MATCHES ".+xz")
+  execute_process(COMMAND tar -xJf ${CLANG_FILENAME})
+else()
+  execute_process(COMMAND tar -xzf ${CLANG_FILENAME})
+endif()
+
+# We need to set PATH_TO_LLVM_ROOT. To do that, we first have to find the
+# folder name the archive produced. It isn't the archive base name.
+execute_process(COMMAND
+  find ${CMAKE_CURRENT_BINARY_DIR} -maxdepth 1 -type d -name clang*
+  OUTPUT_VARIABLE LLVM_ROOT_PATH
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 include_directories(
   include
 
-  clang+llvm-3.6.0-x86_64-apple-darwin/include
+  ${LLVM_ROOT_PATH}/include
 
   lib/boost/config/include
   lib/boost/core/include
@@ -78,143 +132,143 @@ set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")
 set_property(TARGET color_coded PROPERTY SUFFIX "")
 
 # Clang
-set(color_coded_CLANG_LIB ${CMAKE_CURRENT_SOURCE_DIR}/clang+llvm-3.6.0-x86_64-apple-darwin/lib)
-target_link_libraries(
-  color_coded
-
+set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
+target_link_libraries(color_coded
   boost_parts
   ${LUA_LIBRARIES}
-  ${color_coded_CLANG_LIB}/libclang.a
-  ${color_coded_CLANG_LIB}/libclangIndex.a
-  ${color_coded_CLANG_LIB}/libclangFormat.a
-  ${color_coded_CLANG_LIB}/libclangFrontendTool.a
-  ${color_coded_CLANG_LIB}/libclangFrontend.a
-  ${color_coded_CLANG_LIB}/libclangDriver.a
-  ${color_coded_CLANG_LIB}/libclangSerialization.a
-  ${color_coded_CLANG_LIB}/libclangCodeGen.a
-  ${color_coded_CLANG_LIB}/libclangParse.a
-  ${color_coded_CLANG_LIB}/libclangSema.a
-  ${color_coded_CLANG_LIB}/libclangStaticAnalyzerFrontend.a
-  ${color_coded_CLANG_LIB}/libclangStaticAnalyzerCheckers.a
-  ${color_coded_CLANG_LIB}/libclangStaticAnalyzerCore.a
-  ${color_coded_CLANG_LIB}/libclangAnalysis.a
-  ${color_coded_CLANG_LIB}/libclangARCMigrate.a
-  ${color_coded_CLANG_LIB}/libclangRewriteFrontend.a
-  ${color_coded_CLANG_LIB}/libclangRewrite.a
-  ${color_coded_CLANG_LIB}/libclangEdit.a
-  ${color_coded_CLANG_LIB}/libclangAST.a
-  ${color_coded_CLANG_LIB}/libclangASTMatchers.a
-  ${color_coded_CLANG_LIB}/libclangDynamicASTMatchers.a
-  ${color_coded_CLANG_LIB}/libclangLex.a
-  ${color_coded_CLANG_LIB}/libclangBasic.a
-  ${color_coded_CLANG_LIB}/libclangTooling.a
-  ${color_coded_CLANG_LIB}/libclangToolingCore.a
-  ${color_coded_CLANG_LIB}/libLLVMLTO.a
-  ${color_coded_CLANG_LIB}/libLLVMObjCARCOpts.a
-  ${color_coded_CLANG_LIB}/libLLVMLinker.a
-  ${color_coded_CLANG_LIB}/libLLVMBitWriter.a
-  ${color_coded_CLANG_LIB}/libLLVMIRReader.a
-  ${color_coded_CLANG_LIB}/libLLVMAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMR600CodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMipo.a
-  ${color_coded_CLANG_LIB}/libLLVMVectorize.a
-  ${color_coded_CLANG_LIB}/libLLVMR600AsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMR600Desc.a
-  ${color_coded_CLANG_LIB}/libLLVMR600Info.a
-  ${color_coded_CLANG_LIB}/libLLVMR600AsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMSystemZAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMHexagonDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMHexagonCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMHexagonDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMHexagonInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMNVPTXCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMNVPTXDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMNVPTXInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMNVPTXAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMCppBackendCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMCppBackendInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMMSP430CodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMMSP430Desc.a
-  ${color_coded_CLANG_LIB}/libLLVMMSP430Info.a
-  ${color_coded_CLANG_LIB}/libLLVMMSP430AsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMXCoreDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMXCoreCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMXCoreDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMXCoreInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMXCoreAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMMipsAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64Disassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64CodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64AsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64Desc.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64Info.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64AsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMAArch64Utils.a
-  ${color_coded_CLANG_LIB}/libLLVMARMDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMARMCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMARMAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMARMDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMARMInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMARMAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMPowerPCAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcAsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcDesc.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMSparcAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMTableGen.a
-  ${color_coded_CLANG_LIB}/libLLVMDebugInfo.a
-  ${color_coded_CLANG_LIB}/libLLVMOption.a
-  ${color_coded_CLANG_LIB}/libLLVMX86Disassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMX86AsmParser.a
-  ${color_coded_CLANG_LIB}/libLLVMX86CodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMSelectionDAG.a
-  ${color_coded_CLANG_LIB}/libLLVMAsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMX86Desc.a
-  ${color_coded_CLANG_LIB}/libLLVMMCDisassembler.a
-  ${color_coded_CLANG_LIB}/libLLVMX86Info.a
-  ${color_coded_CLANG_LIB}/libLLVMX86AsmPrinter.a
-  ${color_coded_CLANG_LIB}/libLLVMX86Utils.a
-  ${color_coded_CLANG_LIB}/libLLVMMCJIT.a
-  ${color_coded_CLANG_LIB}/libLLVMLineEditor.a
-  ${color_coded_CLANG_LIB}/libLLVMInstrumentation.a
-  ${color_coded_CLANG_LIB}/libLLVMInterpreter.a
-  ${color_coded_CLANG_LIB}/libLLVMExecutionEngine.a
-  ${color_coded_CLANG_LIB}/libLLVMRuntimeDyld.a
-  ${color_coded_CLANG_LIB}/libLLVMCodeGen.a
-  ${color_coded_CLANG_LIB}/libLLVMScalarOpts.a
-  ${color_coded_CLANG_LIB}/libLLVMProfileData.a
-  ${color_coded_CLANG_LIB}/libLLVMObject.a
-  ${color_coded_CLANG_LIB}/libLLVMMCParser.a
-  ${color_coded_CLANG_LIB}/libLLVMBitReader.a
-  ${color_coded_CLANG_LIB}/libLLVMInstCombine.a
-  ${color_coded_CLANG_LIB}/libLLVMTransformUtils.a
-  ${color_coded_CLANG_LIB}/libLLVMipa.a
-  ${color_coded_CLANG_LIB}/libLLVMAnalysis.a
-  ${color_coded_CLANG_LIB}/libLLVMTarget.a
-  ${color_coded_CLANG_LIB}/libLLVMMC.a
-  ${color_coded_CLANG_LIB}/libLLVMCore.a
-  ${color_coded_CLANG_LIB}/libLLVMSupport.a
+
+  ${LLVM_LIB_PATH}/libclang.a
+  ${LLVM_LIB_PATH}/libclangIndex.a
+  ${LLVM_LIB_PATH}/libclangFormat.a
+  ${LLVM_LIB_PATH}/libclangFrontendTool.a
+  ${LLVM_LIB_PATH}/libclangFrontend.a
+  ${LLVM_LIB_PATH}/libclangDriver.a
+  ${LLVM_LIB_PATH}/libclangSerialization.a
+  ${LLVM_LIB_PATH}/libclangCodeGen.a
+  ${LLVM_LIB_PATH}/libclangParse.a
+  ${LLVM_LIB_PATH}/libclangSema.a
+  ${LLVM_LIB_PATH}/libclangStaticAnalyzerFrontend.a
+  ${LLVM_LIB_PATH}/libclangStaticAnalyzerCheckers.a
+  ${LLVM_LIB_PATH}/libclangStaticAnalyzerCore.a
+  ${LLVM_LIB_PATH}/libclangAnalysis.a
+  ${LLVM_LIB_PATH}/libclangARCMigrate.a
+  ${LLVM_LIB_PATH}/libclangRewriteFrontend.a
+  ${LLVM_LIB_PATH}/libclangRewrite.a
+  ${LLVM_LIB_PATH}/libclangEdit.a
+  ${LLVM_LIB_PATH}/libclangAST.a
+  ${LLVM_LIB_PATH}/libclangASTMatchers.a
+  ${LLVM_LIB_PATH}/libclangDynamicASTMatchers.a
+  ${LLVM_LIB_PATH}/libclangLex.a
+  ${LLVM_LIB_PATH}/libclangBasic.a
+  ${LLVM_LIB_PATH}/libclangTooling.a
+  ${LLVM_LIB_PATH}/libclangToolingCore.a
+  ${LLVM_LIB_PATH}/libLLVMLTO.a
+  ${LLVM_LIB_PATH}/libLLVMObjCARCOpts.a
+  ${LLVM_LIB_PATH}/libLLVMLinker.a
+  ${LLVM_LIB_PATH}/libLLVMBitWriter.a
+  ${LLVM_LIB_PATH}/libLLVMIRReader.a
+  ${LLVM_LIB_PATH}/libLLVMAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMR600CodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMipo.a
+  ${LLVM_LIB_PATH}/libLLVMVectorize.a
+  ${LLVM_LIB_PATH}/libLLVMR600AsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMR600Desc.a
+  ${LLVM_LIB_PATH}/libLLVMR600Info.a
+  ${LLVM_LIB_PATH}/libLLVMR600AsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZDesc.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZInfo.a
+  ${LLVM_LIB_PATH}/libLLVMSystemZAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMHexagonDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMHexagonCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMHexagonDesc.a
+  ${LLVM_LIB_PATH}/libLLVMHexagonInfo.a
+  ${LLVM_LIB_PATH}/libLLVMNVPTXCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMNVPTXDesc.a
+  ${LLVM_LIB_PATH}/libLLVMNVPTXInfo.a
+  ${LLVM_LIB_PATH}/libLLVMNVPTXAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMCppBackendCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMCppBackendInfo.a
+  ${LLVM_LIB_PATH}/libLLVMMSP430CodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMMSP430Desc.a
+  ${LLVM_LIB_PATH}/libLLVMMSP430Info.a
+  ${LLVM_LIB_PATH}/libLLVMMSP430AsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMXCoreDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMXCoreCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMXCoreDesc.a
+  ${LLVM_LIB_PATH}/libLLVMXCoreInfo.a
+  ${LLVM_LIB_PATH}/libLLVMXCoreAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMMipsDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMMipsCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMMipsAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMMipsDesc.a
+  ${LLVM_LIB_PATH}/libLLVMMipsInfo.a
+  ${LLVM_LIB_PATH}/libLLVMMipsAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64Disassembler.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64CodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64AsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64Desc.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64Info.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64AsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMAArch64Utils.a
+  ${LLVM_LIB_PATH}/libLLVMARMDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMARMCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMARMAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMARMDesc.a
+  ${LLVM_LIB_PATH}/libLLVMARMInfo.a
+  ${LLVM_LIB_PATH}/libLLVMARMAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCDesc.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCInfo.a
+  ${LLVM_LIB_PATH}/libLLVMPowerPCAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMSparcDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMSparcCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMSparcAsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMSparcDesc.a
+  ${LLVM_LIB_PATH}/libLLVMSparcInfo.a
+  ${LLVM_LIB_PATH}/libLLVMSparcAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMTableGen.a
+  ${LLVM_LIB_PATH}/libLLVMDebugInfo.a
+  ${LLVM_LIB_PATH}/libLLVMOption.a
+  ${LLVM_LIB_PATH}/libLLVMX86Disassembler.a
+  ${LLVM_LIB_PATH}/libLLVMX86AsmParser.a
+  ${LLVM_LIB_PATH}/libLLVMX86CodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMSelectionDAG.a
+  ${LLVM_LIB_PATH}/libLLVMAsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMX86Desc.a
+  ${LLVM_LIB_PATH}/libLLVMMCDisassembler.a
+  ${LLVM_LIB_PATH}/libLLVMX86Info.a
+  ${LLVM_LIB_PATH}/libLLVMX86AsmPrinter.a
+  ${LLVM_LIB_PATH}/libLLVMX86Utils.a
+  ${LLVM_LIB_PATH}/libLLVMMCJIT.a
+  ${LLVM_LIB_PATH}/libLLVMLineEditor.a
+  ${LLVM_LIB_PATH}/libLLVMInstrumentation.a
+  ${LLVM_LIB_PATH}/libLLVMInterpreter.a
+  ${LLVM_LIB_PATH}/libLLVMExecutionEngine.a
+  ${LLVM_LIB_PATH}/libLLVMRuntimeDyld.a
+  ${LLVM_LIB_PATH}/libLLVMCodeGen.a
+  ${LLVM_LIB_PATH}/libLLVMScalarOpts.a
+  ${LLVM_LIB_PATH}/libLLVMProfileData.a
+  ${LLVM_LIB_PATH}/libLLVMObject.a
+  ${LLVM_LIB_PATH}/libLLVMMCParser.a
+  ${LLVM_LIB_PATH}/libLLVMBitReader.a
+  ${LLVM_LIB_PATH}/libLLVMInstCombine.a
+  ${LLVM_LIB_PATH}/libLLVMTransformUtils.a
+  ${LLVM_LIB_PATH}/libLLVMipa.a
+  ${LLVM_LIB_PATH}/libLLVMAnalysis.a
+  ${LLVM_LIB_PATH}/libLLVMTarget.a
+  ${LLVM_LIB_PATH}/libLLVMMC.a
+  ${LLVM_LIB_PATH}/libLLVMCore.a
+  ${LLVM_LIB_PATH}/libLLVMSupport.a
 
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
 )
 
+# Install locally
 set(CMAKE_INSTALL_PREFIX "./")
 install(TARGETS color_coded DESTINATION bin)
