@@ -7,11 +7,7 @@ endif()
 
 project(color_coded)
 
-# Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
-# used when making a shared object; recompile with -fPIC.
-# See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-fPIC")
   set(64_BIT_PLATFORM 1)
 else()
   set(64_BIT_PLATFORM 0)
@@ -134,6 +130,13 @@ add_library(color_coded SHARED src/main.cpp)
 set_property(TARGET color_coded PROPERTY PREFIX "")
 set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")
 set_property(TARGET color_coded PROPERTY SUFFIX "")
+
+# Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
+# used when making a shared object; recompile with -fPIC.
+# See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
+if(64_BIT_PLATFORM)
+  set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-fPIC")
+endif()
 
 # Clang
 set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
