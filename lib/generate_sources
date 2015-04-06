@@ -2,7 +2,7 @@
 
 pwd=$1
 clang_dir=$2
-target=$1/include/env/impl.hpp
+target=$pwd/include/env/impl.hpp
 
 [ -f $target ] && rm -f $target
 cat <<EOF > $target

@@ -122,9 +122,9 @@ include_directories(
   ${ZLIB_INCLUDE_PATH}
 )
 
-message("Generating sources ...")
-execute_process(COMMAND
-  lib/generate_sources ${CMAKE_CURRENT_LIST_DIR} ${LLVM_ROOT_PATH})
+message("Generating sources ... ")
+execute_process(
+  COMMAND ${CMAKE_CURRENT_LIST_DIR}/lib/generate_sources ${CMAKE_CURRENT_LIST_DIR} ${LLVM_ROOT_PATH})
 
 add_library(boost_parts STATIC ${BOOST_SRC})
 
