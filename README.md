@@ -23,6 +23,7 @@ Before installing color_coded on OS X, please read the following. The vim that s
 brew update
 brew install macvim --with-lua --override-system-vim
 brew linkapps macvim
+brew install xz
 # Spawn a new shell to use the new system vim
 ```
 
@@ -31,7 +32,7 @@ brew linkapps macvim
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-sudo apt-get install build-essential liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev
+sudo apt-get install build-essential liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev cmake xz-utils
 ```
 
 Next, you need to ensure you have GCC 4.9. If you don't, you can try the following (tested on Ubuntu 14.04).
@@ -57,7 +58,9 @@ Since color_coded has a compiled component, you'll need to manually compile when
 
 ```bash
 cd ~/.vim/bundle/color_coded
-./configure && make
+mkdir build && cd build
+cmake ..
+make && make install
 ```
 
 For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
@@ -172,10 +175,10 @@ Yup. Believe it or not, these are almost certainly libclang bugs. I've been sort
 This is intentional. The first time you open a buffer, color_coded doesn't know if it's going to compile properly and it doesn't want you to wait while it tries to figure this out. color_coded will always compile in the background and events like moving the cursor or changing text will poll for updates. **Note, however,** that, once a buffer has highlighting, leaving that buffer and coming back to it will synchronously apply the previous highlighting.
 
 #### "color_coded unavailable: you need to compile it"
-See the above installation docs. When you install color_coded, you need to manually `./configure && make` (any errors will be reported) before you can successfully use it.
+When you install color_coded, you need to manually compile it before you can successfully use it. See [Installation](https://github.com/jeaye/color_coded#installation) for instructions.
 
 #### "color_coded has been updated: you need to recompile it"
-Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the same exact steps you took to compile initially. Generally, this just means `./configure && make`.
+Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the [same exact steps](https://github.com/jeaye/color_coded#installation) you took to compile initially.
 
 #### "xz is required to unpack clang"
 As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):
