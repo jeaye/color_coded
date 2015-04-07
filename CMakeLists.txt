@@ -44,6 +44,12 @@ include(cmake/generate_sources.cmake)
 
 add_library(color_coded SHARED src/main.cpp)
 
+add_custom_target(color_coded_track_api
+  COMMAND ${CMAKE_CURRENT_LIST_DIR}/lib/track_api
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+add_dependencies(color_coded color_coded_track_api)
+
 # Force the same naming across platforms
 set_property(TARGET color_coded PROPERTY PREFIX "")
 set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")

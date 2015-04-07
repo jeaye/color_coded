@@ -29,4 +29,4 @@ cpp_pattern="s/\\(std::size_t constexpr const version\\).*/\\1\\{ 0x$commit \\};
 sed -i $sed_infix "$vim_pattern" ./autoload/color_coded.vim
 sed -i $sed_infix "$cpp_pattern" ./src/main.cpp
 
-log_end " new version (0x$commit)\n"
+log_end " new version (0x$commit)"
