@@ -27,8 +27,6 @@ brew install xz
 # Spawn a new shell to use the new system vim
 ```
 
-**NOTE:** color_coded does not currently play nicely with luajit on OS X. For the most stability, please ensure you're using macvim as specified above.
-
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
@@ -66,6 +64,9 @@ make && make install
 For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
 
 **NOTE:** color_coded, to my knowledge, has not been tested on Windows.
+
+**ANOTHER NOTE:** color_coded does not currently play nicely with luajit. For the most stability, please ensure you're using vim as specified above.
+
 Usage
 ---
 Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you _may_ need to create a file describing the required compiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage (it favors C++ in this regard).
