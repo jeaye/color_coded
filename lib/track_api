@@ -19,7 +19,7 @@ log_start "Tracking API changes..."
 set +o errexit
   git status --porcelain -uno | egrep 'src|include' 2>&1 > /dev/null
   ret=$?
-  [ ! $ret -eq 0 ] && log_end "\n" && exit 0
+  [ ! $ret -eq 0 ] && log_end && exit 0
 set -o errexit
 
 # Patch the VimL and C++ with the new API version (the commit hash)
