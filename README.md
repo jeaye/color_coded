@@ -23,7 +23,7 @@ Before installing color_coded on OS X, please read the following. The vim that s
 brew update
 brew install macvim --with-lua --override-system-vim
 brew linkapps macvim
-brew install xz
+brew install xz cmake
 # Spawn a new shell to use the new system vim
 ```
 
@@ -180,18 +180,6 @@ When you install color_coded, you need to manually compile it before you can suc
 
 #### "color_coded has been updated: you need to recompile it"
 Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the [same exact steps](https://github.com/jeaye/color_coded#installation) you took to compile initially.
-
-#### "xz is required to unpack clang"
-As of clang 5.0, both Linux and OS X tarballs are compressed with [xz](http://tukaani.org/xz/). To install, consider one of the following (or further documentation for your OS/distribution):
-###### OS X
-```bash
-brew install xz # for homebrew
-port install xz # for macports
-```
-###### Ubuntu/Debian
-```bash
-sudo apt-get install xz-utils
-```
 
 #### Does color_coded work with neovim?
 I doubt it. color_coded has not been tested on neovim and there has been significant work to the plugin API and the lua interface. For now, at least, color_coded is not supporting neovim.
