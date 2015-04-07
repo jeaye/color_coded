@@ -35,4 +35,4 @@ else()
   message("Clang/LLVM ${CLANG_VERSION} already extracted")
 endif()
 
-get_filename_component(LLVM_ROOT_PATH ${CLANG_DIRNAME} ABSOLUTE)
+set(LLVM_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
