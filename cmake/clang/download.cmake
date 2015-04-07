@@ -23,6 +23,7 @@ file(DOWNLOAD
 if(NOT EXISTS ${CLANG_DIRNAME})
   message("Extracting Clang/LLVM ${CLANG_VERSION} ...")
 
+  execute_process(COMMAND mkdir -p ${CLANG_DIRNAME})
   if(CLANG_FILENAME MATCHES ".+bz2")
     execute_process(COMMAND tar -xjf ${CLANG_FILENAME} -C ${CLANG_DIRNAME} --strip-components 1)
   elseif(CLANG_FILENAME MATCHES ".+xz")
