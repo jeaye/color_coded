@@ -30,7 +30,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-sudo apt-get install build-essential liblua5.2-dev lua5.2 libncurses-dev libboost-dev libz-dev cmake xz-utils
+sudo apt-get install build-essential liblua5.1-dev lua5.1 libncurses-dev libboost-dev libz-dev cmake xz-utils
 ```
 
 Next, you need to ensure you have GCC 4.9. If you don't, you can try the following (tested on Ubuntu 14.04).
@@ -155,7 +155,7 @@ Dependencies
 ---
 Compilation of color_coded requires:
   * GCC ≥ 4.9 OR Clang ≥ 3.4
-  * Lua ≥ 5.2.x
+  * Lua ≥ 5.1.x
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
