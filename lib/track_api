@@ -13,7 +13,7 @@ uname=$(uname)
 log_start() { printf "$@" 1>&2; }
 log_end() { printf "$@\n" 1>&2; }
 
-log_start "Tracking API changes..."
+log_start "Tracking API changes ..."
 
 # Check for changes to native code
 set +o errexit

@@ -1,5 +1,5 @@
 set(CLANG_VERSION "3.6.0")
-message("Downloading Clang/LLVM ${CLANG_VERSION} ...")
+message(STATUS "Locating trusted Clang/LLVM ${CLANG_VERSION}")
 
 set(CLANG_URL "http://llvm.org/releases/${CLANG_VERSION}" )
 if(APPLE)
@@ -20,8 +20,10 @@ file(DOWNLOAD
   "${CLANG_URL}/${CLANG_FILENAME}" "./${CLANG_FILENAME}"
   SHOW_PROGRESS EXPECTED_MD5 "${CLANG_MD5}")
 
+message(STATUS "Found ${CLANG_FILENAME}")
+
 if(NOT EXISTS ${CLANG_DIRNAME})
-  message("Extracting Clang/LLVM ${CLANG_VERSION} ...")
+  message(STATUS "Extracting Clang/LLVM ${CLANG_VERSION}")
 
   execute_process(COMMAND mkdir -p ${CLANG_DIRNAME})
   if(CLANG_FILENAME MATCHES ".+bz2")
@@ -32,7 +34,7 @@ if(NOT EXISTS ${CLANG_DIRNAME})
     execute_process(COMMAND tar -xzf ${CLANG_FILENAME} -C ${CLANG_DIRNAME} --strip-components 1)
   endif()
 else()
-  message("Clang/LLVM ${CLANG_VERSION} already extracted")
+  message(STATUS "Clang/LLVM ${CLANG_VERSION} already extracted")
 endif()
 
 set(LLVM_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
