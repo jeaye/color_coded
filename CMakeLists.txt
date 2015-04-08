@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(color_coded)
 
+set(CMAKE_BUILD_TYPE RELEASE)
+
 # Shut up the warning about CMake policy CMP0042.
 if(APPLE)
   set(CMAKE_MACOSX_RPATH ON)
@@ -55,12 +57,14 @@ set_property(TARGET color_coded PROPERTY PREFIX "")
 set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")
 set_property(TARGET color_coded PROPERTY SUFFIX "")
 
+# Enable warnings
+set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-Wall -Wextra -pedantic")
+
 # Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
 # used when making a shared object; recompile with -fPIC.
 # See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(64_BIT_PLATFORM)
   set_property(TARGET color_coded_boost PROPERTY COMPILE_FLAGS "-fPIC")
-  set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-fPIC")
 endif()
 
 # Clang
