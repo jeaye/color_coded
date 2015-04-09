@@ -9,10 +9,12 @@ if(APPLE)
   set(CMAKE_MACOSX_RPATH ON)
 endif()
 
-if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-  set(64_BIT_PLATFORM 1)
-else()
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  message(STATUS "Found 32bit system")
   set(64_BIT_PLATFORM 0)
+else()
+  message(STATUS "Found 64bit system")
+  set(64_BIT_PLATFORM 1)
 endif()
 
 # C++14
