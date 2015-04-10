@@ -58,7 +58,8 @@ Since color_coded has a compiled component, you'll need to manually compile when
 cd ~/.vim/bundle/color_coded
 mkdir build && cd build
 cmake ..
-make && make install
+make && make install # Compiling with GCC is preferred, ironically
+# Clang works on OS X, but has mixed success on Linux and the BSDs
 ```
 
 For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
@@ -154,7 +155,7 @@ This command enables color_coded, if it's currently disabled, or disables it, if
 Dependencies
 ---
 Compilation of color_coded requires:
-  * GCC ≥ 4.9 OR Clang ≥ 3.4
+  * GCC ≥ 4.9
   * Lua ≥ 5.1.x
 
 Usage of color_coded requires vim:
