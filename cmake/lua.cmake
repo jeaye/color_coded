@@ -12,5 +12,7 @@ if((NOT ${LUA_FOUND}) OR (NOT DEFINED LUA_INCLUDE_DIR) OR (${LUA_INCLUDE_DIR} MA
   endif()
 endif()
 message(STATUS "Found Lua")
+message(STATUS "  Lua include ${LUA_INCLUDE_DIR}")
+message(STATUS "  Lua lib ${LUA_LIBRARIES}")
 
 include_directories(${LUA_INCLUDE_DIR})
