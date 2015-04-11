@@ -32,6 +32,9 @@ find_package(Curses REQUIRED)
 # ZLib
 find_package(ZLIB REQUIRED)
 
+# PThread
+find_package(Threads REQUIRED)
+
 # Clang
 include(cmake/clang/download.cmake)
 
@@ -77,6 +80,7 @@ target_link_libraries(color_coded
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT}
 )
 
 # Install locally
