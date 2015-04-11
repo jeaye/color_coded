@@ -66,7 +66,7 @@ For various compatibility reasons, color_coded will attempt to download a known 
 
 **NOTE:** color_coded, to my knowledge, has not been tested on Windows.
 
-**ANOTHER NOTE:** color_coded does not currently play nicely with luajit. For the most stability, please ensure you're using vim as specified above.
+**ANOTHER NOTE:** color_coded doesn't reliably support luajit. More informatively, [luajit doesn't reliably support being embedded in shared libraries](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
 
 Usage
 ---
@@ -185,7 +185,14 @@ Assuming you've updated a working installation of color_coded, you'll get this e
 #### Does color_coded work with neovim?
 I doubt it. color_coded has not been tested on neovim and there has been significant work to the plugin API and the lua interface. For now, at least, color_coded is not supporting neovim.
 
-#### Support
+#### color_coded crashes on startup?!?!
+You're likely using luajit, which doesn't embed well in shared libraries. If you aren't sure, see if this turns up anything:
+```bash
+vim --version | grep jit
+```
+[More information is here.](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
+
+#### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
 
 License
