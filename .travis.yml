@@ -1,0 +1,9 @@
+language: cpp
+compiler: gcc
+before_install:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install liblua5.1-dev libncurses-dev libboost-dev libz-dev g++-4.9
+  - export CXX="g++-4.9"
+script: cmake . && make
