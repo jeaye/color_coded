@@ -1,9 +1,15 @@
 language: cpp
-compiler: gcc
+compiler:
+  - gcc
+  - clang
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - if [ "$CXX" == "clang++"  ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'; fi
   - sudo apt-get update -qq
 install:
-  - sudo apt-get install liblua5.1-dev libncurses-dev libboost-dev libz-dev g++-4.9
-  - export CXX="g++-4.9"
+  - sudo apt-get install liblua5.1-dev libncurses-dev libboost-dev libz-dev
+  - if [ "$CXX" == "g++"  ]; then sudo apt-get install g++-4.9; fi
+  - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
+  - if [ "$CXX" == "clang++"  ]; then sudo apt-get install --allow-unauthenticated libstdc++-4.9-dev clang-3.5; fi
+  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
 script: cmake . && make && make install
