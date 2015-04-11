@@ -3,7 +3,7 @@
 
 hi default Member ctermfg=Cyan guifg=Cyan
 hi default Variable ctermfg=Grey guifg=Grey
-hi default Namespace ctermfg=DarkYellow guifg=DarkYellow
+hi default Namespace ctermfg=Yellow guifg=Yellow
 hi default EnumConstant ctermfg=LightGreen guifg=LightGreen
 
 hi link StructDecl Type
