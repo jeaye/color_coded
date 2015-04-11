@@ -185,6 +185,9 @@ Assuming you've updated a working installation of color_coded, you'll get this e
 #### Does color_coded work with neovim?
 I doubt it. color_coded has not been tested on neovim and there has been significant work to the plugin API and the lua interface. For now, at least, color_coded is not supporting neovim.
 
+#### Support
+Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
+
 License
 ---
 color_coded is under the MIT open-source license.  
