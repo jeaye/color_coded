@@ -1,5 +1,5 @@
 if(NOT CUSTOM_CLANG)
-  set(LLVM_LIBS
+  set(LLVM_LIBRARY
     ${LLVM_LIB_PATH}/libLLVMLTO.a
     ${LLVM_LIB_PATH}/libLLVMObjCARCOpts.a
     ${LLVM_LIB_PATH}/libLLVMLinker.a
