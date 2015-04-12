@@ -4,7 +4,8 @@
 #include <future>
 #include <atomic>
 #include <chrono>
-#include <vector>
+#include <mutex>
+#include <condition_variable>
 
 namespace color_coded
 {
@@ -29,9 +30,12 @@ namespace color_coded
 
         void push(Task &&t)
         {
-          std::lock_guard<std::mutex> const lock{ task_mutex_ };
-          task_ = std::move(t);
-          has_work_.store(true);
+          {
+            std::lock_guard<std::mutex> const lock{ task_mutex_ };
+            task_ = std::move(t);
+            has_work_.store(true);
+          }
+          task_cv_.notify_one();
         }
         std::pair<Result, bool> pull()
         {
@@ -46,15 +50,9 @@ namespace color_coded
           Result result;
           while(should_work_.load())
           {
-            if(!has_work_.load())
             {
-              /* TODO: A condition variable should work instead. */
-              std::this_thread::sleep_for(std::chrono::milliseconds{ 500 });
-              continue;
-            }
-
-            {
-              std::lock_guard<std::mutex> const lock{ task_mutex_ };
+              std::unique_lock<std::mutex> lock{ task_mutex_ };
+              task_cv_.wait(lock, [&]{ return has_work_.load(); });
               curr = std::move(task_);
               has_work_.store(false);
             }
@@ -76,6 +74,7 @@ namespace color_coded
         std::atomic_bool has_work_{};
         Task task_;
         std::mutex task_mutex_;
+        std::condition_variable task_cv_;
 
         std::atomic_bool has_result_{};
         Result result_;
