@@ -45,12 +45,28 @@ sudo update-alternatives --remove-all g++
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 ```
 
-#### All
+#### Vundle and Pathogen
 Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:PluginInstall`):
 
 ```viml
 Plugin 'jeaye/color_coded'
 ```
+
+#### NeoBundle
+
+Installation with [NeoBundle](https://github.com/Shougo/neobundle.vim) supports automatically building and lazy-loading the plugin:
+
+```viml
+NeoBundleLazy 'jeaye/color_coded', { 
+      \ 'build': {
+      \   'unix': 'cmake . && make && make install',
+      \ },
+      \ 'autoload' : { 'filetypes' : ['c', 'cpp', 'objc', 'objcpp'] },
+      \ 'build_commands' : ['cmake', 'make']
+  \}
+```
+
+#### All
 
 Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle (see the [dependencies](https://github.com/jeaye/color_coded#dependencies) section to ensure you can `make` properly):
 
