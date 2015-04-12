@@ -27,7 +27,7 @@ namespace color_coded
         }
         ~token_pack()
         { clang_disposeTokens(tu_.impl, data_, size_); }
-          
+
         iterator begin()
         { return data_; }
         const_iterator cbegin() const

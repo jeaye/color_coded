@@ -8,7 +8,7 @@ namespace color_coded
   {
     inline bool pull(std::string const &file)
     {
-      auto const pulled(core::queue().pull());
+      auto const pulled(core::queue().pull(file));
       if(pulled.second)
       {
         auto &buf(core::buffers()[pulled.first.name]);

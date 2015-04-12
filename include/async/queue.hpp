@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <thread>
 #include <future>
 #include <atomic>
@@ -37,10 +38,10 @@ namespace color_coded
           }
           task_cv_.notify_one();
         }
-        std::pair<Result, bool> pull()
+        std::pair<Result, bool> pull(std::string const &name)
         {
-          std::lock_guard<std::mutex> const lock{ result_mutex_ };
-          return { std::move(result_), has_result_.exchange(false) };
+          std::lock_guard<std::mutex> const lock{ results_mutex_ };
+          return { std::move(results_[name]), has_results_[name].exchange(false) };
         }
 
       private:
@@ -60,9 +61,9 @@ namespace color_coded
             result = func_(curr);
 
             {
-              std::lock_guard<std::mutex> const lock{ result_mutex_ };
-              result_ = std::move(result);
-              has_result_.store(true);
+              std::lock_guard<std::mutex> const lock{ results_mutex_ };
+              has_results_[result.name].store(true);
+              results_[result.name] = std::move(result);
             }
           }
         }
@@ -76,9 +77,9 @@ namespace color_coded
         std::mutex task_mutex_;
         std::condition_variable task_cv_;
 
-        std::atomic_bool has_result_{};
-        Result result_;
-        std::mutex result_mutex_;
+        std::map<std::string, std::atomic_bool> has_results_{};
+        std::map<std::string, Result> results_;
+        std::mutex results_mutex_;
     };
   }
 }
