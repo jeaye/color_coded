@@ -57,7 +57,7 @@ Plugin 'jeaye/color_coded'
 Installation with [NeoBundle](https://github.com/Shougo/neobundle.vim) supports automatically building and lazy-loading the plugin:
 
 ```viml
-NeoBundleLazy 'jeaye/color_coded', { 
+NeoBundleLazy 'jeaye/color_coded', {
       \ 'build': {
       \   'unix': 'cmake . && make && make install',
       \ },
@@ -68,7 +68,7 @@ NeoBundleLazy 'jeaye/color_coded', {
 
 #### All
 
-Since color_coded has a compiled component, you'll need to manually compile when installing and updating. Compilation works as follows, assuming usage of vundle (see the [dependencies](https://github.com/jeaye/color_coded#dependencies) section to ensure you can `make` properly):
+Since color_coded has a compiled component, you'll need to manually compile when installing and updating (unless your vim package manager does it for you). Compilation works as follows, assuming usage of vundle (see the [dependencies](https://github.com/jeaye/color_coded#dependencies) section to ensure you can `make` properly):
 
 ```bash
 cd ~/.vim/bundle/color_coded
