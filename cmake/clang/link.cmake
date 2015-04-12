@@ -131,10 +131,20 @@ if(NOT CUSTOM_CLANG)
     ${LLVM_LIB_PATH}/libLLVMSupport.a
   )
 else()
+  set(SEARCH_PATHS
+    /usr/lib
+    /usr/local/lib
+    /usr/local/opt/lib
+    /usr/local/opt/llvm/lib
+    /usr/lib/llvm-3.6/lib
+    /usr/lib/llvm-3.5/lib
+    /usr/lib/llvm-3.4/lib
+  )
+
   if(NOT CLANG_LIBS)
     find_library(CLANG_LIBS
       NAMES clang
-      PATHS /usr/lib /usr/local/lib /usr/local/opt/lib /usr/local/opt/llvm/lib
+      PATHS ${SEARCH_PATHS}
     )
     if(CLANG_LIBS)
       message(STATUS "Found Clang at ${CLANG_LIBS}")
@@ -146,7 +156,7 @@ else()
   if(NOT LLVM_LIBS)
     find_library(LLVM_LIBS
       NAMES LLVM-3.6.0 LLVM-3.6 LLVM-3.5.0 LLVM-3.5 LLVM-3.4.0 LLVM-3.4
-      PATHS /usr/lib /usr/local/lib /usr/local/opt/lib /usr/local/opt/llvm/lib
+      PATHS ${SEARCH_PATHS}
     )
     if(LLVM_LIBS)
       message(STATUS "Found LLVM at ${LLVM_LIBS}")
