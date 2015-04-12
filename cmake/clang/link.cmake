@@ -1,4 +1,7 @@
-set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
+if(NOT LLVM_LIB_PATH)
+  set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
+endif()
+
 target_link_libraries(color_coded
   ${LLVM_LIB_PATH}/libclang.a
   ${LLVM_LIB_PATH}/libclangIndex.a

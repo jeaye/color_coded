@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(color_coded)
 
-set(CMAKE_BUILD_TYPE RELEASE)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RELEASE)
+endif()
 
 # Shut up the warning about CMake policy CMP0042.
 if(APPLE)
@@ -38,10 +40,13 @@ find_package(Threads REQUIRED)
 # Clang
 include(cmake/clang/download.cmake)
 
+if(NOT LLVM_INCLUDE_PATH)
+  set(LLVM_INCLUDE_PATH ${LLVM_ROOT_PATH}/include)
+endif()
 include_directories(
   include
 
-  ${LLVM_ROOT_PATH}/include
+  ${LLVM_INCLUDE_PATH}
 
   ${CURSES_INCLUDE_PATH}
   ${ZLIB_INCLUDE_PATH}
