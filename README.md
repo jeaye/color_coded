@@ -78,7 +78,7 @@ make && make install # Compiling with GCC is preferred, ironically
 # Clang works on OS X, but has mixed success on Linux and the BSDs
 ```
 
-For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms. Avoiding this is not officially supported, but documented [here](https://github.com/jeaye/color_coded#).
+For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms. Avoiding this is not officially supported, but documented [here](https://github.com/jeaye/color_coded#how-can-i-use-a-custom-llvmclang-setup).
 
 **ANOTHER NOTE:** color_coded doesn't reliably support luajit. More informatively, [luajit doesn't reliably support being embedded in shared libraries](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
 
