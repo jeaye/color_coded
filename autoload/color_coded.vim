@@ -11,7 +11,7 @@ let g:color_coded_matches = {}
 
 function! s:color_coded_create_defaults()
   if !exists("g:color_coded_filetypes")
-    let g:color_coded_filetypes = ['c', 'h', 'cpp', 'hpp', 'cc', 'm', 'mm']
+    let g:color_coded_filetypes = ['c', 'cpp', 'objc']
   endif
 endfunction!
 

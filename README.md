@@ -112,7 +112,7 @@ This option controls the filetypes which color_coded will try to compile.
 
 Default:
 ```viml
-let g:color_coded_filetypes = ['c', 'h', 'cpp', 'hpp', 'cc', 'm', 'mm']
+let g:color_coded_filetypes = ['c', 'cpp', 'objc']
 ```
 
 Highlighting
