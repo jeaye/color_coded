@@ -40,9 +40,6 @@ find_package(Threads REQUIRED)
 # Clang
 include(cmake/clang/download.cmake)
 
-if(NOT LLVM_INCLUDE_PATH)
-  set(LLVM_INCLUDE_PATH ${LLVM_ROOT_PATH}/include)
-endif()
 include_directories(
   include
 
