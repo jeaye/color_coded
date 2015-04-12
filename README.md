@@ -78,9 +78,7 @@ make && make install # Compiling with GCC is preferred, ironically
 # Clang works on OS X, but has mixed success on Linux and the BSDs
 ```
 
-For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms.
-
-**NOTE:** color_coded, to my knowledge, has not been tested on Windows.
+For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms. Avoiding this is not officially supported, but documented [here](https://github.com/jeaye/color_coded#).
 
 **ANOTHER NOTE:** color_coded doesn't reliably support luajit. More informatively, [luajit doesn't reliably support being embedded in shared libraries](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
 
@@ -207,6 +205,21 @@ You're likely using luajit, which doesn't embed well in shared libraries. If you
 vim --version | grep jit
 ```
 [More information is here.](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
+
+#### How can I use a custom LLVM/Clang setup?
+This is not officially supported. If you run into bugs or crashes or you're unable to compile or anything else that's catastrophic or otherwise terrible, you're on your own. With that said, you can try specifying `CUSTOM_CLANG=1` and `LLVM_ROOT_PATH=...` to cmake during the build process. The `LLVM_ROOT_PATH` is a prefix, excluding `/lib` and `/include` where your LLVM installation lives; you should try this first. If cmake fails, you'll need to specify one or both of `LLVM_INCLUDE_PATH` or `LLVM_LIB_PATH` (based on the error it gave you). If cmake still fails to find what it needs, you may need to specify one or both of `CLANG_LIBS` or `LLVM_LIBS` (based on the error it gave you). Examples:
+
+##### Arch Linux
+```bash
+# From the build directory
+cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr
+```
+
+##### Ubuntu
+```bash
+# From the build directory
+cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/lib/llvm-3.4/include
+```
 
 #### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
