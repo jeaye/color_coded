@@ -1,5 +1,32 @@
 if(NOT CUSTOM_CLANG)
-  set(LLVM_LIBRARY
+  set(CLANG_LIBS
+    ${LLVM_LIB_PATH}/libclang.a
+    ${LLVM_LIB_PATH}/libclangIndex.a
+    ${LLVM_LIB_PATH}/libclangFormat.a
+    ${LLVM_LIB_PATH}/libclangFrontendTool.a
+    ${LLVM_LIB_PATH}/libclangFrontend.a
+    ${LLVM_LIB_PATH}/libclangDriver.a
+    ${LLVM_LIB_PATH}/libclangSerialization.a
+    ${LLVM_LIB_PATH}/libclangCodeGen.a
+    ${LLVM_LIB_PATH}/libclangParse.a
+    ${LLVM_LIB_PATH}/libclangSema.a
+    ${LLVM_LIB_PATH}/libclangStaticAnalyzerFrontend.a
+    ${LLVM_LIB_PATH}/libclangStaticAnalyzerCheckers.a
+    ${LLVM_LIB_PATH}/libclangStaticAnalyzerCore.a
+    ${LLVM_LIB_PATH}/libclangAnalysis.a
+    ${LLVM_LIB_PATH}/libclangARCMigrate.a
+    ${LLVM_LIB_PATH}/libclangRewriteFrontend.a
+    ${LLVM_LIB_PATH}/libclangRewrite.a
+    ${LLVM_LIB_PATH}/libclangEdit.a
+    ${LLVM_LIB_PATH}/libclangAST.a
+    ${LLVM_LIB_PATH}/libclangASTMatchers.a
+    ${LLVM_LIB_PATH}/libclangDynamicASTMatchers.a
+    ${LLVM_LIB_PATH}/libclangLex.a
+    ${LLVM_LIB_PATH}/libclangBasic.a
+    ${LLVM_LIB_PATH}/libclangTooling.a
+    ${LLVM_LIB_PATH}/libclangToolingCore.a
+  )
+  set(LLVM_LIBS
     ${LLVM_LIB_PATH}/libLLVMLTO.a
     ${LLVM_LIB_PATH}/libLLVMObjCARCOpts.a
     ${LLVM_LIB_PATH}/libLLVMLinker.a
@@ -104,14 +131,25 @@ if(NOT CUSTOM_CLANG)
     ${LLVM_LIB_PATH}/libLLVMSupport.a
   )
 else()
-  if(NOT LLVM_LIBS)
-    include(CheckCXXCompilerFlag)
-    find_library(LLVM_LIBRARY
-      NAMES LLVM-3.6.0 LLVM-3.6 LLVM-3.5.0 LLVM-3.5 LLVM-3.7.0 LLVM-3.7
+  if(NOT CLANG_LIBS)
+    find_library(CLANG_LIBS
+      NAMES clang
       PATHS /usr/lib /usr/local/lib /usr/local/opt/lib /usr/local/opt/llvm/lib
     )
-    if(LLVM_LIBRARY)
-      message(STATUS "Found LLVM at ${LLVM_LIBRARY}")
+    if(CLANG_LIBS)
+      message(STATUS "Found Clang at ${CLANG_LIBS}")
+    else()
+      message(FATAL_ERROR "Couldn't find Clang; you need to specify CLANG_LIBS. See the README for details.")
+    endif()
+  endif()
+
+  if(NOT LLVM_LIBS)
+    find_library(LLVM_LIBS
+      NAMES LLVM-3.6.0 LLVM-3.6 LLVM-3.5.0 LLVM-3.5 LLVM-3.4.0 LLVM-3.4
+      PATHS /usr/lib /usr/local/lib /usr/local/opt/lib /usr/local/opt/llvm/lib
+    )
+    if(LLVM_LIBS)
+      message(STATUS "Found LLVM at ${LLVM_LIBS}")
     else()
       message(FATAL_ERROR "Couldn't find LLVM; you need to specify LLVM_LIBS. See the README for details.")
     endif()
@@ -119,30 +157,6 @@ else()
 endif()
 
 target_link_libraries(color_coded
-  ${LLVM_LIB_PATH}/libclang.a
-  ${LLVM_LIB_PATH}/libclangIndex.a
-  ${LLVM_LIB_PATH}/libclangFormat.a
-  ${LLVM_LIB_PATH}/libclangFrontendTool.a
-  ${LLVM_LIB_PATH}/libclangFrontend.a
-  ${LLVM_LIB_PATH}/libclangDriver.a
-  ${LLVM_LIB_PATH}/libclangSerialization.a
-  ${LLVM_LIB_PATH}/libclangCodeGen.a
-  ${LLVM_LIB_PATH}/libclangParse.a
-  ${LLVM_LIB_PATH}/libclangSema.a
-  ${LLVM_LIB_PATH}/libclangStaticAnalyzerFrontend.a
-  ${LLVM_LIB_PATH}/libclangStaticAnalyzerCheckers.a
-  ${LLVM_LIB_PATH}/libclangStaticAnalyzerCore.a
-  ${LLVM_LIB_PATH}/libclangAnalysis.a
-  ${LLVM_LIB_PATH}/libclangARCMigrate.a
-  ${LLVM_LIB_PATH}/libclangRewriteFrontend.a
-  ${LLVM_LIB_PATH}/libclangRewrite.a
-  ${LLVM_LIB_PATH}/libclangEdit.a
-  ${LLVM_LIB_PATH}/libclangAST.a
-  ${LLVM_LIB_PATH}/libclangASTMatchers.a
-  ${LLVM_LIB_PATH}/libclangDynamicASTMatchers.a
-  ${LLVM_LIB_PATH}/libclangLex.a
-  ${LLVM_LIB_PATH}/libclangBasic.a
-  ${LLVM_LIB_PATH}/libclangTooling.a
-  ${LLVM_LIB_PATH}/libclangToolingCore.a
-  ${LLVM_LIBRARY}
+  ${CLANG_LIBS}
+  ${LLVM_LIBS}
 )
