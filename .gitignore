@@ -14,6 +14,11 @@ bin
 # Clang
 /clang*
 /lib/clang*
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+color_coded.so
+install_manifest.txt
 
 # Personal notes
 NOTES
