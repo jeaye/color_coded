@@ -22,11 +22,11 @@ endif()
 # C++14
 include(cmake/cxx14.cmake)
 
-# Lua
-include(cmake/lua.cmake)
-
 # Boost
 include(cmake/boost.cmake)
+
+# Lua
+include(cmake/lua.cmake)
 
 # Curses
 find_package(Curses REQUIRED)
