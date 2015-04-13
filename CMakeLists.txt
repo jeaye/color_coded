@@ -65,7 +65,7 @@ set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")
 set_property(TARGET color_coded PROPERTY SUFFIX "")
 
 # Enable warnings
-set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-Wall -Wextra -pedantic -Wno-missing-field-initializers")
+set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-Wall -Wextra -Werror -pedantic -Wno-missing-field-initializers")
 
 # Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
 # used when making a shared object; recompile with -fPIC.
