@@ -150,8 +150,7 @@ endfunction!
 
 function! color_coded#last_error()
 lua << EOF
-  vim.command
-  (
+  vim.command(
     "echo \"" .. string.gsub(color_coded_last_error(), "\"", "'") ..  "\""
   )
 EOF
