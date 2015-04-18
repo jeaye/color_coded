@@ -1,0 +1,4 @@
+foo
+-Itests
+
+-I/etc/

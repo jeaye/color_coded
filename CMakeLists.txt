@@ -88,3 +88,22 @@ target_link_libraries(color_coded
 # Install locally
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR})
 install(TARGETS color_coded DESTINATION bin)
+
+# Tests
+include_directories(lib/jest/include)
+include_directories(tests/include)
+add_definitions(-DTEST_ROOT=${CMAKE_CURRENT_LIST_DIR}/tests)
+add_executable(check ${CMAKE_CURRENT_LIST_DIR}/tests/src/main.cpp)
+target_link_libraries(check
+  color_coded_boost
+  ${LUA_LIBRARIES}
+  ${CURSES_LIBRARY}
+  ${ZLIB_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT}
+)
+
+add_custom_target(test
+  COMMAND ${CMAKE_CURRENT_LIST_DIR}/check
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+add_dependencies(test check)
