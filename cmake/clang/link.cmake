@@ -166,7 +166,7 @@ else()
   endif()
 endif()
 
-target_link_libraries(color_coded
+target_link_libraries(${PROJECT_NAME}
   ${CLANG_LIBS}
   ${LLVM_LIBS}
 )
