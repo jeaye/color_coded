@@ -1,0 +1,3 @@
+[submodule "lib/jest"]
+  path = lib/jest
+  url = https://github.com/jeaye/jest.git

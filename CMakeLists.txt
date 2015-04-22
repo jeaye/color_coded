@@ -51,34 +51,34 @@ include_directories(
 
 include(cmake/generate_sources.cmake)
 
-add_library(color_coded SHARED src/main.cpp)
+add_library(${PROJECT_NAME} SHARED src/main.cpp)
 
-add_custom_target(color_coded_track_api
+add_custom_target(${PROJECT_NAME}_track_api
   COMMAND ${CMAKE_CURRENT_LIST_DIR}/lib/track_api
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 )
-add_dependencies(color_coded color_coded_track_api)
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_track_api)
 
 # Force the same naming across platforms
-set_property(TARGET color_coded PROPERTY PREFIX "")
-set_property(TARGET color_coded PROPERTY OUTPUT_NAME "color_coded.so")
-set_property(TARGET color_coded PROPERTY SUFFIX "")
+set_property(TARGET ${PROJECT_NAME} PROPERTY PREFIX "")
+set_property(TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME "${PROJECT_NAME}.so")
+set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX "")
 
 # Enable warnings
-set_property(TARGET color_coded PROPERTY COMPILE_FLAGS "-Wall -Wextra -pedantic -Wno-missing-field-initializers")
+set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS "-Wall -Wextra -pedantic -Wno-missing-field-initializers")
 
 # Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
 # used when making a shared object; recompile with -fPIC.
 # See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(64_BIT_PLATFORM)
-  set_property(TARGET color_coded_boost PROPERTY COMPILE_FLAGS "-fPIC")
+  set_property(TARGET ${PROJECT_NAME}_boost PROPERTY COMPILE_FLAGS "-fPIC")
 endif()
 
 # Clang
 include(cmake/clang/link.cmake)
 
-target_link_libraries(color_coded
-  color_coded_boost
+target_link_libraries(${PROJECT_NAME}
+  ${PROJECT_NAME}_boost
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
@@ -87,4 +87,24 @@ target_link_libraries(color_coded
 
 # Install locally
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR})
-install(TARGETS color_coded DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+# Tests
+include_directories(
+  lib/jest/include
+  test/include
+)
+add_executable(${PROJECT_NAME}_config_test ${CMAKE_CURRENT_LIST_DIR}/test/src/config/main.cpp)
+target_link_libraries(${PROJECT_NAME}_config_test
+  ${PROJECT_NAME}_boost
+  ${LUA_LIBRARIES}
+  ${CURSES_LIBRARY}
+  ${ZLIB_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT}
+)
+
+add_custom_target(test
+  COMMAND ${PROJECT_NAME}_config_test
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+add_dependencies(test ${PROJECT_NAME}_config_test)

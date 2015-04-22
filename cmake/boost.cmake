@@ -31,4 +31,4 @@ include_directories(
   ${BOOST_DIR}/utility/include
 )
 
-add_library(color_coded_boost STATIC ${BOOST_SRC})
+add_library(${PROJECT_NAME}_boost STATIC ${BOOST_SRC})
