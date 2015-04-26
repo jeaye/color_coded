@@ -50,6 +50,12 @@ namespace color_coded
     return 0;
   }
 
+  static int exit(lua_State * const)
+  {
+    event::exit();
+    return 0;
+  }
+
   static int last_error(lua_State * const lua)
   {
     lua_pushstring(lua, event::last_error().c_str());
@@ -58,7 +64,7 @@ namespace color_coded
 
   static int api_version(lua_State * const lua)
   {
-    std::size_t constexpr const version{ 0x3b66265 };
+    std::size_t constexpr const version{ 0x659d25c };
     lua_pushinteger(lua, version);
     return 1;
   }
@@ -82,6 +88,9 @@ extern "C" int luaopen_color_coded(lua_State * const lua)
   lua_register(lua, "color_coded_destroy",
     (color_coded::safe_func<decltype(&color_coded::destroy),
                             &color_coded::destroy>()));
+  lua_register(lua, "color_coded_exit",
+    (color_coded::safe_func<decltype(&color_coded::exit),
+                            &color_coded::exit>()));
   lua_register(lua, "color_coded_last_error",
     (color_coded::safe_func<decltype(&color_coded::last_error),
                             &color_coded::last_error>()));

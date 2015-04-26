@@ -49,6 +49,7 @@ if s:color_coded_valid == 1
     " Leaving a color_coded buffer requires removing matched positions
     au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
     au BufDelete * call color_coded#destroy(expand('<afile>'))
+    au VimLeave * call color_coded#exit()
   augroup END
 
   nnoremap <silent> <ScrollWheelUp>

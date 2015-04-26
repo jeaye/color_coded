@@ -49,6 +49,9 @@ namespace color_coded
     inline void destroy(std::string const &file)
     { core::buffers().erase(file); }
 
+    inline void exit()
+    { core::queue().join(); }
+
     inline std::string last_error()
     { return core::last_error(); }
   }

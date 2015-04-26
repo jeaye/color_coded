@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0x3b66265
+let s:color_coded_api_version = 0x659d25c
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -143,6 +143,15 @@ EOF
   let s:file = color_coded#get_buffer_name()
   call color_coded#clear_matches(s:file)
   unlet s:file
+endfunction!
+
+function! color_coded#exit()
+  if g:color_coded_enabled == 0
+    return
+  endif
+lua << EOF
+  color_coded_exit()
+EOF
 endfunction!
 
 " Commands

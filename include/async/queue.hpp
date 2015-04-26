@@ -23,11 +23,6 @@ namespace color_coded
           : func_{ std::move(f) }
           , thread_{ std::bind(&queue::work, this) }
         { }
-        ~queue()
-        {
-          should_work_.store(false);
-          thread_.detach();
-        }
 
         void push(Task &&t)
         {
@@ -44,6 +39,14 @@ namespace color_coded
           return { std::move(results_[name]), has_results_[name].exchange(false) };
         }
 
+        void join()
+        {
+          should_work_.store(false);
+          has_work_.store(true);
+          task_cv_.notify_one();
+          thread_.join();
+        }
+
       private:
         void work()
         {
@@ -54,6 +57,11 @@ namespace color_coded
             {
               std::unique_lock<std::mutex> lock{ task_mutex_ };
               task_cv_.wait(lock, [&]{ return has_work_.load(); });
+
+              /* We may be woken up to die. */
+              if(!should_work_.load())
+              { return; }
+
               curr = std::move(task_);
               has_work_.store(false);
             }
