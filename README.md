@@ -54,11 +54,10 @@ $ [sudo] pkg install clang36 llvm36 cmake
 ```
 
 ```bash
-# From within the project folder
-$ cmake -DCUSTOM_CLANG=1 -DCLANG_LIBS=/usr/lib/include/clang/3.4.1 -DLLVM_LIBS=/usr/local/llvm36/lib
--DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/local/llvm36/include .
-$ make
-$ make install
+$ cd ~/.vim/bundle/color_coded
+$ mkdir build && cd build
+$ cmake -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr/local/llvm36  ..
+$ make && make install
 ```
 
 #### Vundle and Pathogen
