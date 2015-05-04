@@ -15,4 +15,4 @@ install:
 script:
   - cmake . && make && make install
   - echo "os.exit()" | lua -l color_coded
-  - make test
+  - make color_coded_test

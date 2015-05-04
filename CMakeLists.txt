@@ -103,8 +103,8 @@ target_link_libraries(${PROJECT_NAME}_config_test
   ${CMAKE_THREAD_LIBS_INIT}
 )
 
-add_custom_target(test
+add_custom_target(${PROJECT_NAME}_test
   COMMAND ${PROJECT_NAME}_config_test
   WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
 )
-add_dependencies(test ${PROJECT_NAME}_config_test)
+add_dependencies(${PROJECT_NAME}_test ${PROJECT_NAME}_config_test)
