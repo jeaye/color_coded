@@ -139,6 +139,8 @@ else()
     /usr/lib/llvm-3.6/lib
     /usr/lib/llvm-3.5/lib
     /usr/lib/llvm-3.4/lib
+    /usr/local/llvm35/lib
+    /usr/local/llvm36/lib
   )
 
   if(NOT CLANG_LIBS)

@@ -45,6 +45,21 @@ sudo update-alternatives --remove-all g++
 sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 ```
 
+#### FreeBSD / PCBSD
+
+(Tested in FreeBSD 10.1)
+
+```bash
+$ [sudo] pkg install clang36 llvm36 cmake
+```
+
+```bash
+$ cd ~/.vim/bundle/color_coded
+$ mkdir build && cd build
+$ cmake -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr/local/llvm36  ..
+$ make && make install
+```
+
 #### Vundle and Pathogen
 Installation has been tested using [vundle](https://github.com/gmarik/Vundle.vim), but should also be compatible with [pathogen](https://github.com/tpope/vim-pathogen). To install using vundle (add the line to your `~/.vimrc`, restart vim, run `:PluginInstall`):
 
