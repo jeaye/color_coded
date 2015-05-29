@@ -105,8 +105,6 @@ That said, in any non-trivial case, you'll find yourself needing to supply a `.c
 
 **color_coded will try its hardest to highlight your code for you, even if there are errors in the translation unit.** This allows for better highlighting while typing and highlighting of valid code when color_coded doesn't know everything about your project.
 
-You can test that color_coded is working properly after installation by running `make run`, which will open a small C++ file known to be valid. Highlighting compilation may take a second, but, after moving the cursor, you should see the code becomes highlighted.
-
 ### .color_coded file contents
 The contents of a `.color_coded` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
 
