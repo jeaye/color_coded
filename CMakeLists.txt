@@ -19,6 +19,9 @@ else()
   set(64_BIT_PLATFORM 1)
 endif()
 
+# Add custom find modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
 # C++14
 include(cmake/cxx14.cmake)
 
