@@ -30,7 +30,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-sudo apt-get install build-essential liblua5.1-dev lua5.1 libncurses-dev libboost-dev libz-dev cmake xz-utils
+sudo apt-get install build-essential libclang-3.6-dev liblua5.1-dev lua5.1 libncurses-dev libboost-dev libz-dev cmake xz-utils
 ```
 
 Next, you need to ensure you have GCC 4.9. If you don't, you can try the following (tested on Ubuntu 14.04).

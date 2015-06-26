@@ -19,6 +19,16 @@ else()
   set(64_BIT_PLATFORM 1)
 endif()
 
+# Add custom find modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
+# Submodules
+message(STATUS "Updating submodules")
+execute_process(
+  COMMAND git submodule update --recursive --init
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
 # C++14
 include(cmake/cxx14.cmake)
 
