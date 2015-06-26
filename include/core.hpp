@@ -32,17 +32,18 @@ namespace color_coded
 
     inline std::string temp_dir()
     {
-      static auto dir(fs::temp_directory_path() / "color_coded/");
-      static auto make_dir(fs::create_directory(dir));
+      static auto const dir(fs::temp_directory_path() / "color_coded/");
+      static auto const make_dir(fs::create_directory(dir));
       static_cast<void>(make_dir);
       return dir.string();
     }
 
+    auto constexpr * const no_errors("no errors");
     inline void reset_last_error()
-    { last_error("no errors"); }
+    { last_error(no_errors); }
     inline std::string const& last_error(std::string const &e = "")
     {
-      static std::string error{ "no errors" };
+      static std::string error{ no_errors };
       if(e.size())
       { error = e; }
       return error;
@@ -62,8 +63,8 @@ namespace color_coded
 
             fs::path const path{ t.name };
             conf::args_t config_args{ config_args_impl };
-            config_args.emplace_back("-I" +
-                                     fs::absolute(path.parent_path()).string());
+            config_args.emplace_back
+            ("-I" + fs::absolute(path.parent_path()).string());
 
             std::string const filename{ temp_dir() + path.filename().string() };
             async::temp_file tmp{ filename, t.code };
