@@ -64,3 +64,8 @@ endif()
 if(NOT LLVM_LIB_PATH)
   set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
 endif()
+
+add_custom_target(clean_clang
+  COMMAND rm -rf ${CLANG_FILENAME} ${CLANG_DIRNAME}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
