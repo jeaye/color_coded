@@ -91,6 +91,9 @@ mkdir build && cd build
 cmake ..
 make && make install # Compiling with GCC is preferred, ironically
 # Clang works on OS X, but has mixed success on Linux and the BSDs
+
+# Cleanup afterward; frees several hundred megabytes
+make clean && make clean_clang
 ```
 
 For various compatibility reasons, color_coded will attempt to download a known version of clang. This may add time to your configuration process, but it offers more stability across multiple platforms. Avoiding this is not officially supported, but documented [here](https://github.com/jeaye/color_coded#how-can-i-use-a-custom-llvmclang-setup).
