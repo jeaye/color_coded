@@ -33,7 +33,7 @@ First, install all required dependencies.
 sudo apt-get install build-essential libclang-3.6-dev liblua5.1-dev lua5.1 libncurses-dev libboost-dev libz-dev cmake xz-utils
 ```
 
-Next, you need to ensure you have GCC 4.9. If you don't, you can try the following (tested on Ubuntu 14.04).
+Next, you need to ensure you have GCC 4.9 (or higher). If you don't, you can try the following (tested on Ubuntu 14.04).
 ```bash
 # Install GCC 4.9
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
