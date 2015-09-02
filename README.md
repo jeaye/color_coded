@@ -224,6 +224,16 @@ vim --version | grep jit
 ```
 [More information is here.](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
 
+#### How can I disable color_coded in diff mode?
+You can use this in your `.vimrc`:
+
+```viml
+" Disable color_coded in diff mode
+if &diff
+  let g:color_coded_enabled = 0
+endif
+```
+
 #### How can I use a custom LLVM/Clang setup?
 This is not officially supported. If you run into bugs or crashes or you're unable to compile or anything else that's catastrophic or otherwise terrible, you're on your own. With that said, you can try specifying `CUSTOM_CLANG=1` and `LLVM_ROOT_PATH=...` to cmake during the build process. The `LLVM_ROOT_PATH` is a prefix, excluding `/lib` and `/include` where your LLVM installation lives; you should try this first. If cmake fails, you'll need to specify one or both of `LLVM_INCLUDE_PATH` or `LLVM_LIB_PATH` (based on the error it gave you). If cmake still fails to find what it needs, you may need to specify one or both of `CLANG_LIBS` or `LLVM_LIBS` (based on the error it gave you). Examples:
 
