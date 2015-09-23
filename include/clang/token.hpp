@@ -267,7 +267,7 @@ namespace color_coded
           case CXToken_Punctuation:
             return ""; /* Allow vim to do this. */
           case CXToken_Keyword:
-            return "Keyword";
+            return ""; /* Allow vim to do this. */
           case CXToken_Identifier:
             return map_cursor_kind(cursor_kind, cursor_type);
           case CXToken_Literal:
