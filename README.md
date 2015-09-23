@@ -188,7 +188,7 @@ Dependencies
 ---
 Compilation of color_coded requires:
   * GCC ≥ 4.9
-  * Lua ≥ 5.1.x
+  * Lua ≥ 5.1.x (using the version with which vim was compiled)
 
 Usage of color_coded requires vim:
   * Version: 7.4p330+
