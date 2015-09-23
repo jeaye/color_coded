@@ -51,14 +51,21 @@ namespace jest
     );
     expect(std::find(args.begin(), args.end(), "-I/etc/") != args.end());
     expect(std::find(args.begin(), args.end(), "foo") != args.end());
-    expect(args.size() == 3 + color_coded::conf::constants().size());
+    expect_equal
+    (
+      args.size(),
+      3 + color_coded::conf::pre_constants().size() +
+          color_coded::conf::post_constants().size()
+    );
   }
 
   template <> template <>
   void color_coded::config_group::test<3>() /* Constants always present. */
   {
     auto const args(color_coded::conf::load(test_config));
-    for(auto const &constant : color_coded::conf::constants())
+    for(auto const &constant : color_coded::conf::pre_constants())
+    { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
+    for(auto const &constant : color_coded::conf::post_constants())
     { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
   }
 }
