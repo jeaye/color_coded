@@ -40,12 +40,16 @@ namespace color_coded
       if(!ifs.is_open())
       { return defaults(); }
 
-      static auto const additions(constants());
-      args_t args{ additions };
+      static auto const pre_additions(pre_constants());
+      static auto const post_additions(post_constants());
+      args_t args{ pre_additions };
 
       std::string tmp;
       while(std::getline(ifs, tmp))
       { args.emplace_back(detail::make_absolute(std::move(tmp))); }
+
+      std::copy(post_additions.begin(), post_additions.end(),
+                std::back_inserter(args));
 
       return args;
     }
