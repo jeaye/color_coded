@@ -78,14 +78,13 @@ Plugin 'jeaye/color_coded'
 
 #### NeoBundle
 
-Installation with [NeoBundle](https://github.com/Shougo/neobundle.vim) supports automatically building and lazy-loading the plugin:
+Installation with [NeoBundle](https://github.com/Shougo/neobundle.vim) supports automatically building and loading the plugin:
 
 ```viml
-NeoBundleLazy 'jeaye/color_coded', {
+NeoBundle 'jeaye/color_coded', {
       \ 'build': {
       \   'unix': 'cmake . && make && make install',
       \ },
-      \ 'autoload' : { 'filetypes' : ['c', 'cpp', 'objc', 'objcpp'] },
       \ 'build_commands' : ['cmake', 'make']
   \}
 ```
