@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xf97cb1f
+let s:color_coded_api_version = 0x7b923cc
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -130,7 +130,7 @@ function! color_coded#enter()
 
 lua << EOF
   local name, data = color_coded_buffer_details()
-  color_coded_enter(name, data)
+  color_coded_enter(name, vim.eval('&ft'), data)
 EOF
 endfunction!
 

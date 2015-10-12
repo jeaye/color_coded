@@ -39,12 +39,13 @@ namespace color_coded
       { vim::try_apply(buf); }
     }
 
-    inline void enter(std::string const &file, std::string const &data)
+    inline void enter(std::string const &file,
+                      std::string const &filetype, std::string const &data)
     {
       auto &buf(core::buffers()[file]);
       if(buf.group.size())
       { vim::apply(buf); }
-      core::queue().push({ file, data });
+      core::queue().push({ file, filetype, data });
     }
 
     inline void destroy(std::string const &file)

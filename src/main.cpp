@@ -37,9 +37,10 @@ namespace color_coded
 
   static int enter(lua_State * const lua)
   {
-    auto const file(lua_tostring(lua, -2));
+    auto const file(lua_tostring(lua, -3));
+    auto const filetype(lua_tostring(lua, -2));
     auto const data(lua_tostring(lua, -1));
-    event::enter(file, data);
+    event::enter(file, filetype, data);
     return 0;
   }
 
@@ -64,7 +65,7 @@ namespace color_coded
 
   static int api_version(lua_State * const lua)
   {
-    std::size_t constexpr const version{ 0xf97cb1f };
+    std::size_t constexpr const version{ 0x7b923cc };
     lua_pushinteger(lua, version);
     return 1;
   }
