@@ -51,7 +51,7 @@ namespace color_coded
 
     inline auto& configs()
     {
-      static std::map<std::string, std::string> configs;
+      static std::map<std::string, conf::args_t> configs;
       return configs;
     }
 
@@ -68,16 +68,16 @@ namespace color_coded
             auto config_it(config_paths.find(t.name));
 
             if(config_it != config_paths.end() && config_it->second.empty())
-            { config_it->second = conf::find(".", t.filetype); }
+            { config_it->second = conf::load(conf::find(".", t.filetype)); }
             else if(config_it == config_paths.end())
             {
               config_it = config_paths.insert
-              ({ t.name, conf::find(".", t.filetype) }).first;
+              ({ t.name, conf::load(conf::find(".", t.filetype)) }).first;
             }
 
             /* Build the compiler arguments. */
-            conf::args_t const config_args_impl
-            { conf::load(config_it->second) };
+            conf::args_t const &config_args_impl
+            { config_it->second };
 
             fs::path const path{ t.name };
             conf::args_t config_args{ config_args_impl };
