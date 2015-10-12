@@ -109,7 +109,11 @@ function! color_coded#enter()
 
   " Each new window controls highlighting separate from the buffer
   if !exists("w:color_coded_own_syntax") || w:color_coded_name != color_coded#get_buffer_name()
-    execute 'ownsyntax ' . b:current_syntax
+    if has('b:current_syntax')
+      execute 'ownsyntax ' . b:current_syntax
+    else
+      execute 'ownsyntax ' . &ft
+    endif
     let w:color_coded_own_syntax = 1
 
     " Each window has a unique ID
