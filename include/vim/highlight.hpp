@@ -44,7 +44,7 @@ namespace color_coded
 
         highlight_group() = default;
         highlight_group(clang::translation_unit const &trans_unit,
-                        clang::token_pack &tokens)
+                        clang::token_pack &&tokens)
         {
           auto &tu(trans_unit.impl);
           std::vector<CXCursor> cursors(tokens.size());

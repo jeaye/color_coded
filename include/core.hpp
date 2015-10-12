@@ -66,15 +66,18 @@ namespace color_coded
             config_args.emplace_back
             ("-I" + fs::absolute(path.parent_path()).string());
 
-            std::string const filename{ temp_dir() + path.filename().string() };
+            std::string const &filename
+            { temp_dir() + path.filename().string() };
             async::temp_file tmp{ filename, t.code };
 
             /* Attempt compilation. */
             clang::translation_unit trans_unit
             { clang::compile({ config_args }, filename) };
-            clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
+            clang::token_pack tp
+            { trans_unit, clang::source_range(trans_unit) };
 
-            return async::result{ t.name, { trans_unit, tp } };
+            return async::result
+            { t.name, { trans_unit, std::move(tp) } };
           }
           catch(clang::compilation_error const &e)
           { return async::result{{}, {}}; }
