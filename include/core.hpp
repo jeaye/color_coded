@@ -57,6 +57,7 @@ namespace color_coded
         {
           try
           {
+            /* TODO: We need to do this once per file. */
             /* Build the compiler arguments. */
             static conf::args_t const config_args_impl
             { conf::load(conf::find(".")) };

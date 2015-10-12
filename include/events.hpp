@@ -18,6 +18,7 @@ namespace color_coded
       return false;
     }
 
+    /* TODO: Take in filetype. */
     inline void push(std::string const &file, std::string const &data)
     {
       if(pull(file))
