@@ -18,7 +18,7 @@ namespace color_coded
     {
       inline std::string make_absolute(std::string line)
       {
-        static std::regex reg
+        static std::regex const reg
         {
           "\\s*(-I|-isystem|-iquote|--sysroot=)\\s*(.*)",
           std::regex::optimize
