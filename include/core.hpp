@@ -63,10 +63,10 @@ namespace color_coded
         {
           try
           {
-            /* Update this buffers path, if needed. */
             auto &config_paths(configs());
             auto config_it(config_paths.find(t.name));
 
+            /* Only load what we need. */
             if(config_it != config_paths.end() && config_it->second.empty())
             { config_it->second = conf::load(conf::find(".", t.filetype)); }
             else if(config_it == config_paths.end())
