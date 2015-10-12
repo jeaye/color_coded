@@ -29,6 +29,9 @@ namespace color_coded
             { return e.path().filename().string() == typed_file_name; }
           )
         );
+        if(typed_it != end)
+        { return typed_it->path().string(); }
+
         auto const normal_it
         (
           std::find_if
@@ -38,12 +41,11 @@ namespace color_coded
             { return e.path().filename().string() == file_name; }
           )
         );
-
-        if(typed_it != end)
-        { return typed_it->path().string(); }
         if(normal_it != end)
         { return normal_it->path().string(); }
-        else if(!fs::canonical(curr).has_parent_path())
+
+        /* We may have hit /. */
+        if(!fs::canonical(curr).has_parent_path())
         { return {}; }
 
         curr /= "..";
