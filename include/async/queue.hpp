@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <map>
 #include <thread>
 #include <future>
@@ -7,6 +8,8 @@
 #include <chrono>
 #include <mutex>
 #include <condition_variable>
+
+#include <boost/optional.hpp>
 
 namespace color_coded
 {
@@ -27,16 +30,22 @@ namespace color_coded
         void push(Task &&t)
         {
           {
+            /* Allows multiple tasks to override each other; only considers
+             * the most recently pushed task. */
             std::lock_guard<std::mutex> const lock{ task_mutex_ };
             task_ = std::move(t);
             has_work_.store(true);
           }
           task_cv_.notify_one();
         }
-        std::pair<Result, bool> pull(std::string const &name)
+
+        boost::optional<Result> pull(std::string const &name)
         {
           std::lock_guard<std::mutex> const lock{ results_mutex_ };
-          return { std::move(results_[name]), has_results_[name].exchange(false) };
+          if(has_results_[name].exchange(false))
+          { return { std::move(results_[name]) }; }
+          else
+          { return {}; }
         }
 
         void join()
@@ -80,7 +89,7 @@ namespace color_coded
         std::thread thread_;
         std::atomic_bool should_work_{ true };
 
-        std::atomic_bool has_work_{};
+        std::atomic_bool has_work_{}; /* TODO: rename to wake_up_ */
         Task task_;
         std::mutex task_mutex_;
         std::condition_variable task_cv_;

@@ -9,11 +9,11 @@ namespace color_coded
     inline bool pull(std::string const &file)
     {
       auto const pulled(core::queue().pull(file));
-      if(pulled.second)
+      if(pulled)
       {
-        auto &buf(core::buffers()[pulled.first.name]);
-        buf.group = std::move(pulled.first.group);
-        return file == pulled.first.name;
+        auto &buf(core::buffers()[pulled->name]);
+        buf.group = std::move(pulled->group);
+        return file == pulled->name;
       }
       return false;
     }
