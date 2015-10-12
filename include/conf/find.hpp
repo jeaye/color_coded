@@ -8,26 +8,25 @@ namespace color_coded
 {
   namespace conf
   {
-    namespace filesystem = boost::filesystem;
+    namespace fs = boost::filesystem;
 
-    inline std::string find(filesystem::path curr)
+    inline std::string find(fs::path curr)
     {
-      /* TODO: Configurable max depth. */
-      filesystem::directory_iterator const end;
+      fs::directory_iterator const end;
       while(true)
       {
         auto const it
         (
           std::find_if
           (
-           filesystem::directory_iterator{ curr }, end,
-           [](filesystem::directory_entry const &e)
-           { return e.path().filename().string() == ".color_coded"; }
+            fs::directory_iterator{ curr }, end,
+            [](fs::directory_entry const &e)
+            { return e.path().filename().string() == ".color_coded"; }
           )
         );
         if(it != end)
         { return it->path().string(); }
-        else if(!filesystem::canonical(curr).has_parent_path())
+        else if(!fs::canonical(curr).has_parent_path())
         { return {}; }
         curr /= "..";
       }
