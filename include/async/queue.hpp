@@ -34,7 +34,7 @@ namespace color_coded
              * the most recently pushed task. */
             std::lock_guard<std::mutex> const lock{ task_mutex_ };
             task_ = std::move(t);
-            has_work_.store(true);
+            wake_up_.store(true);
           }
           task_cv_.notify_one();
         }
@@ -51,7 +51,7 @@ namespace color_coded
         void join()
         {
           should_work_.store(false);
-          has_work_.store(true);
+          wake_up_.store(true);
           task_cv_.notify_one();
           thread_.join();
         }
@@ -65,14 +65,14 @@ namespace color_coded
           {
             {
               std::unique_lock<std::mutex> lock{ task_mutex_ };
-              task_cv_.wait(lock, [&]{ return has_work_.load(); });
+              task_cv_.wait(lock, [&]{ return wake_up_.load(); });
 
               /* We may be woken up to die. */
               if(!should_work_.load())
               { return; }
 
               curr = std::move(task_);
-              has_work_.store(false);
+              wake_up_.store(false);
             }
 
             result = func_(curr);
@@ -89,7 +89,7 @@ namespace color_coded
         std::thread thread_;
         std::atomic_bool should_work_{ true };
 
-        std::atomic_bool has_work_{}; /* TODO: rename to wake_up_ */
+        std::atomic_bool wake_up_{};
         Task task_;
         std::mutex task_mutex_;
         std::condition_variable task_cv_;
