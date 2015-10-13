@@ -145,11 +145,6 @@ EOF
   let s:file = color_coded#get_buffer_name()
   call color_coded#clear_matches(s:file)
   unlet s:file
-
-  " TODO: needed?
-  unlet w:color_coded_own_syntax
-  unlet w:color_coded_unique_counter
-  unlet w:color_coded_name
 endfunction!
 
 function! color_coded#exit()
