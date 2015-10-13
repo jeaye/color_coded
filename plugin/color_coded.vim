@@ -40,15 +40,22 @@ if s:color_coded_valid == 1
 
   augroup color_coded
     au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
-    au VimEnter,BufEnter * call color_coded#enter()
+    au BufEnter * call color_coded#enter()
     au WinEnter * call color_coded#enter()
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#moved()
     au CursorHold,CursorHoldI * call color_coded#moved()
-    au VimResized * call color_coded#moved()
+    " Resized events trigger midway through a vim state change; the buffer
+    " name will still be the previous buffer, yet the window-specific
+    " variables won't be available.
+    "au VimResized * call color_coded#moved()
+
     " Leaving a color_coded buffer requires removing matched positions
     au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
-    au BufDelete * call color_coded#destroy(expand('<afile>'))
+
+    " There is a rogue BufDelete at the start of vim; the buffer name ends up
+    " being relative, so it's not a bother, but it's certainly odd.
+    au BufDelete * call color_coded#destroy()
     au VimLeave * call color_coded#exit()
   augroup END
 
