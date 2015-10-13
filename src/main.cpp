@@ -20,9 +20,10 @@ namespace color_coded
 
   static int push(lua_State * const lua)
   {
-    auto const file(lua_tostring(lua, -2));
+    auto const file(lua_tostring(lua, -3));
+    auto const filetype(lua_tostring(lua, -2));
     auto const data(lua_tostring(lua, -1));
-    event::push(file, data);
+    event::push(file, filetype, data);
     return 0;
   }
 
