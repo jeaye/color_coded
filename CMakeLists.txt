@@ -75,7 +75,10 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME "${PROJECT_NAME}.so")
 set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX "")
 
 # Enable warnings
-set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS "-Wall -Wextra -pedantic -Wno-missing-field-initializers")
+set(WARNING_FLAGS
+  "-Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-variable -Wno-deprecated-declarations"
+)
+set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 
 # Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
 # used when making a shared object; recompile with -fPIC.
@@ -112,6 +115,7 @@ target_link_libraries(${PROJECT_NAME}_config_test
   ${ZLIB_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT}
 )
+set_property(TARGET ${PROJECT_NAME}_config_test PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 
 add_custom_target(${PROJECT_NAME}_test
   COMMAND ${PROJECT_NAME}_config_test
