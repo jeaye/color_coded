@@ -30,7 +30,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-sudo apt-get install build-essential libclang-3.6-dev libncurses-dev libboost-dev libz-dev cmake xz-utils
+[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libboost-dev libz-dev cmake xz-utils
 ```
 
 For lua, you must install the version that your version of vim is compiled for.
@@ -39,19 +39,19 @@ vim --version | grep lua
 ```
 Find your version number `-llua5.x` and use it to install the correct version.
 ```bash
-sudo apt-get install liblua5.x-dev lua5.x
+[sudo] apt-get install liblua5.x-dev lua5.x
 ```
 
 You also need to ensure you have GCC 4.9 (or higher). If you don't, you can try the following (tested on Ubuntu 14.04).
 ```bash
 # Install GCC 4.9
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo apt-get update
-sudo apt-get install g++-4.9
+[sudo] add-apt-repository ppa:ubuntu-toolchain-r/test
+[sudo] apt-get update
+[sudo] apt-get install g++-4.9
 
 # Prefer 4.9 to other versions
-sudo update-alternatives --remove-all g++
-sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
+[sudo] update-alternatives --remove-all g++
+[sudo] update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 50
 ```
 
 #### FreeBSD / PCBSD
