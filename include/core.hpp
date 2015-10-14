@@ -49,6 +49,12 @@ namespace color_coded
       return error;
     }
 
+    inline auto& configs()
+    {
+      static std::map<std::string, conf::args_t> configs;
+      return configs;
+    }
+
     inline auto& queue()
     {
       static async::queue<async::task, async::result> q
@@ -57,10 +63,21 @@ namespace color_coded
         {
           try
           {
-            /* TODO: We need to do this once per file. */
+            auto &config_paths(configs());
+            auto config_it(config_paths.find(t.name));
+
+            /* Only load what we need. */
+            if(config_it != config_paths.end() && config_it->second.empty())
+            { config_it->second = conf::load(conf::find(".", t.filetype)); }
+            else if(config_it == config_paths.end())
+            {
+              config_it = config_paths.insert
+              ({ t.name, conf::load(conf::find(".", t.filetype)) }).first;
+            }
+
             /* Build the compiler arguments. */
-            static conf::args_t const config_args_impl
-            { conf::load(conf::find(".")) };
+            conf::args_t const &config_args_impl
+            { config_it->second };
 
             fs::path const path{ t.name };
             conf::args_t config_args{ config_args_impl };

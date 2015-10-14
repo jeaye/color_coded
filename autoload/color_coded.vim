@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xf97cb1f
+let s:color_coded_api_version = 0xcdd568c
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -78,7 +78,7 @@ function! color_coded#push()
   endif
 lua << EOF
   local name, data = color_coded_buffer_details()
-  color_coded_push(name, data)
+  color_coded_push(name, vim.eval('&ft'), data)
 EOF
 endfunction!
 
@@ -130,18 +130,16 @@ function! color_coded#enter()
 
 lua << EOF
   local name, data = color_coded_buffer_details()
-  color_coded_enter(name, data)
+  color_coded_enter(name, vim.eval('&ft'), data)
 EOF
 endfunction!
 
-function! color_coded#destroy(file)
+function! color_coded#destroy()
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
-  let s:file = a:file
 lua << EOF
-  local name = vim.eval('s:file')
-  color_coded_destroy(name)
+  color_coded_destroy(color_coded_buffer_name())
 EOF
 
   let s:file = color_coded#get_buffer_name()

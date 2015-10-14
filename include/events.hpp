@@ -18,12 +18,12 @@ namespace color_coded
       return false;
     }
 
-    /* TODO: Take in filetype. */
-    inline void push(std::string const &file, std::string const &data)
+    inline void push(std::string const &file,
+                     std::string const &filetype, std::string const &data)
     {
       if(pull(file))
       { vim::apply(core::buffers()[file]); }
-      core::queue().push({ file, data });
+      core::queue().push({ file, filetype, data });
     }
 
     inline void moved(std::string const &file, std::size_t const begin,
@@ -39,16 +39,20 @@ namespace color_coded
       { vim::try_apply(buf); }
     }
 
-    inline void enter(std::string const &file, std::string const &data)
+    inline void enter(std::string const &file,
+                      std::string const &filetype, std::string const &data)
     {
       auto &buf(core::buffers()[file]);
       if(buf.group.size())
       { vim::apply(buf); }
-      core::queue().push({ file, data });
+      core::queue().push({ file, filetype, data });
     }
 
     inline void destroy(std::string const &file)
-    { core::buffers().erase(file); }
+    {
+      core::buffers().erase(file);
+      core::configs().erase(file);
+    }
 
     inline void exit()
     { core::queue().join(); }

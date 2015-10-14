@@ -12,6 +12,7 @@ namespace color_coded
     struct task
     {
       std::string name;
+      std::string filetype;
       std::string code;
     };
 
