@@ -111,14 +111,14 @@ For various compatibility reasons, color_coded will attempt to download a known 
 
 Usage
 ---
-Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you _may_ need to create a file describing the required compiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage (it favors C++ in this regard).
+Once color_coded is installed and compiled, it will automatically begin working the next time you start vim. In order for color_coded to know how your code must be compiled, you _may_ need to create a file describing the required compiler options. Note, color_coded assumes sane defaults and tries to allow for immediate usage.
 
-That said, in any non-trivial case, you'll find yourself needing to supply a `.color_coded` file for your project. color_coded will search from the current working directory all the way up to the root of the filesystem looking for a `.color_coded` file. This makes it possible for you to have one in your home directory, for example, and then in each of your projects' directories. If you don't specify one in a project directory, the one in your home directory is used. Again, if no such files are found, sane defaults will be applied.
+That said, in any non-trivial case, you'll find yourself needing to supply a `.color_coded` file for your project. For each file, color_coded will search from the file's directory all the way up to the root of the filesystem looking for a `.color_coded` file or a `.color_coded_foo` file (where `foo` is the filetype; i.e. `c`, `cpp`, etc). This makes it possible for you to have one in your home directory, for example, and then in each of your projects' directories. If you don't specify one in a project directory, the one in your home directory is used. Again, if no such files are found, sane defaults will be applied.
 
 **color_coded will try its hardest to highlight your code for you, even if there are errors in the translation unit.** This allows for better highlighting while typing and highlighting of valid code when color_coded doesn't know everything about your project.
 
 ### .color_coded file contents
-The contents of a `.color_coded` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
+The contents of a `.color_coded` or `.color_coded_foo` file is simply a line-separated list of compiler options. For example, the `.color_coded` file for color_coded is:
 
 ```
 -std=c++1y
@@ -128,14 +128,6 @@ The contents of a `.color_coded` file is simply a line-separated list of compile
 The `.color_coded` file can be automatically generated using [YCM-Generator](https://github.com/rdnetto/YCM-Generator).
 
 **NOTE:** Out of simplicity, no other data is permitted in the `.color_coded` file. That is to say, comments are not supported.
-
-### Using for languages other than C++
-#### Using for C
-Since color_coded defaults to using C++, you'll need to tell it if you're planning on using it for a C project. You can do this by adding these two lines to your `.color_coded` file, along with all your other flags:
-```
--x
-c
-```
 
 Options
 ---
