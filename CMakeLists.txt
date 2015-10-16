@@ -60,6 +60,7 @@ include_directories(
 )
 
 include(cmake/generate_sources.cmake)
+include(cmake/check_luajit.cmake)
 
 add_library(${PROJECT_NAME} SHARED src/main.cpp)
 
