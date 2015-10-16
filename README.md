@@ -21,7 +21,7 @@ Installation
 Before installing color_coded on OS X, please read the following. The vim that ships with (even the latest) OS X is not new enough to support color_coded. Furthermore, the default macvim from [homebrew](http://brew.sh/) doesn't have lua enabled. To ensure you have a valid macvim install on OS X, please do the following:
 ```bash
 brew update
-brew install macvim --with-lua --override-system-vim
+brew install macvim --with-lua --with-override-system-vim
 brew linkapps macvim
 brew install xz cmake
 # Spawn a new shell to use the new system vim
