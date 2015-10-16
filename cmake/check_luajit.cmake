@@ -6,6 +6,6 @@ execute_process(
   RESULT_VARIABLE RESULT
 )
 
-if(RESULT EQUAL 0)
+if(RESULT EQUAL 1)
   message(FATAL_ERROR "luajit doesn't support being embedded; to use color_coded, you must install vim without luajit")
 endif()
