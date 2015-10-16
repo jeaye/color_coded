@@ -1,7 +1,7 @@
 message(STATUS "Checking for luajit")
 
 execute_process(
-  COMMAND "vim --version | grep luajit"
+  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/check_luajit
   OUTPUT_QUIET ERROR_QUIET
   RESULT_VARIABLE RESULT
 )

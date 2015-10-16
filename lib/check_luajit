@@ -1,0 +1,4 @@
+#!/bin/sh
+
+set +e
+vim --version | grep "luajit"
