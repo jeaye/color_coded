@@ -13,11 +13,14 @@ namespace color_coded
     /* From the current directory, search for a .color_coded file for the
      * current filetype first, then for a non-typed .color_coded. If neither
      * is found, move to the parent directory. Repeat until /. */
-    inline std::string find(fs::path curr, std::string const &filetype)
+    inline std::string find(fs::path file, std::string const &filetype)
     {
+      fs::path curr{ file.parent_path() };
       fs::directory_iterator const end;
+
       static auto constexpr file_name(".color_coded");
       auto const typed_file_name(std::string{ file_name } + "_" + filetype);
+
       while(true)
       {
         auto const typed_it

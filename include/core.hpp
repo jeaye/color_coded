@@ -68,11 +68,11 @@ namespace color_coded
 
             /* Only load what we need. */
             if(config_it != config_paths.end() && config_it->second.empty())
-            { config_it->second = conf::load(conf::find(".", t.filetype)); }
+            { config_it->second = conf::load(conf::find(t.name, t.filetype)); }
             else if(config_it == config_paths.end())
             {
               config_it = config_paths.insert
-              ({ t.name, conf::load(conf::find(".", t.filetype)) }).first;
+              ({ t.name, conf::load(conf::find(t.name, t.filetype)) }).first;
             }
 
             /* Build the compiler arguments. */

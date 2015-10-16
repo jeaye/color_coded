@@ -66,7 +66,7 @@ namespace color_coded
 
   static int api_version(lua_State * const lua)
   {
-    std::size_t constexpr const version{ 0xcdd568c };
+    std::size_t constexpr const version{ 0x88467ea };
     lua_pushinteger(lua, version);
     return 1;
   }
