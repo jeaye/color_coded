@@ -35,16 +35,16 @@ namespace color_coded
       }
     }
 
-    inline args_t load(std::string const &file)
+    inline args_t load(std::string const &file, std::string const &filetype)
     {
       if(file.empty())
-      { return defaults(); }
+      { return defaults(filetype); }
 
       std::ifstream ifs{ file };
       if(!ifs.is_open())
-      { return defaults(); }
+      { return defaults(filetype); }
 
-      static auto const pre_additions(pre_constants());
+      auto const pre_additions(pre_constants(filetype));
       static auto const post_additions(post_constants());
       args_t args{ pre_additions };
 

@@ -31,16 +31,58 @@ namespace jest
 
   template <> template <>
   void color_coded::config_group::test<0>() /* Empty defaults. */
-  { expect_equal(color_coded::conf::load(""), color_coded::conf::defaults()); }
+  {
+    expect_equal
+    (
+      color_coded::conf::load("", "c"),
+      color_coded::conf::defaults("c")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("", "c++"),
+      color_coded::conf::defaults("c++")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("", "objective-c"),
+      color_coded::conf::defaults("objective-c")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("", "objective-c++"),
+      color_coded::conf::defaults("objective-c++")
+    );
+  }
 
   template <> template <>
   void color_coded::config_group::test<1>() /* Non-existent file defaults. */
-  { expect_equal(color_coded::conf::load("nonexistent/file"), color_coded::conf::defaults()); }
+  {
+    expect_equal
+    (
+      color_coded::conf::load("nonexistent/file", "c"),
+      color_coded::conf::defaults("c")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("nonexistent/file", "c++"),
+      color_coded::conf::defaults("c++")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("nonexistent/file", "objective-c"),
+      color_coded::conf::defaults("objective-c")
+    );
+    expect_equal
+    (
+      color_coded::conf::load("nonexistent/file", "objective-c++"),
+      color_coded::conf::defaults("objective-c++")
+    );
+  }
 
   template <> template <>
   void color_coded::config_group::test<2>() /* Valid file. */
   {
-    auto const args(color_coded::conf::load(test_config));
+    auto const args(color_coded::conf::load(test_config, "c++"));
     expect
     (
       std::find
@@ -54,7 +96,7 @@ namespace jest
     expect_equal
     (
       args.size(),
-      3 + color_coded::conf::pre_constants().size() +
+      3 + color_coded::conf::pre_constants("c++").size() +
           color_coded::conf::post_constants().size()
     );
   }
@@ -62,8 +104,8 @@ namespace jest
   template <> template <>
   void color_coded::config_group::test<3>() /* Constants always present. */
   {
-    auto const args(color_coded::conf::load(test_config));
-    for(auto const &constant : color_coded::conf::pre_constants())
+    auto const args(color_coded::conf::load(test_config, "c++"));
+    for(auto const &constant : color_coded::conf::pre_constants("c++"))
     { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
     for(auto const &constant : color_coded::conf::post_constants())
     { expect(std::find(args.begin(), args.end(), constant) != args.end()); }

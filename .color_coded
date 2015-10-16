@@ -1,3 +1,2 @@
--std=c++1y
 -Iinclude
 -Ilib/jest/include
