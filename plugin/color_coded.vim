@@ -8,6 +8,12 @@ if v:version < 704 || !exists("*matchaddpos")
         \ echohl None
   finish
 endif
+if has('nvim')
+  echohl WarningMsg |
+        \ echomsg "color_coded unavailable: nvim isn't yet supported" |
+        \ echohl None
+  finish
+endif
 if !has('lua')
   echohl WarningMsg |
         \ echomsg "color_coded unavailable: requires lua" |
