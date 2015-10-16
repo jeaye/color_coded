@@ -142,9 +142,7 @@ lua << EOF
   color_coded_destroy(color_coded_buffer_name())
 EOF
 
-  let s:file = color_coded#get_buffer_name()
-  call color_coded#clear_matches(s:file)
-  unlet s:file
+  call color_coded#clear_matches(color_coded#get_buffer_name())
 endfunction!
 
 function! color_coded#exit()
