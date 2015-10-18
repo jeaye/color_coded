@@ -8,8 +8,6 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
   * Unintrusive highlighting; self-contained
   * Utilizes self-contained clang 3.6.0
 
-**NOTE:** color_coded is currently _alpha_ software; please report issues [here](https://github.com/jeaye/color_coded/issues) if you find them and make some noise on the [clang bugs I've reported](https://github.com/jeaye/color_coded/issues/2).
-
 Before color_coded | After color_coded
 :------------------:|:------------------:
 <img src="http://jeaye.com/cc/trimmed_cc_t_no_3.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_3.png" width="100%"/>
