@@ -6,7 +6,7 @@ target=include/env/impl.hpp
 # Create directories if they don't exist
 mkdir -p include/env/
 
-# Remove the impl.hpp to create a fresth one, since the PWD changes.
+# Remove the impl.hpp to create a fresh one, since the PWD changes.
 [ -f $target ] && rm -f $target
 cat <<EOF > $target
 /* XXX: Automagically generated. No touching. */
