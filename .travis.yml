@@ -23,6 +23,11 @@ install:
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
   - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
 script:
+  - export OUTSOURCE=$PWD/build
+  - export SOURCEPATH=$PWD
+  - mkdir -p $OUTSOURCE && cd $OUTSOURCE && cmake $SOURCEPATH && make && make install
+  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && rm -rf bin && mv $OUTSOURCE/clang* . && rm -rf $OUTSOURCE
   - cmake . && make && make install
-  - echo "os.exit()" | lua -l color_coded
-  - make color_coded_test || true
+  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && make color_coded_test || true
