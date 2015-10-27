@@ -23,7 +23,9 @@ install:
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
   - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
 script:
-  - mkdir -p build && cd build/ && cmake .. && make
-  - cd .. && mv build/clang* . && rm -r build/ && cmake . && make && make install
-  - echo "os.exit()" | lua -l color_coded
+  - mkdir -p build && cd build/ && cmake .. && make && make install
+  - cd ../bin && echo "os.exit()" | lua -l color_coded && cd ..
+  - rm -rf bin && mv build/clang* . && rm -rf build
+  - cmake . && make && make install
+  - cd bin && echo "os.exit()" | lua -l color_coded
   - make color_coded_test || true
