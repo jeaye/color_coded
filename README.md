@@ -248,6 +248,9 @@ cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr
 cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/lib/llvm-3.4/include
 ```
 
+#### "no version information available (required by gvim)"
+You may run into this on Debian-based systems. [The solution](https://github.com/jeaye/color_coded/issues/83) has been to install `liblua-5.x-0-dbg`.
+
 #### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
 
