@@ -14,7 +14,8 @@ addons:
       - g++-4.9
       - liblua5.1-0-dev
       - lua5.1
-      - libboost-dev
+      - libboost-system1.55-dev
+      - libboost-filesystem1.55-dev
     sources:
       - llvm-toolchain-precise-3.5
       - ubuntu-toolchain-r-test
