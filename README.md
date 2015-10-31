@@ -21,7 +21,7 @@ Before installing color_coded on OS X, please read the following. The vim that s
 brew update
 brew install macvim --with-lua --with-override-system-vim
 brew linkapps macvim
-brew install xz cmake boost
+brew install xz cmake
 # Spawn a new shell to use the new system vim
 ```
 
