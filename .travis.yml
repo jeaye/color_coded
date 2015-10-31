@@ -9,7 +9,7 @@ compiler:
 addons:
   apt:
     packages:
-      - clang-3.5
+      - clang-3.6
       - libstdc++-4.9-dev
       - g++-4.9
       - liblua5.1-0-dev
@@ -17,12 +17,13 @@ addons:
       - libboost-system1.55-dev
       - libboost-filesystem1.55-dev
     sources:
-      - llvm-toolchain-precise-3.5
+      - libboost-dev
+      - llvm-toolchain-precise-3.6
       - ubuntu-toolchain-r-test
 
 install:
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
-  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
+  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.6"; fi
 script:
   - export OUTSOURCE=$PWD/build
   - export SOURCEPATH=$PWD
