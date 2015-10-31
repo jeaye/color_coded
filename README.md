@@ -28,7 +28,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libboost-dev libz-dev cmake xz-utils
+[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libz-dev cmake xz-utils
 ```
 
 For lua, you must install the version that your version of vim is compiled for.
