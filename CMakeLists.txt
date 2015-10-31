@@ -33,7 +33,10 @@ execute_process(
 include(cmake/cxx14.cmake)
 
 # Boost
-include(cmake/boost.cmake)
+find_package(Boost
+  REQUIRED
+  COMPONENTS system filesystem
+)
 
 # Lua
 include(cmake/lua.cmake)
@@ -54,6 +57,7 @@ include_directories(
   include
 
   ${LLVM_INCLUDE_PATH}
+  ${Boost_INCLUDE_DIRS}
   ${CURSES_INCLUDE_PATH}
   ${ZLIB_INCLUDE_PATH}
 
@@ -82,18 +86,11 @@ set(WARNING_FLAGS
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 
-# Fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
-# used when making a shared object; recompile with -fPIC.
-# See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
-if(64_BIT_PLATFORM)
-  set_property(TARGET ${PROJECT_NAME}_boost PROPERTY COMPILE_FLAGS "-fPIC")
-endif()
-
 # Clang
 include(cmake/clang/link.cmake)
 
 target_link_libraries(${PROJECT_NAME}
-  ${PROJECT_NAME}_boost
+  ${Boost_LIBRARIES}
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
@@ -111,7 +108,7 @@ include_directories(
 )
 add_executable(${PROJECT_NAME}_config_test ${CMAKE_CURRENT_LIST_DIR}/test/src/config/main.cpp)
 target_link_libraries(${PROJECT_NAME}_config_test
-  ${PROJECT_NAME}_boost
+  ${Boost_LIBRARIES}
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
