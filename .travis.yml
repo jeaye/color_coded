@@ -9,6 +9,8 @@ compiler:
 addons:
   apt:
     packages:
+      - cmake
+      - cmake-data
       - clang-3.6
       - libstdc++-4.9-dev
       - g++-4.9
@@ -17,11 +19,11 @@ addons:
       - libboost-system1.55-dev
       - libboost-filesystem1.55-dev
     sources:
+      - george-edison55-precise-backports
       - libboost-dev
       - llvm-toolchain-precise-3.6
       - ubuntu-toolchain-r-test
-
-install:
+before_install:
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
   - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.6"; fi
 script:
