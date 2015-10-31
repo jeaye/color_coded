@@ -20,7 +20,7 @@ addons:
       - libboost-filesystem1.55-dev
     sources:
       - george-edison55-precise-backports
-      - libboost-dev
+      - boost-latest
       - llvm-toolchain-precise-3.6
       - ubuntu-toolchain-r-test
 before_install:
