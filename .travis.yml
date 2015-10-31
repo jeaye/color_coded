@@ -9,19 +9,23 @@ compiler:
 addons:
   apt:
     packages:
-      - clang-3.5
+      - cmake
+      - cmake-data
+      - clang-3.6
       - libstdc++-4.9-dev
       - g++-4.9
       - liblua5.1-0-dev
       - lua5.1
-      - libboost-dev
+      - libboost-system1.55-dev
+      - libboost-filesystem1.55-dev
     sources:
-      - llvm-toolchain-precise-3.5
+      - george-edison55-precise-backports
+      - boost-latest
+      - llvm-toolchain-precise-3.6
       - ubuntu-toolchain-r-test
-
-install:
+before_install:
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
-  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
+  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.6"; fi
 script:
   - export OUTSOURCE=$PWD/build
   - export SOURCEPATH=$PWD
