@@ -9,6 +9,7 @@ hi clear
 if exists("syntax_on")
     syntax reset
 endif
+let g:colors_name="twilighted"
 
 let b:current_syntax = &cpo
 set background=dark
