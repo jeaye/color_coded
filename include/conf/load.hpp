@@ -38,7 +38,7 @@ namespace color_coded
       }
     }
 
-    inline args_t load_compilation_database(std::string const &file, std::string const &filename)
+    inline args_t load_compilation_database(std::string const &file, std::string filename)
     {
       std::string error;
       auto const database_ptr(::clang::tooling::JSONCompilationDatabase::loadFromFile(file, error));
@@ -47,7 +47,25 @@ namespace color_coded
 
       auto compile_commands(database_ptr->getCompileCommands(filename));
       if(compile_commands.empty())
-      { return {}; }
+      {
+        auto const ext = fs::path(filename).extension();
+        if(!(ext == ".h" || ext == ".hpp"))
+        { return {}; }
+
+        auto const alternative_c = fs::path(filename).replace_extension("c");
+        auto const alternative_cpp = fs::path(filename).replace_extension("cpp");
+
+        compile_commands = database_ptr->getCompileCommands(alternative_c.string());
+        filename = alternative_c.string();
+        if(compile_commands.empty())
+        {
+          compile_commands = database_ptr->getCompileCommands(alternative_cpp.string());
+          filename = alternative_cpp.string();
+        }
+
+        if(compile_commands.empty())
+        { return {}; }
+      }
 
       auto commands(compile_commands[0].CommandLine);
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
