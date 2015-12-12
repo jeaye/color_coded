@@ -73,7 +73,7 @@ namespace color_coded
             if(config_it != config_paths.end() && config_it->second.empty())
             {
               config_it->second = conf::load
-              (conf::find(t.name, t.filetype), t.filetype);
+              (conf::find(t.name, t.filetype), t.filetype, t.name);
             }
             else if(config_it == config_paths.end())
             {
@@ -81,7 +81,7 @@ namespace color_coded
               (
                 {
                   t.name,
-                  conf::load(conf::find(t.name, t.filetype), t.filetype)
+                  conf::load(conf::find(t.name, t.filetype), t.filetype, t.name)
                 }
               ).first;
             }

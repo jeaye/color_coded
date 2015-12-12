@@ -9,6 +9,7 @@
 #include <boost/filesystem.hpp>
 
 #include "defaults.hpp"
+#include <clang/Tooling/JSONCompilationDatabase.h>
 
 namespace color_coded
 {
@@ -37,17 +38,30 @@ namespace color_coded
       }
     }
 
-    inline args_t load(std::string const &file, std::string const &filetype)
+    inline args_t load_compilation_database(std::string const &file, std::string const &filename)
     {
-      if(file.empty())
-      { return defaults(filetype); }
+      std::string error;
+      auto const database_ptr(::clang::tooling::JSONCompilationDatabase::loadFromFile(file, error));
+      if(!database_ptr)
+      { return {}; }
 
+      auto compile_commands(database_ptr->getCompileCommands(filename));
+      if(compile_commands.empty())
+      { return {}; }
+
+      auto commands(compile_commands[0].CommandLine);
+      commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
+
+      return commands;
+    }
+
+    inline args_t load_color_coded(std::string const &file, std::string const &filetype)
+    {
       std::ifstream ifs{ file };
       if(!ifs.is_open())
-      { return defaults(filetype); }
+      { return {}; }
 
       auto const pre_additions(pre_constants(filetype));
-      static auto const post_additions(post_constants());
       args_t args{ pre_additions };
 
       auto const &base(fs::path{ file }.parent_path());
@@ -55,10 +69,32 @@ namespace color_coded
       while(std::getline(ifs, tmp))
       { args.emplace_back(detail::make_absolute(std::move(tmp), base)); }
 
+      return args;
+    }
+
+    inline args_t load(std::string const &file, std::string const &filetype, std::string const &filename)
+    {
+      if(file.empty())
+      { return defaults(filetype); }
+
+      static auto const post_additions(post_constants());
+
+      args_t args;
+      if (fs::path(file).filename() == "compile_commands.json")
+      { args = load_compilation_database(file, filename); }
+      else
+      { args = load_color_coded(file, filetype); }
+
+      if(args.empty())
+      { return defaults(filetype); }
+
       std::copy(post_additions.begin(), post_additions.end(),
                 std::back_inserter(args));
 
       return args;
     }
+
+    inline args_t load(std::string const &file, std::string const &filetype)
+    { return load(file, filetype, "");}
   }
 }
