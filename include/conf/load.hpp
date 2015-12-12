@@ -45,27 +45,29 @@ namespace color_coded
       if(!database_ptr)
       { return {}; }
 
-      auto compile_commands(database_ptr->getCompileCommands(filename));
-      if(compile_commands.empty())
+      std::vector<fs::path> files{filename};
+      auto const ext(fs::path(filename).extension());
+      if(ext == ".h" || ext == ".hpp")
       {
-        auto const ext = fs::path(filename).extension();
-        if(!(ext == ".h" || ext == ".hpp"))
-        { return {}; }
+        files.emplace_back(fs::path(filename).replace_extension("c"));
+        files.emplace_back(fs::path(filename).replace_extension("cpp"));
+      }
 
-        auto const alternative_c = fs::path(filename).replace_extension("c");
-        auto const alternative_cpp = fs::path(filename).replace_extension("cpp");
+      std::vector<::clang::tooling::CompileCommand> compile_commands;
+      for(auto const &file : files)
+      {
+        compile_commands = database_ptr->getCompileCommands(file.string());
 
-        compile_commands = database_ptr->getCompileCommands(alternative_c.string());
-        filename = alternative_c.string();
-        if(compile_commands.empty())
+        if(!compile_commands.empty())
         {
-          compile_commands = database_ptr->getCompileCommands(alternative_cpp.string());
-          filename = alternative_cpp.string();
+          filename = file.string();
+          break;
         }
 
-        if(compile_commands.empty())
-        { return {}; }
       }
+
+      if(compile_commands.empty())
+      { return {}; }
 
       auto commands(compile_commands[0].CommandLine);
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
