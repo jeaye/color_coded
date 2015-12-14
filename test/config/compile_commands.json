@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/usr/src/color_coded/",
+  "command": "/usr/bin/c++  -std=c++11 -I/etc/ -foo -o myfile.cpp.o -c /usr/src/color_coded/myfile.cpp",
+  "file": "/usr/src/color_coded/myfile.cpp"
+}
+]
