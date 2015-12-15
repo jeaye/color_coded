@@ -10,8 +10,8 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 
 Before color_coded | After color_coded
 :------------------:|:------------------:
-<img src="http://jeaye.com/cc/trimmed_cc_t_no_3.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_3.png" width="100%"/>
-<img src="http://jeaye.com/cc/trimmed_cc_t_no_1.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_1.png" width="100%"/>
+<img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_no_3.png" width="100%"/> | <img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_yes_3.png" width="100%"/>
+<img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_no_1.png" width="100%"/> | <img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_yes_1.png" width="100%"/>
 
 Installation
 ---
