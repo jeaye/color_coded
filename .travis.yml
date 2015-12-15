@@ -1,18 +1,33 @@
 language: cpp
+
+sudo: false
+
 compiler:
   - gcc
   - clang
-before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - if [ "$CXX" == "clang++"  ]; then sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.5 main'; fi
-  - sudo apt-get update -qq
+
+addons:
+  apt:
+    packages:
+      - clang-3.5
+      - libstdc++-4.9-dev
+      - g++-4.9
+      - liblua5.1-0-dev
+      - lua5.1
+      - libboost-dev
+    sources:
+      - llvm-toolchain-precise-3.5
+      - ubuntu-toolchain-r-test
+
 install:
-  - sudo apt-get install liblua5.1-dev lua5.1 libncurses-dev libboost-dev libz-dev
-  - if [ "$CXX" == "g++"  ]; then sudo apt-get install g++-4.9; fi
   - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
-  - if [ "$CXX" == "clang++"  ]; then sudo apt-get install --allow-unauthenticated libstdc++-4.9-dev clang-3.5; fi
   - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
 script:
+  - export OUTSOURCE=$PWD/build
+  - export SOURCEPATH=$PWD
+  - mkdir -p $OUTSOURCE && cd $OUTSOURCE && cmake $SOURCEPATH && make && make install
+  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && rm -rf bin && mv $OUTSOURCE/clang* . && rm -rf $OUTSOURCE
   - cmake . && make && make install
-  - echo "os.exit()" | lua -l color_coded
-  - make color_coded_test
+  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && make color_coded_test || true

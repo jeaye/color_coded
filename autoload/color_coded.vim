@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xc9417a4
+let s:color_coded_api_version = 0xf956488
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -207,12 +207,17 @@ endfunction!
 
 " Clears color_coded matches only in the current buffer
 function! color_coded#clear_matches(file)
-  if has_key(g:color_coded_matches, a:file) == 1
-    for id in g:color_coded_matches[a:file]
-      call matchdelete(id)
-    endfor
-  endif
-  let g:color_coded_matches[a:file] = []
+  try
+    if has_key(g:color_coded_matches, a:file) == 1
+      for id in g:color_coded_matches[a:file]
+        call matchdelete(id)
+      endfor
+    endif
+  catch
+    echomsg "color_coded caught: " . v:exception
+  finally
+    let g:color_coded_matches[a:file] = []
+  endtry
 endfunction!
 
 " Clears color_coded matches in all open buffers

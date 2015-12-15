@@ -14,9 +14,11 @@ namespace color_coded
 {
   namespace conf
   {
+    namespace fs = boost::filesystem;
+
     namespace detail
     {
-      inline std::string make_absolute(std::string line)
+      inline std::string make_absolute(std::string line, fs::path const &base)
       {
         static std::regex const reg
         {
@@ -28,7 +30,7 @@ namespace color_coded
         {
           auto const &str(match[2].str());
           if(str.size() && str[0] != '/')
-          { line = match[1].str() + boost::filesystem::absolute(str).string(); }
+          { line = match[1].str() + fs::absolute(str, base).string(); }
         }
 
         return line;
@@ -48,9 +50,10 @@ namespace color_coded
       static auto const post_additions(post_constants());
       args_t args{ pre_additions };
 
+      auto const &base(fs::path{ file }.parent_path());
       std::string tmp;
       while(std::getline(ifs, tmp))
-      { args.emplace_back(detail::make_absolute(std::move(tmp))); }
+      { args.emplace_back(detail::make_absolute(std::move(tmp), base)); }
 
       std::copy(post_additions.begin(), post_additions.end(),
                 std::back_inserter(args));

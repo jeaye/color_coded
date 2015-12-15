@@ -1,9 +1,12 @@
 #!/bin/sh
 
-pwd=$1
-clang_dir=$2
-target=$pwd/include/env/impl.hpp
+clang_dir=$1
+target=include/env/impl.hpp
 
+# Create directories if they don't exist
+mkdir -p include/env/
+
+# Remove the impl.hpp to create a fresh one, since the PWD changes.
 [ -f $target ] && rm -f $target
 cat <<EOF > $target
 /* XXX: Automagically generated. No touching. */
@@ -14,7 +17,7 @@ namespace color_coded
   template <>
   struct environment<env::tag>
   {
-    static char constexpr const * const pwd{ "$pwd" };
+    static char constexpr const * const pwd{ "$PWD" };
     static char constexpr const * const clang_include
     { "-I$clang_dir/include" };
     static char constexpr const * const clang_include_cpp
