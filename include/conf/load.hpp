@@ -47,9 +47,10 @@ namespace color_coded
 
       std::vector<fs::path> files{filename};
       auto const ext(fs::path(filename).extension());
-      if(ext == ".h" || ext == ".hpp")
+      if(ext == ".h" || ext == ".hpp" || ext == ".hh")
       {
         files.emplace_back(fs::path(filename).replace_extension("c"));
+        files.emplace_back(fs::path(filename).replace_extension("cc"));
         files.emplace_back(fs::path(filename).replace_extension("cpp"));
       }
 
