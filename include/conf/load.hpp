@@ -51,6 +51,12 @@ namespace color_coded
       auto const ext(filename.extension());
       if(std::find(begin(header_extensions), end(header_extensions), ext) != end(header_extensions))
       {
+        auto path = filename.string();
+        auto const include_it = path.rfind("include");
+        if(include_it != std::string::npos)
+        {
+            filename = path.replace(include_it, 7, "src");
+        }
         for(auto const &extension : source_extensions)
         {
           files.emplace_back(filename.replace_extension(extension));

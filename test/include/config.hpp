@@ -34,6 +34,7 @@ namespace jest
   auto constexpr compile_commands("test/config/compile_commands.json");
   auto constexpr test_file("/usr/src/color_coded/myfile.cpp");
   auto constexpr test_header("/usr/src/color_coded/myfile.hpp");
+  auto constexpr test_include("/usr/include/color_coded/myfile.hpp");
 
   template <> template <>
   void color_coded::config_group::test<0>() /* Empty defaults. */
@@ -140,7 +141,9 @@ namespace jest
   {
     auto const args_source(color_coded::conf::load(compile_commands, "c++", test_file));
     auto const args_header(color_coded::conf::load(compile_commands, "c++", test_header));
+    auto const args_include(color_coded::conf::load(compile_commands, "c++", test_include));
     expect_equal(args_source, args_header);
+    expect_equal(args_source, args_include);
   }
 
   template <> template <>
