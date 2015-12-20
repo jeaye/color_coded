@@ -38,7 +38,7 @@ namespace color_coded
       }
     }
 
-    inline args_t load_compilation_database(std::string const &file, std::string filename)
+    inline args_t load_compilation_database(std::string const &file, fs::path filename)
     {
       static const std::string source_extensions[] {".c", ".cpp", ".cc"};
       static const std::string header_extensions[] {".h", ".hpp", ".hh"};
@@ -48,12 +48,12 @@ namespace color_coded
       { return {}; }
 
       std::vector<fs::path> files{filename};
-      auto const ext(fs::path(filename).extension());
+      auto const ext(filename.extension());
       if(std::find(begin(header_extensions), end(header_extensions), ext) != end(header_extensions))
       {
         for(auto const &extension : source_extensions)
         {
-          files.emplace_back(fs::path(filename).replace_extension(extension));
+          files.emplace_back(filename.replace_extension(extension));
         }
       }
 
@@ -64,7 +64,7 @@ namespace color_coded
 
         if(!compile_commands.empty())
         {
-          filename = file.string();
+          filename = file;
           break;
         }
 
