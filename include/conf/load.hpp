@@ -40,6 +40,8 @@ namespace color_coded
 
     inline args_t load_compilation_database(std::string const &file, std::string filename)
     {
+      static const std::string source_extensions[] {".c", ".cpp", ".cc"};
+      static const std::string header_extensions[] {".h", ".hpp", ".hh"};
       std::string error;
       auto const database_ptr(::clang::tooling::JSONCompilationDatabase::loadFromFile(file, error));
       if(!database_ptr)
@@ -47,11 +49,12 @@ namespace color_coded
 
       std::vector<fs::path> files{filename};
       auto const ext(fs::path(filename).extension());
-      if(ext == ".h" || ext == ".hpp" || ext == ".hh")
+      if(std::find(begin(header_extensions), end(header_extensions), ext) != end(header_extensions))
       {
-        files.emplace_back(fs::path(filename).replace_extension("c"));
-        files.emplace_back(fs::path(filename).replace_extension("cc"));
-        files.emplace_back(fs::path(filename).replace_extension("cpp"));
+        for(auto const &extension : source_extensions)
+        {
+          files.emplace_back(fs::path(filename).replace_extension(extension));
+        }
       }
 
       std::vector<::clang::tooling::CompileCommand> compile_commands;
