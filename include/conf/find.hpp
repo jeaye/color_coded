@@ -10,42 +10,38 @@ namespace color_coded
   {
     namespace fs = boost::filesystem;
 
+    inline fs::directory_iterator find_file(fs::path const &dir, std::string const &file)
+    {
+      static fs::directory_iterator const end;
+      return std::find_if
+      (
+          fs::directory_iterator{ dir }, end,
+          [&](fs::directory_entry const &e)
+          { return e.path().filename().string() == file; }
+      );
+    }
+
     /* From the current directory, search for a .color_coded file for the
      * current filetype first, then for a non-typed .color_coded. If neither
      * is found, move to the parent directory. Repeat until /. */
     inline std::string find(fs::path file, std::string const &filetype)
     {
       fs::path curr{ file.parent_path() };
-      fs::directory_iterator const end;
+      static fs::directory_iterator const end;
 
       static auto constexpr file_name(".color_coded");
       auto const typed_file_name(std::string{ file_name } + "_" + filetype);
+      std::string const flag_files[] {file_name, typed_file_name};
 
       while(true)
       {
-        auto const typed_it
-        (
-          std::find_if
-          (
-            fs::directory_iterator{ curr }, end,
-            [&](fs::directory_entry const &e)
-            { return e.path().filename().string() == typed_file_name; }
-          )
-        );
-        if(typed_it != end)
-        { return typed_it->path().string(); }
 
-        auto const normal_it
-        (
-          std::find_if
-          (
-            fs::directory_iterator{ curr }, end,
-            [&](fs::directory_entry const &e)
-            { return e.path().filename().string() == file_name; }
-          )
-        );
-        if(normal_it != end)
-        { return normal_it->path().string(); }
+        for(auto const &file : flag_files)
+        {
+          auto const dir_it(find_file(curr, file));
+          if(dir_it != end)
+          { return dir_it->path().string(); }
+        }
 
         /* We may have hit /. */
         if(!fs::canonical(curr).has_parent_path())
