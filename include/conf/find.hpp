@@ -31,7 +31,7 @@ namespace color_coded
 
       static auto constexpr file_name(".color_coded");
       auto const typed_file_name(std::string{ file_name } + "_" + filetype);
-      std::string const flag_files[] {file_name, typed_file_name};
+      std::string const flag_files[] {typed_file_name, file_name};
 
       while(true)
       {

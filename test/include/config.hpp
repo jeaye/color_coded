@@ -4,6 +4,7 @@
 
 #include "env/environment.hpp"
 #include "conf/load.hpp"
+#include "conf/find.hpp"
 #include "conf/defaults.hpp"
 
 namespace color_coded
@@ -27,7 +28,9 @@ namespace std
 
 namespace jest
 {
+  auto constexpr test_config_dir("test/config");
   auto constexpr test_config("test/config/.color_coded");
+  auto constexpr test_config_typed("test/config/.color_coded_foo");
 
   template <> template <>
   void color_coded::config_group::test<0>() /* Empty defaults. */
@@ -109,5 +112,12 @@ namespace jest
     { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
     for(auto const &constant : color_coded::conf::post_constants())
     { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
+  }
+
+  template <> template <>
+  void color_coded::config_group::test<4>() /* Prefer language specific config. */
+  {
+    auto const file(color_coded::conf::find(test_config, "foo"));
+    expect_equal(file, test_config_typed);
   }
 }
