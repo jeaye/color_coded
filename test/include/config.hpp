@@ -2,10 +2,7 @@
 
 #include <jest/jest.hpp>
 
-#include "env/environment.hpp"
-#include "conf/load.hpp"
-#include "conf/find.hpp"
-#include "conf/defaults.hpp"
+#include "core.hpp"
 
 namespace color_coded
 {
