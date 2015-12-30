@@ -13,6 +13,11 @@
 
 namespace color_coded
 {
+  namespace core
+  {
+    std::string const& last_error(std::string const &e);
+  }
+
   namespace conf
   {
     namespace fs = boost::filesystem;
@@ -45,7 +50,10 @@ namespace color_coded
       std::string error;
       auto const database_ptr(::clang::tooling::JSONCompilationDatabase::loadFromFile(file, error));
       if(!database_ptr)
-      { return {}; }
+      {
+          core::last_error(error);
+          return {};
+      }
 
       std::vector<fs::path> files{filename};
       auto const ext(filename.extension());
