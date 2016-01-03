@@ -91,7 +91,9 @@ namespace jest
       std::find
       (
         args.begin(), args.end(),
-        std::string{ "-I" } + color_coded::environment<color_coded::env::tag>::pwd + "/test"
+        std::string{ "-I" } +
+        color_coded::environment<color_coded::env::tag>::pwd +
+        "/" + test_config_dir + "/test"
       ) != args.end()
     );
     expect(std::find(args.begin(), args.end(), "-I/etc/") != args.end());
