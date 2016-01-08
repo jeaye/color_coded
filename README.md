@@ -254,6 +254,12 @@ You may run into this on Debian-based systems. [The solution](https://github.com
 #### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
 
+## Donate
+Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
+
+For more information regarding how I use donations, see
+[here](http://jeaye.com/donate/).
+
 License
 ---
 color_coded is under the MIT open-source license.  
