@@ -51,7 +51,10 @@ namespace color_coded
         void join()
         {
           should_work_.store(false);
-          wake_up_.store(true);
+          {
+            std::unique_lock<std::mutex> lock{ task_mutex_ };
+            wake_up_.store(true);
+          }
           task_cv_.notify_one();
           thread_.join();
         }
