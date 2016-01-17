@@ -1,4 +1,7 @@
 language: cpp
+os:
+  - linux
+  - osx
 
 sudo: false
 
@@ -20,8 +23,14 @@ addons:
       - ubuntu-toolchain-r-test
 
 install:
-  - if [ "$CXX" == "g++"  ]; then export CXX="g++-4.9"; fi
-  - if [ "$CXX" == "clang++"  ]; then export CXX="clang++-3.5"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      brew install lua;
+    elif [ "$CXX" == "g++"  ]; then
+      export CXX="g++-4.9";
+    elif [ "$CXX" == "clang++"  ]; then
+      export CXX="clang++-3.5";
+    fi
+
 script:
   - export OUTSOURCE=$PWD/build
   - export SOURCEPATH=$PWD
