@@ -48,12 +48,22 @@ find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
 
 # Clang
-include(cmake/clang/download.cmake)
+if (NOT DOWNLOAD_CLANG)
+	find_package(LLVM)
+	find_package(LibClang)
+elseif ((NOT LLVM_FOUND) OR (NOT CLANG_FOUND) OR (${DOWNLOAD_CLANG}))
+	set(DOWNLOAD_CLANG 1)
+	include(cmake/clang/download.cmake)
+	find_package(LLVM)
+	find_package(LibClang)
+endif()
 
 include_directories(
   include
+  ${LLVM_INCLUDE_DIRS}
+  include
+  ${CLANG_INCLUDE_DIRS}
 
-  ${LLVM_INCLUDE_PATH}
   ${CURSES_INCLUDE_PATH}
   ${ZLIB_INCLUDE_PATH}
 
@@ -66,7 +76,6 @@ set(CMAKE_INSTALL_RPATH ${LLVM_LIB_PATH})
 
 include(cmake/generate_sources.cmake)
 include(cmake/check_luajit.cmake)
-
 add_library(${PROJECT_NAME} SHARED src/main.cpp)
 
 add_custom_target(${PROJECT_NAME}_track_api
@@ -82,7 +91,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX "")
 
 # Enable warnings
 set(WARNING_FLAGS
-  "-Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-variable -Wno-deprecated-declarations"
+    "-Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-variable -Wno-deprecated-declarations -Wno-unused-parameter"
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 
@@ -93,8 +102,10 @@ if(64_BIT_PLATFORM)
   set_property(TARGET ${PROJECT_NAME}_boost PROPERTY COMPILE_FLAGS "-fPIC")
 endif()
 
-# Clang
-include(cmake/clang/link.cmake)
+target_link_libraries(${PROJECT_NAME}
+  ${CLANG_LIBS}
+  ${LLVM_LIBS}
+)
 
 target_link_libraries(${PROJECT_NAME}
   ${PROJECT_NAME}_boost
@@ -115,7 +126,7 @@ include_directories(
 )
 add_executable(${PROJECT_NAME}_config_test ${CMAKE_CURRENT_LIST_DIR}/test/src/config/main.cpp)
 target_link_libraries(${PROJECT_NAME}_config_test
-  ${PROJECT_NAME}_boost
+  ${PROJECT_NAME}_boost	
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}

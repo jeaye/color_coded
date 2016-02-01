@@ -48,23 +48,13 @@ if(NOT CUSTOM_CLANG)
     message(STATUS "Clang/LLVM ${CLANG_VERSION} already extracted")
   endif()
 
-  set(LLVM_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
-  message(STATUS "Clang/LLVM root path: ${LLVM_ROOT_PATH}")
-
+  set(LLVM_ROOT_DIR ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
+  message(STATUS "Clang/LLVM root path: ${LLVM_ROOT_DIR}")
 else()
-  if(NOT LLVM_ROOT_PATH)
-    message(FATAL_ERROR "Using a custom clang requires *at least* setting LLVM_ROOT_PATH. See the README for details.")
-  endif()
-
-  message(STATUS "Trusting custom clang at ${LLVM_ROOT_PATH}")
+  message(STATUS "Trusting custom clang at ${LLVM_ROOT_DIR}")
 endif()
 
-if(NOT LLVM_INCLUDE_PATH)
-  set(LLVM_INCLUDE_PATH ${LLVM_ROOT_PATH}/include)
-endif()
-if(NOT LLVM_LIB_PATH)
-  set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
-endif()
+set(LLVM_LIB_PATH ${LLVM_ROOT_DIR}/lib)
 
 if(APPLE)
   execute_process(COMMAND ln -sf ${LLVM_LIB_PATH}/libclang.dylib ${LLVM_LIB_PATH}/libclang.so)
