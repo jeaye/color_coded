@@ -30,12 +30,7 @@
 set(llvm_config_names llvm-config-3.9 llvm-config39
                       llvm-config-3.8 llvm-config38
                       llvm-config-3.7 llvm-config37
-                      llvm-config-3.6 llvm-config36
-                      llvm-config-3.5 llvm-config35
-                      llvm-config-3.4 llvm-config34
-                      llvm-config-3.3 llvm-config33
-                      llvm-config-3.2 llvm-config32
-                      llvm-config-3.1 llvm-config31 llvm-config)
+                      llvm-config-3.6 llvm-config36 llvm-config)
 find_program(LLVM_CONFIG
     NAMES ${llvm_config_names}
     PATHS ${LLVM_ROOT_DIR}/bin /usr/local/opt/llvm/bin NO_DEFAULT_PATH
@@ -172,6 +167,14 @@ else()
     endif()
     llvm_set(LIBRARY_DIRS libdir true)
     llvm_set_libs(LIBRARIES libs)
+
+    # LLVM bug: llvm-config --libs tablegen returns -lLLVM-3.8.0
+    # but code for it is not in shared library
+    if("${LLVM_FIND_COMPONENTS}" MATCHES "tablegen")
+      if (NOT "${LLVM_LIBRARIES}" MATCHES "LLVMTableGen")
+            set(LLVM_LIBRARIES "${LLVM_LIBRARIES} -lLLVMTableGen")
+        endif()
+    endif()
 endif()
 
 # On CMake builds of LLVM, the output of llvm-config --cxxflags does not
