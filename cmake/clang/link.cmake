@@ -1,6 +1,6 @@
 if(NOT CUSTOM_CLANG)
   set(CLANG_LIBS
-    ${LLVM_LIB_PATH}/libclang.a
+    ${LLVM_LIB_PATH}/libclang.dylib
     ${LLVM_LIB_PATH}/libclangIndex.a
     ${LLVM_LIB_PATH}/libclangFormat.a
     ${LLVM_LIB_PATH}/libclangFrontendTool.a
@@ -33,13 +33,8 @@ if(NOT CUSTOM_CLANG)
     ${LLVM_LIB_PATH}/libLLVMBitWriter.a
     ${LLVM_LIB_PATH}/libLLVMIRReader.a
     ${LLVM_LIB_PATH}/libLLVMAsmParser.a
-    ${LLVM_LIB_PATH}/libLLVMR600CodeGen.a
     ${LLVM_LIB_PATH}/libLLVMipo.a
     ${LLVM_LIB_PATH}/libLLVMVectorize.a
-    ${LLVM_LIB_PATH}/libLLVMR600AsmParser.a
-    ${LLVM_LIB_PATH}/libLLVMR600Desc.a
-    ${LLVM_LIB_PATH}/libLLVMR600Info.a
-    ${LLVM_LIB_PATH}/libLLVMR600AsmPrinter.a
     ${LLVM_LIB_PATH}/libLLVMSystemZDisassembler.a
     ${LLVM_LIB_PATH}/libLLVMSystemZCodeGen.a
     ${LLVM_LIB_PATH}/libLLVMSystemZAsmParser.a
@@ -97,7 +92,6 @@ if(NOT CUSTOM_CLANG)
     ${LLVM_LIB_PATH}/libLLVMSparcInfo.a
     ${LLVM_LIB_PATH}/libLLVMSparcAsmPrinter.a
     ${LLVM_LIB_PATH}/libLLVMTableGen.a
-    ${LLVM_LIB_PATH}/libLLVMDebugInfo.a
     ${LLVM_LIB_PATH}/libLLVMOption.a
     ${LLVM_LIB_PATH}/libLLVMX86Disassembler.a
     ${LLVM_LIB_PATH}/libLLVMX86AsmParser.a
@@ -123,7 +117,6 @@ if(NOT CUSTOM_CLANG)
     ${LLVM_LIB_PATH}/libLLVMBitReader.a
     ${LLVM_LIB_PATH}/libLLVMInstCombine.a
     ${LLVM_LIB_PATH}/libLLVMTransformUtils.a
-    ${LLVM_LIB_PATH}/libLLVMipa.a
     ${LLVM_LIB_PATH}/libLLVMAnalysis.a
     ${LLVM_LIB_PATH}/libLLVMTarget.a
     ${LLVM_LIB_PATH}/libLLVMMC.a
