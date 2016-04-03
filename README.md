@@ -251,6 +251,10 @@ cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/lib/llv
 #### "no version information available (required by gvim)"
 You may run into this on Debian-based systems. [The solution](https://github.com/jeaye/color_coded/issues/83) has been to install `liblua-5.x-0-dbg`.
 
+#### "E315: ml_get: invalid lnum: 32"
+This is caused by a bug in vim; you can work around it by using a vim with at
+least patch 1691. See [this issue](https://github.com/jeaye/color_coded/issues/112) for details.
+
 #### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
 
