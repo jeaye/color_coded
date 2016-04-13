@@ -51,7 +51,13 @@ namespace color_coded
         void join()
         {
           should_work_.store(false);
-          wake_up_.store(true);
+          {
+            /* Even if the shared variable is atomic, it must be modified under
+             * the mutex in order to correctly publish the modification to the
+             * waiting thread. */
+            std::lock_guard<std::mutex> const lock{ task_mutex_ };
+            wake_up_.store(true);
+          }
           task_cv_.notify_one();
           thread_.join();
         }

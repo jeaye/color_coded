@@ -67,7 +67,7 @@ unset(_lua_include_subdirs)
 unset(_lua_library_names)
 
 # this is a function only to have all the variables inside go away automatically
-set(LUA_MINOR_VERSIONS 2 1)
+set(LUA_MINOR_VERSIONS 3 2 1)
 
 foreach (ver IN LISTS LUA_MINOR_VERSIONS)
     list(APPEND _lua_include_subdirs

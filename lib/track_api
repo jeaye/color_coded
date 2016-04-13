@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 # Tracks changes in the native code each build
 # and updates the API versions as required.
 

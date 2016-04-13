@@ -54,9 +54,10 @@ include_directories(
   include
 
   ${LLVM_INCLUDE_PATH}
-
   ${CURSES_INCLUDE_PATH}
   ${ZLIB_INCLUDE_PATH}
+
+  $ENV{PWD}/include/
 )
 
 # Allow easier dynamic linking with clang

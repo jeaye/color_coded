@@ -10,8 +10,8 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
 
 Before color_coded | After color_coded
 :------------------:|:------------------:
-<img src="http://jeaye.com/cc/trimmed_cc_t_no_3.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_3.png" width="100%"/>
-<img src="http://jeaye.com/cc/trimmed_cc_t_no_1.png" width="100%"/> | <img src="http://jeaye.com/cc/trimmed_cc_t_yes_1.png" width="100%"/>
+<img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_no_3.png" width="100%"/> | <img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_yes_3.png" width="100%"/>
+<img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_no_1.png" width="100%"/> | <img src="https://raw.githubusercontent.com/jeaye/color_coded/master/pics/trimmed_cc_t_yes_1.png" width="100%"/>
 
 Installation
 ---
@@ -28,7 +28,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libboost-dev libz-dev cmake xz-utils
+[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libz-dev cmake xz-utils
 ```
 
 For lua, you must install the version that your version of vim is compiled for.
@@ -248,8 +248,21 @@ cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr
 cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/lib/llvm-3.4/include
 ```
 
+#### "no version information available (required by gvim)"
+You may run into this on Debian-based systems. [The solution](https://github.com/jeaye/color_coded/issues/83) has been to install `liblua-5.x-0-dbg`.
+
+#### "E315: ml_get: invalid lnum: 32"
+This is caused by a bug in vim; you can work around it by using a vim with at
+least patch 1691. See [this issue](https://github.com/jeaye/color_coded/issues/112) for details.
+
 #### How can I get support?
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
+
+## Donate
+Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
+
+For more information regarding how I use donations, see
+[here](http://jeaye.com/donate/).
 
 License
 ---
