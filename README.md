@@ -6,7 +6,7 @@ color_coded is a vim plugin that provides realtime (fast), tagless code highligh
   * Lua binding for VimL -> C++
   * Exhaustive customization possibilities
   * Unintrusive highlighting; self-contained
-  * Utilizes self-contained clang 3.6.0
+  * Utilizes self-contained clang 3.8.0
 
 Before color_coded | After color_coded
 :------------------:|:------------------:
@@ -28,7 +28,7 @@ brew install xz cmake
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-[sudo] apt-get install build-essential libclang-3.6-dev libncurses-dev libz-dev cmake xz-utils
+[sudo] apt-get install build-essential libclang-3.8-dev libncurses-dev libz-dev cmake xz-utils
 ```
 
 For lua, you must install the version that your version of vim is compiled for.
