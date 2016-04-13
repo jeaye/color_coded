@@ -61,7 +61,8 @@ include_directories(
 )
 
 # Allow easier dynamic linking with clang
-set(INSTALL_RPATH_USE_LINK_PATH ON)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH ${LLVM_LIB_PATH})
 
 include(cmake/generate_sources.cmake)
 include(cmake/check_luajit.cmake)
@@ -105,7 +106,7 @@ target_link_libraries(${PROJECT_NAME}
 
 # Install locally
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR})
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_CURRENT_LIST_DIR})
 
 # Tests
 include_directories(
