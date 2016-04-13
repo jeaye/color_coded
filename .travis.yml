@@ -35,8 +35,8 @@ script:
   - export OUTSOURCE=$PWD/build
   - export SOURCEPATH=$PWD
   - mkdir -p $OUTSOURCE && cd $OUTSOURCE && cmake $SOURCEPATH && make && make install
-  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
-  - cd $SOURCEPATH && rm -rf bin && mv $OUTSOURCE/clang* . && rm -rf $OUTSOURCE
+  - cd $SOURCEPATH && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && mv $OUTSOURCE/clang* . && rm -rf $OUTSOURCE
   - cmake . && make && make install
-  - cd $SOURCEPATH/bin && echo "os.exit()" | lua -l color_coded
+  - cd $SOURCEPATH && echo "os.exit()" | lua -l color_coded
   - cd $SOURCEPATH && make color_coded_test || true
