@@ -49,6 +49,7 @@ if(NOT CUSTOM_CLANG)
   endif()
 
   set(LLVM_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
+  message(STATUS "Clang/LLVM root path: ${LLVM_ROOT_PATH}")
 
 else()
   if(NOT LLVM_ROOT_PATH)
@@ -63,6 +64,10 @@ if(NOT LLVM_INCLUDE_PATH)
 endif()
 if(NOT LLVM_LIB_PATH)
   set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
+endif()
+
+if(APPLE)
+  execute_process(COMMAND ln -sf ${LLVM_LIB_PATH}/libclang.dylib ${LLVM_LIB_PATH}/libclang.so)
 endif()
 
 add_custom_target(clean_clang

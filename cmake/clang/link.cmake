@@ -1,6 +1,6 @@
 if(NOT CUSTOM_CLANG)
   set(CLANG_LIBS
-    ${LLVM_LIB_PATH}/libclang.dylib
+    ${LLVM_LIB_PATH}/libclang.so
     ${LLVM_LIB_PATH}/libclangIndex.a
     ${LLVM_LIB_PATH}/libclangFormat.a
     ${LLVM_LIB_PATH}/libclangFrontendTool.a

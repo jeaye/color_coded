@@ -59,6 +59,9 @@ include_directories(
   ${ZLIB_INCLUDE_PATH}
 )
 
+# Allow easier dynamic linking with clang
+set(INSTALL_RPATH_USE_LINK_PATH ON)
+
 include(cmake/generate_sources.cmake)
 include(cmake/check_luajit.cmake)
 
