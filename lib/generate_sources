@@ -23,7 +23,7 @@ namespace color_coded
     static char constexpr const * const clang_include_cpp
     { "-I$clang_dir/include/c++/v1" };
     static char constexpr const * const clang_lib_include
-    { "-I$clang_dir/lib/clang/3.6.0/include" };
+    { "-I$clang_dir/lib/clang/3.8.0/include" };
   };
 }
 EOF
