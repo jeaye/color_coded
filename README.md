@@ -25,6 +25,12 @@ brew install xz cmake
 # Spawn a new shell to use the new system vim
 ```
 
+To get proper highlighting, you'll also want the Xcode command line tools, which
+will give you the appropriate system headers:
+```bash
+xcode-select --install
+```
+
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
