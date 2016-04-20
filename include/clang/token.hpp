@@ -74,6 +74,9 @@ namespace color_coded
           case CXType_FunctionProto:
             return "Function";
 
+          case CXType_Auto:
+            return "Variable";
+
           default:
             return "";
             //return "Error1 " + std::to_string(kind);
