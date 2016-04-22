@@ -240,18 +240,13 @@ endif
 ```
 
 #### How can I use a custom LLVM/Clang setup?
-This is not officially supported. If you run into bugs or crashes or you're unable to compile or anything else that's catastrophic or otherwise terrible, you're on your own. With that said, you can try specifying `CUSTOM_CLANG=1` and `LLVM_ROOT_PATH=...` to cmake during the build process. The `LLVM_ROOT_PATH` is a prefix, excluding `/lib` and `/include` where your LLVM installation lives; you should try this first. If cmake fails, you'll need to specify one or both of `LLVM_INCLUDE_PATH` or `LLVM_LIB_PATH` (based on the error it gave you). If cmake still fails to find what it needs, you may need to specify one or both of `CLANG_LIBS` or `LLVM_LIBS` (based on the error it gave you). Examples:
+You may specify `DOWNLOAD_CLANG=0` to `cmake`. Depending on your platform, you
+may also need to specify the path to your llvm-config binary using
+`LLVM_CONFIG=`. This can also allow you to use different versions of Clang/LLVM.
 
-##### Arch Linux
+Example:
 ```bash
-# From the build directory
-cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr
-```
-
-##### Ubuntu
-```bash
-# From the build directory
-cmake .. -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr -DLLVM_INCLUDE_PATH=/usr/lib/llvm-3.4/include
+cmake . -DDOWNLOAD_CLANG=0
 ```
 
 #### "no version information available (required by gvim)"
