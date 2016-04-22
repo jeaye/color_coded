@@ -73,10 +73,10 @@ namespace color_coded
           case CXType_FunctionNoProto:
           case CXType_FunctionProto:
             return "Function";
-
+#if CINDEX_VERSION_MINOR >= 32
           case CXType_Auto:
             return "Variable";
-
+#endif
           default:
             return "";
             //return "Error1 " + std::to_string(kind);
