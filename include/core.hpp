@@ -22,6 +22,7 @@
 
 #include <string>
 #include <map>
+#include <sstream>
 
 /* XXX: It's a shared object to a C lib; I need globals. :| */
 namespace color_coded
@@ -107,6 +108,13 @@ namespace color_coded
           }
           catch(clang::compilation_error const &e)
           { return async::result{{}, {}}; }
+          catch(std::exception const &e)
+          {
+            std::stringstream ss;
+            ss << "internal error: " << e.what();
+            last_error(ss.str());
+            return async::result{{}, {}};
+          }
           catch(...)
           {
             last_error("unknown compilation error");
