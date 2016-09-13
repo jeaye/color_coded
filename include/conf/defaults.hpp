@@ -55,7 +55,8 @@ namespace color_coded
         "-isystem/usr/local/include",
         "-isystem/opt/local/include",
         "-isystem/usr/include",
-        "-w"
+        "-w",
+        "-fcolor-diagnostics" // See https://github.com/jeaye/color_coded/issues/104
       };
     }
 
