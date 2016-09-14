@@ -61,6 +61,6 @@ if(APPLE)
 endif()
 
 add_custom_target(clean_clang
-  COMMAND rm -rf ${CLANG_FILENAME} ${CLANG_DIRNAME}
+  COMMAND rm -rf ${CLANG_FILENAME}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
