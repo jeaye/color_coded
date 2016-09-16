@@ -55,6 +55,10 @@ namespace color_coded
         "-isystem/usr/local/include",
         "-isystem/opt/local/include",
         "-isystem/usr/include",
+        "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
+        "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+        "-isystem/System/Library/Frameworks",
+        "-isystem/Library/Frameworks",
         "-w",
         "-fcolor-diagnostics" // See https://github.com/jeaye/color_coded/issues/104
       };
