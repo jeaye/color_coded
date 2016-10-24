@@ -222,6 +222,17 @@ Assuming you've updated a working installation of color_coded, you'll get this e
 #### Does color_coded work with neovim?
 For now, at least, color_coded is not supporting neovim. There is [chromatica.vim](https://github.com/arakashic/chromatica.nvim), however, which aims to provide similar highlighting, specifically for neovim.
 
+#### 'stdarg.h' file not found
+This happens on certain operating systems which require additional include
+paths; the solution is to just make sure these paths are in your `.color_coded`
+file, prefixed with `-isystem`. To find out those paths, run the following:
+
+```bash
+echo | clang -v -E -x c++ -
+```
+
+See [this issue comment](https://github.com/jeaye/color_coded/issues/140#issuecomment-255614113) for details. color_coded tries to help by assuming some of these, as shown in `post_constants()` [here](https://github.com/jeaye/color_coded/blob/master/include/conf/defaults.hpp).
+
 #### color_coded crashes on startup?!?!
 You're likely using luajit, which doesn't embed well in shared libraries. If you aren't sure, see if this turns up anything:
 ```bash
