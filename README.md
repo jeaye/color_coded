@@ -238,7 +238,7 @@ You're likely using luajit, which doesn't embed well in shared libraries. If you
 ```bash
 vim --version | grep jit
 ```
-[More information is here.](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
+[More information is here](https://www.freelists.org/post/luajit/OSx-load-luajit-64bit-from-plugin).
 
 #### How can I disable color_coded in diff mode?
 You can use this in your `.vimrc`:
