@@ -220,7 +220,7 @@ When you install color_coded, you need to manually compile it before you can suc
 Assuming you've updated a working installation of color_coded, you'll get this error if the update requires you to recompile color_coded (i.e. there have been changes to the native API). To recompile, follow the [same exact steps](https://github.com/jeaye/color_coded#installation) you took to compile initially.
 
 #### Does color_coded work with neovim?
-I doubt it. color_coded has not been tested on neovim and there has been significant work to the plugin API and the lua interface. For now, at least, color_coded is not supporting neovim.
+For now, at least, color_coded is not supporting neovim. There is [chromatica.vim](https://github.com/arakashic/chromatica.nvim), however, which aims to provide similar highlighting, specifically for neovim.
 
 #### color_coded crashes on startup?!?!
 You're likely using luajit, which doesn't embed well in shared libraries. If you aren't sure, see if this turns up anything:
