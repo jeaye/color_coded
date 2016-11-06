@@ -12,7 +12,7 @@ if(NOT CUSTOM_CLANG)
       # Using OpenSuSE binary to avoid terminfo dependency
       # See https://github.com/Valloric/YouCompleteMe/issues/778 and
       # https://github.com/jeaye/color_coded/issues/144
-      set(CLANG_DIRNAME "clang+llvm-${CLANG_VERSION}-x86_64-opensuse13.2)
+      set(CLANG_DIRNAME "clang+llvm-${CLANG_VERSION}-x86_64-opensuse13.2")
       set(CLANG_MD5 "31ef61aad2b5ca6bfccb40ce48752292")
       set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
     else()
