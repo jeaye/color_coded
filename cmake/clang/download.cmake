@@ -9,8 +9,11 @@ if(NOT CUSTOM_CLANG)
     set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
   elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     if(64_BIT_PLATFORM)
-      set(CLANG_DIRNAME "clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04")
-      set(CLANG_MD5 "0eabc565733a62d77da1214a70c6c344")
+      # Using OpenSuSE binary to avoid terminfo dependency
+      # See https://github.com/Valloric/YouCompleteMe/issues/778 and
+      # https://github.com/jeaye/color_coded/issues/144
+      set(CLANG_DIRNAME "clang+llvm-${CLANG_VERSION}-x86_64-opensuse13.2)
+      set(CLANG_MD5 "31ef61aad2b5ca6bfccb40ce48752292")
       set(CLANG_FILENAME "${CLANG_DIRNAME}.tar.xz")
     else()
       message(FATAL_ERROR "No pre-built Clang ${CLANG_VERSION} binaries for 32 bit Linux; this system is not supported")
