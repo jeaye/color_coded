@@ -134,6 +134,7 @@ include_directories(
 add_definitions(
 -D__STDC_CONSTANT_MACROS
 -D__STDC_LIMIT_MACROS
+-D_GLIBCXX_USE_CXX11_ABI=0
 )
 add_executable(${PROJECT_NAME}_config_test ${CMAKE_CURRENT_LIST_DIR}/test/src/config/main.cpp)
 target_link_libraries(${PROJECT_NAME}_config_test
