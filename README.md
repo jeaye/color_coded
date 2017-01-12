@@ -271,7 +271,7 @@ least patch 1691. See [this issue](https://github.com/jeaye/color_coded/issues/1
 Feel free to make an issue on Github or email me or catch me on IRC: Freenode @ `#color_coded`
 
 ## Donate
-Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
+Feel free to shoot Bitcoins my way: **1BRbkEpuQYmPptHdkfkDfNnnnMJd9GdCTW**
 
 For more information regarding how I use donations, see
 [here](http://jeaye.com/donate/).
