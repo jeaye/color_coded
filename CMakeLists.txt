@@ -61,8 +61,8 @@ endif()
 if ((NOT LLVM_FOUND) OR (NOT CLANG_FOUND) OR (${DOWNLOAD_CLANG}))
 	set(DOWNLOAD_CLANG 1)
 	include(cmake/clang/download.cmake)
-	find_package(LLVM)
-	find_package(LibClang)
+	find_package(LLVM REQUIRED)
+	find_package(LibClang REQUIRED)
 endif()
 
 include_directories(

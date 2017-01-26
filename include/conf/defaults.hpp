@@ -49,9 +49,9 @@ namespace color_coded
     {
       return
       {
+        environment<env::tag>::clang_resource_dir,
         environment<env::tag>::clang_include,
         environment<env::tag>::clang_include_cpp,
-        environment<env::tag>::clang_lib_include,
         "-isystem/usr/local/include",
         "-isystem/opt/local/include",
         "-isystem/usr/include",
