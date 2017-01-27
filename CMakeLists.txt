@@ -110,7 +110,8 @@ endif()
 
 target_link_libraries(${PROJECT_NAME}
   ${CLANG_LIBS}
-  ${LLVM_LIBS}
+  ${LLVM_LIBRARIES}
+  ${LLVM_LDFLAGS}
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -130,9 +131,19 @@ include_directories(
   lib/jest/include
   test/include
 )
+add_definitions(
+-D__STDC_CONSTANT_MACROS
+-D__STDC_LIMIT_MACROS
+)
+if(${DOWNLOAD_CLANG})
+    add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+endif()
 add_executable(${PROJECT_NAME}_config_test ${CMAKE_CURRENT_LIST_DIR}/test/src/config/main.cpp)
 target_link_libraries(${PROJECT_NAME}_config_test
-  ${PROJECT_NAME}_boost	
+  ${CLANG_LIBS}
+  ${LLVM_LIBRARIES}
+  ${LLVM_LDFLAGS}
+  ${PROJECT_NAME}_boost
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}

@@ -9,7 +9,7 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-        #- llvm-toolchain-precise-3.8
+      - llvm-toolchain-precise-3.9
     packages:
       - libstdc++-4.9-dev
       - liblua5.1-0-dev
@@ -17,15 +17,21 @@ addons:
       - libboost-dev
       - g++-4.9
       - g++-5
-        #- clang-3.8
-        #- libclang-3.8-dev
-        #- llvm-3.8
+      - clang-3.9
+      - libclang-3.9-dev
+      - llvm-3.9
+      - llvm-3.9-dev
 
-env: 
-  - DOWNLOAD_CLANG=1 COMPILER=g++-4.9 GCC_VERSION=4.9 
-    #- DOWNLOAD_CLANG=0 COMPILER=g++-4.9 GCC_VERSION=4.9 LLVM_CONFIG="llvm-config-3.8"
-    #- DOWNLOAD_CLANG=1 COMPILER=clang++-3.8 CLANG_VERSION=3.8
-    #- DOWNLOAD_CLANG=0 COMPILER=clang++-3.8 CLANG_VERSION=3.8 LLVM_CONFIG="llvm-config-3.8"
+env:
+  - DOWNLOAD_CLANG=1 COMPILER=g++-4.9 GCC_VERSION=4.9
+    # - DOWNLOAD_CLANG=0 COMPILER=g++-4.9 GCC_VERSION=4.9 LLVM_CONFIG="llvm-config-3.8"
+  - DOWNLOAD_CLANG=1 COMPILER=clang++-3.9 CLANG_VERSION=3.9
+    # - DOWNLOAD_CLANG=0 COMPILER=clang++-3.8 CLANG_VERSION=3.8 LLVM_CONFIG="llvm-config-3.8"
+
+matrix:
+  exclude:
+    - os: osx
+      env: DOWNLOAD_CLANG=1 COMPILER=g++-4.9 GCC_VERSION=4.9
 
 before_install:
   - if [ -n "$GCC_VERSION" ]; then export CXX="g++-${GCC_VERSION}" CC="gcc-${GCC_VERSION}"; fi
