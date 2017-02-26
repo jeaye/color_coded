@@ -77,16 +77,24 @@ namespace color_coded
       };
     }
 
-    /* If no .color_coded file is provided, these are used. */
-    inline args_t defaults(std::string const &filetype)
+    /* Add system defaults to user specified arguments. Needed because libclang
+     * often fails to find system search paths. */
+    void add_defaults_to_args(std::string const &filetype, args_t &args)
     {
       auto const pre_additions(pre_constants(filetype));
       static auto const post_additions(post_constants());
-      args_t args{ "-I.", "-Iinclude" };
       std::copy(std::begin(pre_additions), std::end(pre_additions),
                 std::back_inserter(args));
       std::copy(std::begin(post_additions), std::end(post_additions),
                 std::back_inserter(args));
+    }
+
+    /* If no .color_coded file is provided, these are used. */
+    inline args_t defaults(std::string const &filetype)
+    {
+      // Heuristic local includes.
+      args_t args{ "-I.", "-Iinclude" };
+      add_defaults_to_args(filetype, args);
       return args;
     }
   }
