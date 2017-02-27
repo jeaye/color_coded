@@ -85,7 +85,7 @@ namespace color_coded
      * often fails to find system search paths. */
     inline args_t add_defaults_to_args(std::string const &filetype, args_t &&args)
     {
-      auto pre_additions(pre_constants(filetype));
+      auto const pre_additions(pre_constants(filetype));
       static auto const post_additions(post_constants());
 
       args.insert(args.begin(), pre_additions.begin(), pre_additions.end());
