@@ -87,7 +87,11 @@ namespace color_coded
       if(compile_commands.empty())
       { return {}; }
 
-      auto commands(compile_commands[0].CommandLine);
+      // Skip argv[0] which is the name of the clang executable.
+      args_t commands((compile_commands[0].CommandLine.begin() + 1), compile_commands[0].CommandLine.end());
+
+      // Get rid of the source filename itself.
+      // NOTE: '-o <output>' and '-c' will be automatically ignored by libclang.
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
 
       return commands;
