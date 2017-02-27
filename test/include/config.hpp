@@ -152,4 +152,28 @@ namespace jest
       color_coded::conf::defaults("c++")
     );
   }
+
+  template <> template <>
+  void color_coded::config_group::test<8>() /* Constants still present with compilation database. */
+  {
+    auto const args(color_coded::conf::load(compile_commands, "c++", test_file));
+    for(auto const &constant : color_coded::conf::pre_constants("c++"))
+    { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
+    for(auto const &constant : color_coded::conf::post_constants())
+    { expect(std::find(args.begin(), args.end(), constant) != args.end()); }
+  }
+
+  template <> template <>
+  void color_coded::config_group::test<9>() /* Pre/post constants in the right positions. */
+  {
+    auto const args(color_coded::conf::load(test_config, "c++"));
+    auto const pre_constants(color_coded::conf::pre_constants("c++"));
+    auto const post_constants(color_coded::conf::post_constants());
+    // The first arg should be a pre-constant.
+    expect(std::find(pre_constants.begin(), pre_constants.end(),*args.begin())
+           != pre_constants.end());
+    // The last arg should be a post-constant.
+    expect(std::find(post_constants.begin(), post_constants.end(),*(args.end() - 1))
+           != post_constants.end());
+  }
 }
