@@ -123,9 +123,7 @@ namespace color_coded
       if(args.empty())
       { return defaults(filetype); }
 
-      add_defaults_to_args(filetype, args);
-
-      return args;
+      return add_defaults_to_args(filetype, args);
     }
 
     inline args_t load(std::string const &file, std::string const &filetype)
