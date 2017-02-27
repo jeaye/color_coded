@@ -20,9 +20,11 @@ namespace color_coded
         /* Local clang+llvm */
         environment<env::tag>::clang_include_cpp,
         environment<env::tag>::clang_include,
+#ifdef __APPLE__
         /* System clang on macOS */
         "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
         "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+#endif
       };
 
       if(filetype == "c")
@@ -70,24 +72,34 @@ namespace color_coded
         "-isystem/opt/local/include",
         environment<env::tag>::clang_resource_dir, // internal libraries and intrinsics
         "-isystem/usr/include",
+#ifdef __APPLE__
         "-isystem/System/Library/Frameworks",
         "-isystem/Library/Frameworks",
+#endif
         "-w",
         "-fcolor-diagnostics" // See https://github.com/jeaye/color_coded/issues/104
       };
     }
 
+    /* Add system defaults to user specified arguments. Needed because libclang
+     * often fails to find system search paths. */
+    inline args_t add_defaults_to_args(std::string const &filetype, args_t &&args)
+    {
+      auto pre_additions(pre_constants(filetype));
+      static auto const post_additions(post_constants());
+
+      args.insert(args.begin(), pre_additions.begin(), pre_additions.end());
+      std::copy(std::begin(post_additions), std::end(post_additions),
+                std::back_inserter(args));
+      return std::move(args);
+    }
+
     /* If no .color_coded file is provided, these are used. */
     inline args_t defaults(std::string const &filetype)
     {
-      auto const pre_additions(pre_constants(filetype));
-      static auto const post_additions(post_constants());
+      // Heuristic local includes.
       args_t args{ "-I.", "-Iinclude" };
-      std::copy(std::begin(pre_additions), std::end(pre_additions),
-                std::back_inserter(args));
-      std::copy(std::begin(post_additions), std::end(post_additions),
-                std::back_inserter(args));
-      return args;
+      return add_defaults_to_args(filetype, std::move(args));
     }
   }
 }

@@ -87,20 +87,23 @@ namespace color_coded
       if(compile_commands.empty())
       { return {}; }
 
-      auto commands(compile_commands[0].CommandLine);
+      // Skip argv[0] which is the name of the clang executable.
+      args_t commands((compile_commands[0].CommandLine.begin() + 1), compile_commands[0].CommandLine.end());
+
+      // Get rid of the source filename itself.
+      // NOTE: '-o <output>' and '-c' will be automatically ignored by libclang.
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
 
       return commands;
     }
 
-    inline args_t load_color_coded(std::string const &file, std::string const &filetype)
+    inline args_t load_color_coded(std::string const &file)
     {
       std::ifstream ifs{ file };
       if(!ifs.is_open())
       { return {}; }
 
-      auto const pre_additions(pre_constants(filetype));
-      args_t args{ pre_additions };
+      args_t args;
 
       auto const &base(fs::path{ file }.parent_path());
       std::string tmp;
@@ -115,21 +118,16 @@ namespace color_coded
       if(file.empty())
       { return defaults(filetype); }
 
-      static auto const post_additions(post_constants());
-
       args_t args;
       if (fs::path(file).filename() == "compile_commands.json")
       { args = load_compilation_database(file, filename); }
       else
-      { args = load_color_coded(file, filetype); }
+      { args = load_color_coded(file); }
 
       if(args.empty())
       { return defaults(filetype); }
 
-      std::copy(post_additions.begin(), post_additions.end(),
-                std::back_inserter(args));
-
-      return args;
+      return add_defaults_to_args(filetype, std::move(args));
     }
 
     inline args_t load(std::string const &file, std::string const &filetype)
