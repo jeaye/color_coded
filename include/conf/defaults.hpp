@@ -20,9 +20,11 @@ namespace color_coded
         /* Local clang+llvm */
         environment<env::tag>::clang_include_cpp,
         environment<env::tag>::clang_include,
+#ifdef __APPLE__
         /* System clang on macOS */
         "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1",
         "-isystem/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+#endif
       };
 
       if(filetype == "c")
@@ -70,8 +72,10 @@ namespace color_coded
         "-isystem/opt/local/include",
         environment<env::tag>::clang_resource_dir, // internal libraries and intrinsics
         "-isystem/usr/include",
+#ifdef __APPLE__
         "-isystem/System/Library/Frameworks",
         "-isystem/Library/Frameworks",
+#endif
         "-w",
         "-fcolor-diagnostics" // See https://github.com/jeaye/color_coded/issues/104
       };
