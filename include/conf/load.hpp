@@ -48,7 +48,26 @@ namespace color_coded
       static const std::string source_extensions[] {".c", ".cpp", ".cc"};
       static const std::string header_extensions[] {".h", ".hpp", ".hh"};
       std::string error;
-      auto const database_ptr(::clang::tooling::JSONCompilationDatabase::loadFromFile(file, error));
+#if LLVM_VERSION_MAJOR >= 4
+      auto const database_ptr
+      (
+        ::clang::tooling::JSONCompilationDatabase::loadFromFile
+        (
+          file,
+          error,
+          ::clang::tooling::JSONCommandLineSyntax::Gnu
+        )
+      );
+#else
+      auto const database_ptr
+      (
+        ::clang::tooling::JSONCompilationDatabase::loadFromFile
+        (
+          file,
+          error
+        )
+      );
+#endif
       if(!database_ptr)
       {
           core::last_error(error);
