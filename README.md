@@ -60,16 +60,16 @@ You also need to ensure you have GCC 4.9 (or higher). If you don't, you can try 
 
 #### FreeBSD / PCBSD
 
-(Tested in FreeBSD 10.1)
+(Tested in FreeBSD 11.1)
 
 ```bash
-$ [sudo] pkg install clang36 llvm36 cmake
+$ [sudo] pkg install llvm40 cmake
 ```
 
 ```bash
 $ cd ~/.vim/bundle/color_coded
 $ mkdir build && cd build
-$ cmake -DCUSTOM_CLANG=1 -DLLVM_ROOT_PATH=/usr/local/llvm36  ..
+$ cmake -DCUSTOM_CLANG=1 -DLLVM_ROOT_DIR=/usr/local/llvm40  ..
 $ make && make install
 ```
 
