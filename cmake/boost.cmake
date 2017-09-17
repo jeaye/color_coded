@@ -31,4 +31,8 @@ include_directories(
   ${BOOST_DIR}/utility/include
 )
 
-add_library(${PROJECT_NAME}_boost STATIC ${BOOST_SRC})
+set(CMAKE_CXX_FLAGS
+    "-O0 -ggdb"
+)
+
+add_library(${PROJECT_NAME}_boost SHARED ${BOOST_SRC})

@@ -35,7 +35,13 @@ execute_process(
 include(cmake/cxx14.cmake)
 
 # Boost
-include(cmake/boost.cmake)
+#include(cmake/boost.cmake)
+set(Boost_USE_STATIC_LIBS OFF) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME OFF)
+#set(BOOST_INCLUDEDIR /usr/include)
+find_package(Boost 1.57.0 REQUIRED COMPONENTS filesystem) 
+include_directories(${Boost_INCLUDE_DIRS}) 
 
 # Lua
 include(cmake/lua.cmake)
@@ -78,7 +84,7 @@ include_directories(
 
 # Allow easier dynamic linking with clang
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(CMAKE_INSTALL_RPATH ${LLVM_LIB_PATH})
+set(CMAKE_INSTALL_RPATH ${LLVM_LIB_PATH}:${CMAKE_CURRENT_LIST_DIR})
 
 include(cmake/generate_sources.cmake)
 include(cmake/check_luajit.cmake)
@@ -97,7 +103,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX "")
 
 # Enable warnings
 set(WARNING_FLAGS
-    "-Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-variable -Wno-deprecated-declarations -Wno-unused-parameter"
+    "-O0 -ggdb -Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-variable -Wno-deprecated-declarations -Wno-unused-parameter"
 )
 set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 
@@ -105,7 +111,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY COMPILE_FLAGS ${WARNING_FLAGS})
 # used when making a shared object; recompile with -fPIC.
 # See http://www.cmake.org/pipermail/cmake/2007-May/014350.html
 if(64_BIT_PLATFORM)
-  set_property(TARGET ${PROJECT_NAME}_boost PROPERTY COMPILE_FLAGS "-fPIC")
+	#set_property(TARGET ${PROJECT_NAME}_boost PROPERTY COMPILE_FLAGS "-fPIC")
 endif()
 
 target_link_libraries(${PROJECT_NAME}
@@ -115,7 +121,8 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-  ${PROJECT_NAME}_boost
+	#${PROJECT_NAME}_boost
+  ${Boost_LIBRARIES}
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
@@ -143,7 +150,8 @@ target_link_libraries(${PROJECT_NAME}_config_test
   ${CLANG_LIBS}
   ${LLVM_LIBRARIES}
   ${LLVM_LDFLAGS}
-  ${PROJECT_NAME}_boost
+  #${PROJECT_NAME}_boost
+  ${Boost_LIBRARIES}
   ${LUA_LIBRARIES}
   ${CURSES_LIBRARY}
   ${ZLIB_LIBRARIES}
