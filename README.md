@@ -34,7 +34,7 @@ xcode-select --install
 #### Ubuntu/Debian
 First, install all required dependencies.
 ```bash
-[sudo] apt-get install build-essential libclang-3.9-dev libncurses-dev libz-dev cmake xz-utils libpthread-workqueue-dev
+[sudo] apt-get install build-essential libclang-3.9-dev libncurses-dev libz-dev cmake xz-utils libpthread-workqueue-dev libboost-dev libboost-filesystem-dev
 ```
 
 For lua, you must install the version that your version of vim is compiled for.
