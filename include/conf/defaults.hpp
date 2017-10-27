@@ -70,6 +70,7 @@ namespace color_coded
       {
         "-isystem/usr/local/include",
         "-isystem/opt/local/include",
+        environment<env::tag>::clang_include_lib,
         environment<env::tag>::clang_resource_dir, // internal libraries and intrinsics
         "-isystem/usr/include",
 #ifdef __APPLE__

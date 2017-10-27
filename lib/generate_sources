@@ -23,6 +23,8 @@ namespace color_coded
     { "-isystem${llvm_dir}/include" };
     static char constexpr const * const clang_include_cpp
     { "-isystem${llvm_dir}/include/c++/v1" };
+    static char constexpr const * const clang_include_lib
+    { "-isystem${llvm_dir}/lib/clang/${llvm_version}/include" };
     static char constexpr const * const clang_resource_dir
     { "-resource-dir=${llvm_dir}/lib/clang/${llvm_version}" };
   };
