@@ -87,7 +87,7 @@ Installation with [NeoBundle](https://github.com/Shougo/neobundle.vim) supports 
 ```viml
 NeoBundleLazy 'jeaye/color_coded', {
   \ 'build': {
-    \   'unix': 'cmake . && make && make install',
+    \   'unix': 'rm -f CMakeCache.txt && cmake . && make && make install',
   \ },
   \ 'autoload': { 'filetypes' : ['c', 'cpp', 'objc', 'objcpp'] },
   \ 'build_commands' : ['cmake', 'make']
@@ -100,6 +100,7 @@ Since color_coded has a compiled component, you'll need to manually compile when
 
 ```bash
 cd ~/.vim/bundle/color_coded
+rm -f CMakeCache.txt
 mkdir build && cd build
 cmake ..
 make && make install # Compiling with GCC is preferred, ironically
