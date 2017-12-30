@@ -84,8 +84,12 @@ else()
 endif()
 
 if(CLANG_FOUND)
-  set(CLANG_LIBRARY_DIRS ${LLVM_LIBRARY_DIRS})
-  set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
+  if (NOT DEFINED CLANG_LIBRARY_DIRS)
+    set(CLANG_LIBRARY_DIRS ${LLVM_LIBRARY_DIRS})
+  endif()
+  if (NOT DEFINED CLANG_INCLUDE_DIRS)
+    set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
+  endif()
 
   # check whether llvm-config comes from an install prefix
   execute_process(
