@@ -112,6 +112,7 @@ namespace color_coded
       // Get rid of the source filename itself.
       // NOTE: '-o <output>' and '-c' will be automatically ignored by libclang.
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
+      commands.erase(std::remove(commands.begin(), commands.end(), compile_commands[0].Filename), commands.end());
 
       return commands;
     }
