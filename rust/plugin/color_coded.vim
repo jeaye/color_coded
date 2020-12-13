@@ -2,7 +2,7 @@
 " Maintainer:	Jeaye <contact@jeaye.com>
 
 " ------------------------------------------------------------------------------
-if !has('nvim')
+if !has("nvim")
   echohl WarningMsg |
         \ echomsg "color_coded unavailable: only neovim is supported" |
         \ echohl None
@@ -21,7 +21,7 @@ endif
 " ------------------------------------------------------------------------------
 
 let g:loaded_color_coded = 1
-let $VIMHOME = expand('<sfile>:p:h:h')
+let s:root_dir = expand("<sfile>:p:h:h")
 let s:keepcpo = &cpo
 set cpo&vim
 
@@ -29,10 +29,10 @@ set cpo&vim
 let s:color_coded_valid = color_coded#setup()
 if s:color_coded_valid == 1
   command! CCLog call color_coded#open_log()
-  command! CCtoggle call color_coded#toggle()
+  command! CCToggle call color_coded#toggle()
 
   augroup color_coded
-    au VimEnter,ColorScheme * source $VIMHOME/after/syntax/color_coded.vim
+    au VimEnter,ColorScheme * source s:root_dir . "/after/syntax/color_coded.vim"
     au BufEnter * call color_coded#open()
     au WinEnter * call color_coded#open()
     au TextChanged,TextChangedI * call color_coded#push()

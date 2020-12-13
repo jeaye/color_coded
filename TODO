@@ -1,24 +1,24 @@
-rewrite
-  easier to install (precompiled binaries + appimage)
-  easier to configure (edn)
-  support for neovim (remove lua? remove vim support?)
-  support for async processing
-  easier to extend (multiple languages)
-  direct llvm usage (rather than libclang)
-  update llvm more easily (avoid portability issues)
-  lsp support
-  better logging (:CCLog to open log file in new buffer)
-  syntaxa highlighting supported in multiple windows at once
-  better tests
-
-language
-  clojure
-  rust
-
-perks
-  match tracing for much better ux
-
-https://blog.usejournal.com/a-detailed-guide-to-writing-your-first-neovim-plugin-in-rust-a81604c606b1
+goals
+  ux
+    easier to install (precompiled binaries + appimage)
+    easier to configure (edn)
+    direct llvm usage (rather than libclang)
+    update llvm more easily (avoid portability issues)
+    match tracing (no more incorrect highlighting when typing or scrolling)
+  features
+    support for neovim (remove lua? remove vim support?)
+    easier to extend (multiple languages)
+    lsp support
+    better logging (:CCLog to open log file in new buffer)
+    syntax highlighting supported in multiple windows at once
+    better tests
+    additional language support
+      clojure
+      rust
+  performance
+    entirely async, using tokio
+    minimize allocations
+    keep track of compilations per hash, to avoid duplicate compilations
 
 vim
   https://vimhelp.org/textprop.txt.html#text-properties

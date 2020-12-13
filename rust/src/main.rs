@@ -23,13 +23,14 @@ pub struct App {
 
 impl App {
   pub fn new(runtime_handle: tokio::runtime::Handle) -> Self {
-    let log_file_path = match Self::init_logging() {
+    let log_file_path = match Self::initialize_logging() {
       Ok(path) => path,
       Err(e) => panic!("unable to initialize logging: {}", e),
     };
 
     let (event_sender, event_receiver) = mpsc::unbounded_channel();
     let mut session = neovim_lib::Session::new_parent().unwrap();
+    /* TODO: Document this design. */
     session.start_event_loop_handler(handler::Handler::new(event_sender, runtime_handle));
     let mut nvim = neovim_lib::Neovim::new(session);
 
@@ -66,16 +67,20 @@ impl App {
 
   fn open_log(&mut self) {
     debug!("opening log: {}", self.log_file_path);
+    /* TODO: Focus existing tab, if there is one. */
+    /* TODO: Jump to bottom of log. */
+    /* TODO: See if the buffer can be made to `tail -f` reliably. */
     self
       .nvim
       .command(&format!("tabnew {}", self.log_file_path))
       .unwrap();
   }
 
-  fn init_logging() -> Result<String, Box<dyn std::error::Error>> {
-    /* Consider replacing simplelog with something better. */
+  fn initialize_logging() -> Result<String, Box<dyn std::error::Error>> {
+    /* TODO: Consider replacing simplelog with something better. */
     use simplelog::*;
 
+    /* TODO: Read this from Vim config instead. */
     let log_level_filter = match std::env::var("COLOR_CODED_LOG_LEVEL")
       .unwrap_or("trace".to_owned())
       .to_lowercase()
