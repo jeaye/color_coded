@@ -1,0 +1,15 @@
+[package]
+name = "color_coded"
+version = "2020.11.27-1"
+authors = ["jeaye <contact@jeaye.com>"]
+edition = "2018"
+
+[dependencies]
+log = "0.4.11"
+simplelog = "0.8.0"
+anyhow = "1.0"
+# TODO: Optimize feature set.
+tokio = { version = "0.3", features = ["full"] }
+tempfile = "3"
+neovim-lib = "0.6.1"
+clang = { version = "1.0.3", features = ["clang_10_0"] }

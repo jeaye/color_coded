@@ -1,0 +1,112 @@
+use crate::highlight;
+use crate::vim::buffer::Buffer;
+use anyhow::{anyhow, Result};
+use log::*;
+use neovim_lib::Value;
+use std::io::Write;
+use std::sync::Arc;
+use tempfile::NamedTempFile;
+use tokio::sync::mpsc;
+use tokio::sync::Mutex;
+
+pub fn parse_string(value: &neovim_lib::Value) -> Result<String> {
+  value
+    .as_str()
+    .ok_or(anyhow!("cannot parse error"))
+    .map(|s| String::from(s))
+}
+
+pub fn parse_usize(value: &neovim_lib::Value) -> Result<usize> {
+  value
+    .as_u64()
+    .ok_or(anyhow!("cannot parse usize"))
+    .map(|n| n as usize)
+}
+
+#[derive(Debug)]
+pub enum Event {
+  Apply { buffer: Buffer },
+  OpenLog,
+}
+
+pub struct Handler {
+  runtime_handle: tokio::runtime::Handle,
+  event_sender: Arc<Mutex<mpsc::UnboundedSender<Event>>>,
+}
+
+impl Handler {
+  pub fn new(
+    event_sender: mpsc::UnboundedSender<Event>,
+    runtime_handle: tokio::runtime::Handle,
+  ) -> Self {
+    Self {
+      runtime_handle,
+      event_sender: Arc::new(Mutex::new(event_sender)),
+    }
+  }
+
+  async fn push(args: &Vec<Value>) -> Result<Event> {
+    if args.len() != 3 {
+      return Err(anyhow!("invalid args to push: {:?}", args));
+    }
+
+    let filename = parse_string(&args[0])?;
+    let filetype = parse_string(&args[1])?;
+    let data = parse_string(&args[2])?;
+
+    let mut temp_file = NamedTempFile::new()?;
+    temp_file.write_all(data.as_bytes())?;
+    let temp_filename = temp_file.path().to_str().unwrap().to_owned();
+    let tokens;
+    {
+      let temp_filename = temp_filename.clone();
+      tokens = tokio::task::spawn_blocking(move || crate::clang::tokenize(&temp_filename))
+        .await
+        .unwrap();
+    }
+
+    Ok(Event::Apply {
+      buffer: Buffer::new(&filename, highlight::Group::new(tokens)),
+    })
+  }
+}
+
+impl neovim_lib::Handler for Handler {
+  fn handle_notify(&mut self, name: &str, args: Vec<Value>) {
+    debug!("handler event: {}", name);
+    match name {
+      /* TODO: Queue. */
+      "push" => {
+        let event_sender = self.event_sender.clone();
+        self.runtime_handle.spawn(async move {
+          if let Ok(event) = Self::push(&args).await {
+            let event_sender = event_sender.lock().await;
+            if let Err(reason) = event_sender.send(event) {
+              // TODO: Improve
+              error!("failed to send {}", reason);
+            }
+          }
+        });
+      }
+      "open_log" => {
+        let event_sender = self.event_sender.clone();
+        self.runtime_handle.spawn(async move {
+          let event_sender = event_sender.lock().await;
+          if let Err(reason) = event_sender.send(Event::OpenLog) {
+            // TODO: Improve
+            error!("failed to send {}", reason);
+          }
+        });
+      }
+      _ => {
+        debug!("unmatched event: {}", name);
+      }
+    }
+  }
+}
+
+impl neovim_lib::RequestHandler for Handler {
+  fn handle_request(&mut self, _name: &str, _args: Vec<Value>) -> Result<Value, Value> {
+    Err(Value::from("not implemented"))
+  }
+}
