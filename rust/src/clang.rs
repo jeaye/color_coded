@@ -23,7 +23,8 @@ pub struct Config {
 
 impl Config {
   pub fn new() -> Self {
-    let clang_dir = std::env::args().nth(0).unwrap();
+    let clang_dir = std::env::args().nth(1).unwrap();
+    debug!("clang directory: {}", clang_dir);
     Self {
       clang_include: format!("-isystem{}/include", clang_dir),
       clang_include_cpp: format!("-isystem{}/include/c++/v1", clang_dir),
@@ -74,15 +75,15 @@ pub fn tokenize(config: Arc<Config>, file: NamedTempFile) -> Result<Vec<Token>> 
     .tokenize();
   let cursors = translation_unit.annotate(&tokens);
 
-  for (&tok, &cur) in tokens.iter().zip(cursors.iter()) {
-    debug!(
-      "\n-----\ntoken: {:?}\ncursor kind: {:#?}\ncursor type: {:#?}\ncursor typekind: {:#?}\n",
-      tok.get_spelling(),
-      cur.map(|t| t.get_kind()),
-      cur.map(|t| t.get_type()),
-      cur.map(|t| t.get_type().map(|t| t.get_kind())),
-    );
-  }
+  //for (&tok, &cur) in tokens.iter().zip(cursors.iter()) {
+  //  debug!(
+  //    "\n-----\ntoken: {:?}\ncursor kind: {:#?}\ncursor type: {:#?}\ncursor typekind: {:#?}\n",
+  //    tok.get_spelling(),
+  //    cur.map(|t| t.get_kind()),
+  //    cur.map(|t| t.get_type()),
+  //    cur.map(|t| t.get_type().map(|t| t.get_kind())),
+  //  );
+  //}
 
   /* TODO: Parallelize? */
   Ok(

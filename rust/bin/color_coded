@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-
-LD_LIBRARY_PATH="/home/jeaye/downloads/tmp/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib" exec "$here/../target/debug/color_coded"
+LD_LIBRARY_PATH="$here/../build-latest/clang-llvm/lib:$LD_LIBRARY_PATH" exec "$here/../target/debug/color_coded" "$@"

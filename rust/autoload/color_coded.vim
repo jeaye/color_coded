@@ -6,7 +6,6 @@
 
 " TODO: Version check.
 "let s:color_coded_api_version = 0xba89eb5
-let s:root_dir = expand("<sfile>:p:h:h")
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
@@ -16,6 +15,10 @@ let s:rpc_enter_buffer = "enter_buffer"
 let s:rpc_delete_buffer = "delete_buffer"
 let s:rpc_move = "move"
 let s:rpc_open_log = "open_log"
+
+let s:root_dir = expand("<sfile>:p:h:h")
+let s:clang_dir = s:root_dir . "/build-latest/clang-llvm"
+let s:clang_lib_dir = s:clang_dir . "/lib"
 let s:bin = s:root_dir . "/bin/color_coded"
 
 if !exists("s:color_coded_job_id")
@@ -31,7 +34,7 @@ endfunction!
 function! color_coded#setup()
   "echo "color_coded: setup"
   if s:color_coded_job_id == 0
-    let l:jobid = jobstart([s:bin, s:root_dir], { "rpc": v:true })
+    let l:jobid = jobstart("LD_LIBRARY_PATH=" . s:clang_lib_dir . " " .  s:bin . " " . s:clang_dir, { "rpc": v:true })
     echo "color_coded: jobid " . l:jobid
     let s:color_coded_job_id = l:jobid
   endif
