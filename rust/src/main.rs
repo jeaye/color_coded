@@ -35,11 +35,11 @@ impl App {
     let mut nvim = neovim_lib::Neovim::new(session);
 
     /* TODO: Is this needed? */
-    for s in &["push", "open_log"] {
-      nvim
-        .subscribe(s)
-        .expect(&format!("error: cannot subscribe to event: {}", s));
-    }
+    //for s in &["enter_buffer", "delete_buffer", "push", "open_log"] {
+    //  nvim
+    //    .subscribe(s)
+    //    .expect(&format!("error: cannot subscribe to event: {}", s));
+    //}
 
     Self {
       nvim,
@@ -66,7 +66,6 @@ impl App {
   }
 
   fn open_log(&mut self) {
-    debug!("opening log: {}", self.log_file_path);
     /* TODO: Focus existing tab, if there is one. */
     /* TODO: Jump to bottom of log. */
     /* TODO: See if the buffer can be made to `tail -f` reliably. */
@@ -103,7 +102,7 @@ impl App {
       WriteLogger::new(log_level_filter, config, default_log_file),
     ])?;
 
-    debug!("logging initialized");
+    debug!("logging initialized: {}", log_file_path);
 
     Ok(log_file_path)
   }

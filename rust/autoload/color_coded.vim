@@ -11,8 +11,8 @@ let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
 let s:rpc_push = 'push'
 let s:rpc_pull = 'pull'
-let s:rpc_open = 'open'
-let s:rpc_close = 'close'
+let s:rpc_enter_buffer = 'enter_buffer'
+let s:rpc_delete_buffer = 'delete_buffer'
 let s:rpc_move = 'move'
 let s:rpc_open_log = 'open_log'
 " TODO: Sort out pathing.
@@ -29,7 +29,7 @@ function! s:color_coded_create_defaults()
 endfunction!
 
 function! color_coded#setup()
-  echo "color_coded: setup"
+  "echo "color_coded: setup"
   if s:color_coded_job_id == 0
     let l:jobid = jobstart([s:bin], { 'rpc': v:true })
     echo "color_coded: jobid " . l:jobid
@@ -43,7 +43,7 @@ function! color_coded#setup()
     echoerr "color_coded: rpc process is not executable"
     let s:color_coded_valid = 0
   else
-    echo "color_coded: job started"
+    "echo "color_coded: job started"
     call s:color_coded_create_defaults()
   endif
 
@@ -77,7 +77,7 @@ function! color_coded#move()
   call rpcnotify(s:color_coded_job_id, s:rpc_move, l:name, line("w0"), line("w$"))
 endfunction!
 
-function! color_coded#open()
+function! color_coded#enter_buffer()
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
@@ -109,15 +109,15 @@ function! color_coded#open()
   endif
 
   let [l:name, l:data] = color_coded#get_buffer_details()
-  call rpcnotify(s:color_coded_job_id, s:rpc_open, l:name, &ft, l:data)
+  call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, l:name, &ft, l:data)
 endfunction!
 
-function! color_coded#close()
+function! color_coded#delete_buffer()
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
 
-  call rpcnotify(s:color_coded_job_id, s:rpc_close, color_coded#get_base_buffer_name())
+  call rpcnotify(s:color_coded_job_id, s:rpc_delete_buffer, color_coded#get_base_buffer_name())
   call color_coded#clear_matches(color_coded#get_buffer_name())
 endfunction!
 
@@ -125,7 +125,7 @@ endfunction!
 " ------------------------------------------------------------------------------
 
 function! color_coded#open_log()
-  echo "color_coded: open log job id " . s:color_coded_job_id
+  "echo "color_coded: open log job id " . s:color_coded_job_id
   call rpcnotify(s:color_coded_job_id, s:rpc_open_log)
 endfunction!
 
@@ -135,7 +135,7 @@ function! color_coded#toggle()
     call color_coded#clear_all_matches()
     echo "color_coded: disabled"
   else
-    call color_coded#open()
+    call color_coded#enter_buffer()
     echo "color_coded: enabled"
   endif
 endfunction!
@@ -187,7 +187,7 @@ function! color_coded#clear_matches(file)
       endfor
     endif
   catch
-    echomsg "color_coded caught: " . v:exception
+    echoerr "color_coded caught: " . v:exception
   finally
     let g:color_coded_matches[a:file] = []
   endtry

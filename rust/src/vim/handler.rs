@@ -45,7 +45,7 @@ impl Handler {
     }
   }
 
-  async fn push(args: &Vec<Value>) -> Result<Event> {
+  async fn push(runtime_handle: tokio::runtime::Handle, args: &Vec<Value>) -> Result<Event> {
     if args.len() != 3 {
       return Err(anyhow!("invalid args to push: {:?}", args));
     }
@@ -56,13 +56,12 @@ impl Handler {
 
     let mut temp_file = NamedTempFile::new()?;
     temp_file.write_all(data.as_bytes())?;
-    let temp_filename = temp_file.path().to_str().unwrap().to_owned();
     let tokens;
     {
-      let temp_filename = temp_filename.clone();
-      tokens = tokio::task::spawn_blocking(move || crate::clang::tokenize(&temp_filename))
+      tokens = runtime_handle
+        .spawn_blocking(move || crate::clang::tokenize(temp_file))
         .await
-        .unwrap();
+        .unwrap()?;
     }
 
     Ok(Event::Apply {
@@ -76,15 +75,19 @@ impl neovim_lib::Handler for Handler {
     debug!("handler event: {}", name);
     match name {
       /* TODO: Queue. */
-      "push" => {
+      "enter_buffer" | "push" => {
         let event_sender = self.event_sender.clone();
+        let runtime_handle = self.runtime_handle.clone();
         self.runtime_handle.spawn(async move {
-          if let Ok(event) = Self::push(&args).await {
-            let event_sender = event_sender.lock().await;
-            if let Err(reason) = event_sender.send(event) {
-              // TODO: Improve
-              error!("failed to send {}", reason);
+          match Self::push(runtime_handle, &args).await {
+            Ok(event) => {
+              let event_sender = event_sender.lock().await;
+              if let Err(reason) = event_sender.send(event) {
+                // TODO: Improve
+                error!("failed to send {}", reason);
+              }
             }
+            Err(e) => error!("failed to push: {}", e),
           }
         });
       }

@@ -33,8 +33,8 @@ if s:color_coded_valid == 1
 
   augroup color_coded
     au VimEnter,ColorScheme * source s:root_dir . "/after/syntax/color_coded.vim"
-    au BufEnter * call color_coded#open()
-    au WinEnter * call color_coded#open()
+    au BufEnter * call color_coded#enter_buffer()
+    au WinEnter * call color_coded#enter_buffer()
     au TextChanged,TextChangedI * call color_coded#push()
     au CursorMoved,CursorMovedI * call color_coded#move()
     au CursorHold,CursorHoldI * call color_coded#move()
@@ -48,7 +48,7 @@ if s:color_coded_valid == 1
 
     " There is a rogue BufDelete at the start of vim; the buffer name ends up
     " being relative, so it's not a bother, but it's certainly odd.
-    au BufDelete * call color_coded#close()
+    au BufDelete * call color_coded#delete_buffer()
   augroup END
 
   nnoremap <silent> <ScrollWheelUp>
