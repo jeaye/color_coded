@@ -6,32 +6,32 @@
 
 " TODO: Version check.
 "let s:color_coded_api_version = 0xba89eb5
+let s:root_dir = expand("<sfile>:p:h:h")
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
-let s:rpc_push = 'push'
-let s:rpc_pull = 'pull'
-let s:rpc_enter_buffer = 'enter_buffer'
-let s:rpc_delete_buffer = 'delete_buffer'
-let s:rpc_move = 'move'
-let s:rpc_open_log = 'open_log'
-" TODO: Sort out pathing.
-let s:bin = '/home/jeaye/projects/color_coded/rust/bin/color_coded'
+let s:rpc_push = "push"
+let s:rpc_pull = "pull"
+let s:rpc_enter_buffer = "enter_buffer"
+let s:rpc_delete_buffer = "delete_buffer"
+let s:rpc_move = "move"
+let s:rpc_open_log = "open_log"
+let s:bin = s:root_dir . "/bin/color_coded"
 
-if !exists('s:color_coded_job_id')
+if !exists("s:color_coded_job_id")
   let s:color_coded_job_id = 0
 endif
 
 function! s:color_coded_create_defaults()
   if !exists("g:color_coded_filetypes")
-    let g:color_coded_filetypes = ['c', 'cpp', 'objc']
+    let g:color_coded_filetypes = ["c", "cpp", "objc"]
   endif
 endfunction!
 
 function! color_coded#setup()
   "echo "color_coded: setup"
   if s:color_coded_job_id == 0
-    let l:jobid = jobstart([s:bin], { 'rpc': v:true })
+    let l:jobid = jobstart([s:bin, s:root_dir], { "rpc": v:true })
     echo "color_coded: jobid " . l:jobid
     let s:color_coded_job_id = l:jobid
   endif
@@ -86,10 +86,10 @@ function! color_coded#enter_buffer()
   if !exists("w:color_coded_own_syntax") || w:color_coded_name != color_coded#get_buffer_name()
     " Preserve spell after ownsyntax clears it
     let s:keepspell = &spell
-      if has('b:current_syntax')
-        execute 'ownsyntax ' . b:current_syntax
+      if has("b:current_syntax")
+        execute "ownsyntax " . b:current_syntax
       else
-        execute 'ownsyntax ' . &ft
+        execute "ownsyntax " . &ft
       endif
       let &spell = s:keepspell
     unlet s:keepspell

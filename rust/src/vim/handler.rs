@@ -29,9 +29,11 @@ pub enum Event {
   OpenLog,
 }
 
+#[derive(Clone)]
 pub struct Handler {
   runtime_handle: tokio::runtime::Handle,
   event_sender: Arc<Mutex<mpsc::UnboundedSender<Event>>>,
+  clang_config: Arc<crate::clang::Config>,
 }
 
 impl Handler {
@@ -42,10 +44,11 @@ impl Handler {
     Self {
       runtime_handle,
       event_sender: Arc::new(Mutex::new(event_sender)),
+      clang_config: Arc::new(crate::clang::Config::new()),
     }
   }
 
-  async fn push(runtime_handle: tokio::runtime::Handle, args: &Vec<Value>) -> Result<Event> {
+  async fn push(handler: &mut Self, args: &Vec<Value>) -> Result<Event> {
     if args.len() != 3 {
       return Err(anyhow!("invalid args to push: {:?}", args));
     }
@@ -53,16 +56,15 @@ impl Handler {
     let filename = parse_string(&args[0])?;
     let filetype = parse_string(&args[1])?;
     let data = parse_string(&args[2])?;
+    let clang_config = handler.clang_config.clone();
 
     let mut temp_file = NamedTempFile::new()?;
     temp_file.write_all(data.as_bytes())?;
-    let tokens;
-    {
-      tokens = runtime_handle
-        .spawn_blocking(move || crate::clang::tokenize(temp_file))
-        .await
-        .unwrap()?;
-    }
+    let tokens = handler
+      .runtime_handle
+      .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file))
+      .await
+      .unwrap()?;
 
     Ok(Event::Apply {
       buffer: Buffer::new(&filename, highlight::Group::new(tokens)),
@@ -76,12 +78,11 @@ impl neovim_lib::Handler for Handler {
     match name {
       /* TODO: Queue. */
       "enter_buffer" | "push" => {
-        let event_sender = self.event_sender.clone();
-        let runtime_handle = self.runtime_handle.clone();
+        let mut handler = self.clone();
         self.runtime_handle.spawn(async move {
-          match Self::push(runtime_handle, &args).await {
+          match Self::push(&mut handler, &args).await {
             Ok(event) => {
-              let event_sender = event_sender.lock().await;
+              let event_sender = handler.event_sender.lock().await;
               if let Err(reason) = event_sender.send(event) {
                 // TODO: Improve
                 error!("failed to send {}", reason);

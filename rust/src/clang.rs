@@ -2,6 +2,7 @@ extern crate clang;
 
 use anyhow::Result;
 use log::*;
+use std::sync::Arc;
 use tempfile::NamedTempFile;
 
 pub struct Token {
@@ -13,7 +14,26 @@ pub struct Token {
   pub size: usize,
 }
 
-pub fn tokenize(file: NamedTempFile) -> Result<Vec<Token>> {
+pub struct Config {
+  clang_include: String,
+  clang_include_cpp: String,
+  clang_include_lib: String,
+  clang_resource: String,
+}
+
+impl Config {
+  pub fn new() -> Self {
+    let clang_dir = std::env::args().nth(0).unwrap();
+    Self {
+      clang_include: format!("-isystem{}/include", clang_dir),
+      clang_include_cpp: format!("-isystem{}/include/c++/v1", clang_dir),
+      clang_include_lib: format!("-isystem{}/lib/clang/7.0.0/include", clang_dir),
+      clang_resource: format!("-resource-dir={}/lib/clang/7.0.0", clang_dir),
+    }
+  }
+}
+
+pub fn tokenize(config: Arc<Config>, file: NamedTempFile) -> Result<Vec<Token>> {
   let filename = file.path().to_str().unwrap();
   let clang = clang::Clang::new().unwrap();
   let index = clang::Index::new(&clang, false, false);
@@ -21,27 +41,26 @@ pub fn tokenize(file: NamedTempFile) -> Result<Vec<Token>> {
   let translation_unit = index
     .parser(filename.clone())
     .detailed_preprocessing_record(true)
-    /* TODO: Read clang path from vim. */
+    /* TODO: Avoid all of these allocations. */
     .arguments(&[
       // Pre
-      "-isystem/home/jeaye/downloads/tmp/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/include",
-      "-isystem/home/jeaye/downloads/tmp/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/include/c++/v1",
-      "-x", "c++",
-      "-std=c++17",
-
+      config.clang_include.clone(),
+      config.clang_include_cpp.clone(),
+      "-x".to_owned(),
+      "c++".to_owned(),
+      "-std=c++17".to_owned(),
       /* TODO: Allow custom flags. */
       // Middle
-      "-I.",
-      "-Iinclude",
-
+      "-I.".to_owned(),
+      "-Iinclude".to_owned(),
       // Post
-      "-isystem/usr/local/include",
-      "-isystem/opt/local/include",
-      "-isystem/usr/include",
-      "-isystem/home/jeaye/downloads/tmp/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/7.0.0/include",
-      "-resource-dir=/home/jeaye/downloads/tmp/clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04/lib/clang/7.0.0",
-      "-w",
-      "-fcolor-diagnostics"
+      "-isystem/usr/local/include".to_owned(),
+      "-isystem/opt/local/include".to_owned(),
+      "-isystem/usr/include".to_owned(),
+      config.clang_include_lib.clone(),
+      config.clang_resource.clone(),
+      "-w".to_owned(),
+      "-fcolor-diagnostics".to_owned(),
     ])
     .parse()?;
 
