@@ -1,11 +1,7 @@
-pub struct NamedGroup {
-  pub filename: String,
-  pub group: Group,
-}
-
 #[derive(Debug)]
 pub struct Highlight {
   pub r#type: &'static str,
+  /* All of these are zero-based. */
   pub line: usize,
   pub column: usize,
   pub size: usize,
@@ -25,8 +21,8 @@ impl Group {
           "" => None,
           mapped => Some(Highlight {
             r#type: mapped,
-            line: tok.line,
-            column: tok.column,
+            line: tok.line - 1,
+            column: tok.column - 1,
             size: tok.size,
           }),
         })
@@ -189,6 +185,7 @@ impl Group {
     }
   }
 
+  /* TODO: Update syntax file to include all of these. */
   fn map_cursor_kind(token: &crate::clang::Token) -> &'static str {
     match token.cursor_kind {
       /********* Declarations **********/

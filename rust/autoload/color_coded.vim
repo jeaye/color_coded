@@ -48,6 +48,9 @@ function! color_coded#setup()
   else
     "echo "color_coded: job started"
     call s:color_coded_create_defaults()
+
+    " TODO: Update path.
+    exe "source " . s:root_dir . "/../after/syntax/color_coded.vim"
   endif
 
   return s:color_coded_valid

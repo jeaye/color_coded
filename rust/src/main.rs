@@ -6,6 +6,7 @@ mod highlight;
 mod vim;
 
 use crate::vim::handler;
+use anyhow::Result;
 use log::*;
 use neovim_lib::NeovimApi;
 use std::collections::HashMap;
@@ -53,26 +54,50 @@ impl App {
     debug!("starting main event loop");
     loop {
       let event = self.event_receiver.recv().await;
-      match event {
-        Some(handler::Event::Apply { buffer }) => self.apply(buffer),
+      let result = match event {
+        Some(handler::Event::Apply { ref buffer }) => self.apply(buffer),
         Some(handler::Event::OpenLog) => self.open_log(),
-        None => break,
+        None => {
+          break;
+        }
+      };
+
+      if let Err(e) = result {
+        error!("error running event {:?}: {}", event, e);
       }
     }
   }
 
-  fn apply(&mut self, buffer: Buffer) {
+  fn apply(&mut self, buffer: &Buffer) -> Result<()> {
     debug!("applying buffer highlighting: {:#?}", buffer);
+    let nvim_buf = self.nvim.get_current_buf()?;
+    /* TODO: Cache this. */
+    let namespace = self.nvim.create_namespace(&buffer.name)?;
+
+    /* TODO: Clear previous highlights first. */
+    for highlight in &buffer.group.highlights {
+      nvim_buf.add_highlight(
+        &mut self.nvim,
+        namespace,
+        highlight.r#type,
+        highlight.line as i64,
+        highlight.column as i64,
+        (highlight.column + highlight.size) as i64,
+      )?;
+    }
+
+    Ok(())
   }
 
-  fn open_log(&mut self) {
+  fn open_log(&mut self) -> Result<()> {
     /* TODO: Focus existing tab, if there is one. */
     /* TODO: Jump to bottom of log. */
     /* TODO: See if the buffer can be made to `tail -f` reliably. */
     self
       .nvim
-      .command(&format!("tabnew {}", self.log_file_path))
-      .unwrap();
+      .command(&format!("tabnew {}", self.log_file_path))?;
+
+    Ok(())
   }
 
   fn initialize_logging() -> Result<String, Box<dyn std::error::Error>> {

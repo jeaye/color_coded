@@ -32,7 +32,8 @@ if s:color_coded_valid == 1
   command! CCToggle call color_coded#toggle()
 
   augroup color_coded
-    au VimEnter,ColorScheme * source s:root_dir . "/after/syntax/color_coded.vim"
+    " TODO: Update path.
+    au VimEnter,ColorScheme * exe "source " . s:root_dir . "/../after/syntax/color_coded.vim"
     au BufEnter * call color_coded#enter_buffer()
     au WinEnter * call color_coded#enter_buffer()
     au TextChanged,TextChangedI * call color_coded#push()

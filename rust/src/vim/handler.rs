@@ -54,7 +54,7 @@ impl Handler {
     }
 
     let filename = parse_string(&args[0])?;
-    let filetype = parse_string(&args[1])?;
+    let file_type = parse_string(&args[1])?;
     let data = parse_string(&args[2])?;
     let clang_config = handler.clang_config.clone();
 
@@ -62,7 +62,7 @@ impl Handler {
     temp_file.write_all(data.as_bytes())?;
     let tokens = handler
       .runtime_handle
-      .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file))
+      .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file, file_type))
       .await
       .unwrap()?;
 
