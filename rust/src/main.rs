@@ -33,14 +33,7 @@ impl App {
     let mut session = neovim_lib::Session::new_parent().unwrap();
     /* TODO: Document this design. */
     session.start_event_loop_handler(handler::Handler::new(event_sender, runtime_handle));
-    let mut nvim = neovim_lib::Neovim::new(session);
-
-    /* TODO: Is this needed? */
-    //for s in &["enter_buffer", "delete_buffer", "push", "open_log"] {
-    //  nvim
-    //    .subscribe(s)
-    //    .expect(&format!("error: cannot subscribe to event: {}", s));
-    //}
+    let nvim = neovim_lib::Neovim::new(session);
 
     Self {
       nvim,
@@ -73,9 +66,10 @@ impl App {
     let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(buffer.number));
     /* TODO: Cache this. */
     let namespace = self.nvim.create_namespace(&buffer.name)?;
+
+    /* TODO: Only clear the highlighted range. */
     nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
 
-    /* TODO: Clear previous highlights first. */
     for highlight in &buffer.group.highlights {
       nvim_buf.add_highlight(
         &mut self.nvim,

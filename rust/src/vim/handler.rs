@@ -58,11 +58,13 @@ impl Handler {
     let buffer_number = parse_i64(&args[5])?;
     let clang_config = handler.clang_config.clone();
 
-    let mut temp_file = NamedTempFile::new()?;
-    temp_file.write_all(data.as_bytes())?;
     let tokens = handler
       .runtime_handle
-      .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file, file_type))
+      .spawn_blocking(move || {
+        let mut temp_file = NamedTempFile::new()?;
+        temp_file.write_all(data.as_bytes())?;
+        crate::clang::tokenize(clang_config, temp_file, file_type)
+      })
       .await??;
 
     /* TODO: Remove buffer and just put this all in the apply event? */
