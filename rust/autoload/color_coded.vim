@@ -8,7 +8,7 @@
 "let s:color_coded_api_version = 0xba89eb5
 let s:color_coded_valid = 1
 
-let s:rpc_push = "push"
+let s:rpc_recompile = "recompile"
 let s:rpc_enter_buffer = "enter_buffer"
 let s:rpc_delete_buffer = "delete_buffer"
 let s:rpc_move = "move"
@@ -57,26 +57,6 @@ endfunction!
 " Events
 " ------------------------------------------------------------------------------
 
-function! color_coded#push(buffer_file)
-  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
-    return
-  endif
-
-  let l:buffer_number = bufnr(a:buffer_file)
-  let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_push, l:name, &ft, l:data, l:buffer_number)
-endfunction!
-
-function! color_coded#move(buffer_file)
-  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
-    return
-  endif
-
-  let l:buffer_number = bufnr(a:buffer_file)
-  let l:name = color_coded#get_buffer_name(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_move, l:name, line("w0"), line("w$"), l:buffer_number)
-endfunction!
-
 function! color_coded#enter_buffer(buffer_file)
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
@@ -99,7 +79,27 @@ function! color_coded#enter_buffer(buffer_file)
   endif
 
   let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, l:name, &ft, l:data, l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, l:name, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
+endfunction!
+
+function! color_coded#recompile(buffer_file)
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
+    return
+  endif
+
+  let l:buffer_number = bufnr(a:buffer_file)
+  let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_recompile, l:name, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
+endfunction!
+
+function! color_coded#move(buffer_file)
+  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
+    return
+  endif
+
+  let l:buffer_number = bufnr(a:buffer_file)
+  let l:name = color_coded#get_buffer_name(l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_move, l:name, line("w0"), line("w$"), l:buffer_number)
 endfunction!
 
 function! color_coded#delete_buffer(buffer_file)

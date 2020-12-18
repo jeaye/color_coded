@@ -45,15 +45,17 @@ impl Handler {
     }
   }
 
-  async fn push(handler: &mut Self, args: &Vec<Value>) -> Result<Event> {
+  async fn recompile(handler: &mut Self, args: &Vec<Value>) -> Result<Event> {
     if args.len() != 4 {
-      return Err(anyhow!("invalid args to push: {:?}", args));
+      return Err(anyhow!("invalid args to recompile: {:?}", args));
     }
 
     let filename = parse_string(&args[0])?;
     let file_type = parse_string(&args[1])?;
     let data = parse_string(&args[2])?;
-    let buffer_number = parse_i64(&args[3])?;
+    let window_start_line = parse_i64(&args[3])?;
+    let window_end_line = parse_i64(&args[4])?;
+    let buffer_number = parse_i64(&args[5])?;
     let clang_config = handler.clang_config.clone();
 
     let mut temp_file = NamedTempFile::new()?;
@@ -63,8 +65,15 @@ impl Handler {
       .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file, file_type))
       .await??;
 
+    /* TODO: Remove buffer and just put this all in the apply event? */
     Ok(Event::Apply {
-      buffer: Buffer::new(&filename, buffer_number, highlight::Group::new(tokens)),
+      buffer: Buffer::new(
+        &filename,
+        buffer_number,
+        window_start_line,
+        window_end_line,
+        highlight::Group::new(tokens),
+      ),
     })
   }
 }
@@ -74,10 +83,10 @@ impl neovim_lib::Handler for Handler {
     debug!("handler event: {}", name);
     match name {
       /* TODO: Queue. */
-      "enter_buffer" | "push" => {
+      "enter_buffer" | "recompile" => {
         let mut handler = self.clone();
         self.runtime_handle.spawn(async move {
-          match Self::push(&mut handler, &args).await {
+          match Self::recompile(&mut handler, &args).await {
             Ok(event) => {
               let event_sender = handler.event_sender.lock().await;
               if let Err(reason) = event_sender.send(event) {
@@ -85,7 +94,7 @@ impl neovim_lib::Handler for Handler {
                 error!("failed to send {}", reason);
               }
             }
-            Err(e) => error!("failed to push: {}", e),
+            Err(e) => error!("failed to handle: {}", e),
           }
         });
       }

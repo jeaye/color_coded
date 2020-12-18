@@ -36,7 +36,8 @@ if s:color_coded_valid == 1
     au VimEnter,ColorScheme * exe "source " . s:root_dir . "/../after/syntax/color_coded.vim"
     au BufEnter * call color_coded#enter_buffer(expand("<afile>"))
     au WinEnter * call color_coded#enter_buffer(expand("<afile>"))
-    au TextChanged,TextChangedI * call color_coded#push(expand("<afile>"))
+    au TextChanged,TextChangedI * call color_coded#recompile(expand("<afile>"))
+    " TODO: When moving, highlight the new area outside of the old area without clearing.
     au CursorMoved,CursorMovedI * call color_coded#move(expand("<afile>"))
     au CursorHold,CursorHoldI * call color_coded#move(expand("<afile>"))
     " Resized events trigger midway through a vim state change; the buffer

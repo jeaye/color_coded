@@ -5,22 +5,24 @@ pub struct Buffer {
   pub name: String,
   pub number: i64,
   pub group: highlight::Group,
-  pub new_begin: usize,
-  pub new_end: usize,
-  pub old_begin: usize,
-  pub old_end: usize,
+  pub window_start_line: i64,
+  pub window_end_line: i64,
 }
 
 impl Buffer {
-  pub fn new(name: &str, number: i64, group: highlight::Group) -> Self {
+  pub fn new(
+    name: &str,
+    number: i64,
+    window_start_line: i64,
+    window_end_line: i64,
+    group: highlight::Group,
+  ) -> Self {
     Self {
       name: name.to_owned(),
       number,
       group,
-      new_begin: 0,
-      new_end: 0,
-      old_begin: 0,
-      old_end: 0,
+      window_start_line,
+      window_end_line,
     }
   }
 }

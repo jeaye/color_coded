@@ -73,6 +73,7 @@ impl App {
     let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(buffer.number));
     /* TODO: Cache this. */
     let namespace = self.nvim.create_namespace(&buffer.name)?;
+    nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
 
     /* TODO: Clear previous highlights first. */
     for highlight in &buffer.group.highlights {
