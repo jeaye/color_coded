@@ -8,7 +8,6 @@
 "let s:color_coded_api_version = 0xba89eb5
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
-let g:color_coded_matches = {}
 let s:rpc_push = "push"
 let s:rpc_pull = "pull"
 let s:rpc_enter_buffer = "enter_buffer"
@@ -69,11 +68,13 @@ function! color_coded#push(buffer_file)
   call rpcnotify(s:color_coded_job_id, s:rpc_push, l:name, &ft, l:data, l:buffer_number)
 endfunction!
 
-function! color_coded#pull()
+function! color_coded#pull(buffer_file)
   if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
     return
   endif
-  let l:name = color_coded#get_base_buffer_name()
+
+  let l:buffer_number = bufnr(a:buffer_file)
+  let l:name = color_coded#get_buffer_name(l:buffer_number)
   call rpcnotify(s:color_coded_job_id, s:rpc_pull, l:name, l:buffer_number)
 endfunction!
 
@@ -83,7 +84,7 @@ function! color_coded#move(buffer_file)
   endif
 
   let l:buffer_number = bufnr(a:buffer_file)
-  let l:name = color_coded#get_base_buffer_name(l:buffer_number)
+  let l:name = color_coded#get_buffer_name(l:buffer_number)
   call rpcnotify(s:color_coded_job_id, s:rpc_move, l:name, line("w0"), line("w$"), l:buffer_number)
 endfunction!
 
@@ -94,8 +95,7 @@ function! color_coded#enter_buffer(buffer_file)
 
   " Each new window controls highlighting separate from the buffer.
   let l:buffer_number = bufnr(a:buffer_file)
-  let l:buffer_name = color_coded#get_buffer_name(l:buffer_number)
-  if !exists("w:color_coded_own_syntax") || w:color_coded_name != l:buffer_name
+  if !exists("w:color_coded_own_syntax")
     " Preserve spell after ownsyntax clears it.
     let s:keepspell = &spell
       if has("b:current_syntax")
@@ -107,17 +107,6 @@ function! color_coded#enter_buffer(buffer_file)
     unlet s:keepspell
 
     let w:color_coded_own_syntax = 1
-
-    " Each window has a unique ID.
-    let w:color_coded_unique_counter = s:color_coded_unique_counter
-    let s:color_coded_unique_counter += 1
-
-    " Windows can be reused; clear it out if needed.
-    if exists("w:color_coded_name")
-      call color_coded#clear_matches(w:color_coded_name)
-    endif
-    let w:color_coded_name = l:buffer_name
-    call color_coded#clear_matches(w:color_coded_name)
   endif
 
   let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
@@ -130,8 +119,7 @@ function! color_coded#delete_buffer(buffer_file)
   endif
 
   let l:buffer_number = bufnr(a:buffer_file)
-  call rpcnotify(s:color_coded_job_id, s:rpc_delete_buffer, color_coded#get_base_buffer_name(), l:buffer_number)
-  call color_coded#clear_matches(color_coded#get_buffer_name(l:buffer_number))
+  call rpcnotify(s:color_coded_job_id, s:rpc_delete_buffer, color_coded#get_buffer_name(), l:buffer_number)
 endfunction!
 
 " Commands
@@ -145,7 +133,8 @@ endfunction!
 function! color_coded#toggle()
   let g:color_coded_enabled = g:color_coded_enabled ? 0 : 1
   if g:color_coded_enabled == 0
-    call color_coded#clear_all_matches()
+    " TODO: Clear all matches.
+    " TODO: Stop the job.
     echo "color_coded: disabled"
   else
     call color_coded#enter_buffer()
@@ -156,7 +145,7 @@ endfunction!
 " Utilities
 " ------------------------------------------------------------------------------
 
-function! color_coded#get_base_buffer_name(buffer_number)
+function! color_coded#get_buffer_name(buffer_number)
   let s:name = nvim_buf_get_name(a:buffer_number)
   if s:name == ""
     let s:name = nvim_buf_get_number(a:buffer_number)
@@ -164,50 +153,8 @@ function! color_coded#get_base_buffer_name(buffer_number)
   return s:name
 endfunction!
 
-" We keep two sets of buffer names right now:
-" 1) color_coded#get_base_buffer_name
-"   - Just the filename or buffer number
-"   - Used for interfacing with native code
-" 2) color_coded#get_buffer_name
-"   - A combination of 1) and a unique window counter
-"   - Used for storing per-window syntax matches
-function! color_coded#get_buffer_name(buffer_number)
-  let l:file = color_coded#get_base_buffer_name(a:buffer_number)
-  if exists("w:color_coded_unique_counter")
-    return l:file . w:color_coded_unique_counter
-  else
-    return l:file
-  endif
-endfunction!
-
 function! color_coded#get_buffer_details(buffer_number)
-  let l:file = color_coded#get_base_buffer_name(a:buffer_number)
-  let l:data = join(nvim_buf_get_lines(0, 0, -1, 0), "\n")
+  let l:file = color_coded#get_buffer_name(a:buffer_number)
+  let l:data = join(nvim_buf_get_lines(a:buffer_number, 0, -1, 0), "\n")
   return [l:file, l:data]
-endfunction!
-
-" TODO: Figure out if this is needed.
-function! color_coded#add_match(type, line, col, len)
-  let l:file = color_coded#get_buffer_name()
-  call add(g:color_coded_matches[l:file], matchaddpos(a:type, [[ a:line, a:col, a:len ]], -1))
-endfunction!
-
-" Clears color_coded matches only in the current buffer.
-function! color_coded#clear_matches(file)
-  try
-    if has_key(g:color_coded_matches, a:file) == 1
-      for id in g:color_coded_matches[a:file]
-        call matchdelete(id)
-      endfor
-    endif
-  catch
-    echoerr "color_coded caught: " . v:exception
-  finally
-    let g:color_coded_matches[a:file] = []
-  endtry
-endfunction!
-
-" Clears color_coded matches in all open buffers.
-function! color_coded#clear_all_matches()
-  let g:color_coded_matches = {}
 endfunction!
