@@ -13,3 +13,9 @@ tokio = { version = "0.3", features = ["full"] }
 tempfile = "3"
 neovim-lib = "0.6.1"
 clang = { version = "1.0.3", features = ["clang_10_0"] }
+
+[profile.release]
+opt-level = 3 # Optimize for speed.
+lto = true
+codegen-units = 1 # Reduce parallel builds to increase potential optimizations.
+panic = 'abort' # Do not require stack info on an abort; just die.
