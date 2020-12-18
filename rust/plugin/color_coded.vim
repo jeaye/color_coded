@@ -34,50 +34,51 @@ if s:color_coded_valid == 1
   augroup color_coded
     " TODO: Update path.
     au VimEnter,ColorScheme * exe "source " . s:root_dir . "/../after/syntax/color_coded.vim"
-    au BufEnter * call color_coded#enter_buffer()
-    au WinEnter * call color_coded#enter_buffer()
-    au TextChanged,TextChangedI * call color_coded#push()
-    au CursorMoved,CursorMovedI * call color_coded#move()
-    au CursorHold,CursorHoldI * call color_coded#move()
+    au BufEnter * call color_coded#enter_buffer(expand("<afile>"))
+    au WinEnter * call color_coded#enter_buffer(expand("<afile>"))
+    au TextChanged,TextChangedI * call color_coded#push(expand("<afile>"))
+    au CursorMoved,CursorMovedI * call color_coded#move(expand("<afile>"))
+    au CursorHold,CursorHoldI * call color_coded#move(expand("<afile>"))
     " Resized events trigger midway through a vim state change; the buffer
     " name will still be the previous buffer, yet the window-specific
     " variables won't be available.
     "au VimResized * call color_coded#move()
 
-    " Leaving a color_coded buffer requires removing matched positions
-    au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
+    " TODO: Maybe restore this.
+    " Leaving a color_coded buffer requires removing matched positions.
+    "au BufLeave * call color_coded#clear_matches(color_coded#get_buffer_name())
 
     " There is a rogue BufDelete at the start of vim; the buffer name ends up
     " being relative, so it's not a bother, but it's certainly odd.
-    au BufDelete * call color_coded#delete_buffer()
+    au BufDelete * call color_coded#delete_buffer(expand("<afile>"))
   augroup END
 
   nnoremap <silent> <ScrollWheelUp>
-        \ <ScrollWheelUp>:call color_coded#move()<CR>
+        \ <ScrollWheelUp>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <ScrollWheelUp>
-        \ <ScrollWheelUp><ESC>:call color_coded#move()<CR><INS>
+        \ <ScrollWheelUp><ESC>:call color_coded#move(expand("%"))<CR><INS>
   nnoremap <silent> <ScrollWheelDown>
-        \ <ScrollWheelDown>:call color_coded#move()<CR>
+        \ <ScrollWheelDown>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <ScrollWheelDown>
-        \ <ScrollWheelDown><ESC>:call color_coded#move()<CR><INS>
+        \ <ScrollWheelDown><ESC>:call color_coded#move(expand("%"))<CR><INS>
 
   nnoremap <silent> <S-ScrollWheelUp>
-        \ <S-ScrollWheelUp>:call color_coded#move()<CR>
+        \ <S-ScrollWheelUp>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <S-ScrollWheelUp>
-        \ <S-ScrollWheelUp><ESC>:call color_coded#move()<CR><INS>
+        \ <S-ScrollWheelUp><ESC>:call color_coded#move(expand("%"))<CR><INS>
   nnoremap <silent> <S-ScrollWheelDown>
-        \ <S-ScrollWheelDown>:call color_coded#move()<CR>
+        \ <S-ScrollWheelDown>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <S-ScrollWheelDown>
-        \ <S-ScrollWheelDown><ESC>:call color_coded#move()<CR><INS>
+        \ <S-ScrollWheelDown><ESC>:call color_coded#move(expand("%"))<CR><INS>
 
   nnoremap <silent> <C-ScrollWheelUp>
-        \ <C-ScrollWheelUp>:call color_coded#move()<CR>
+        \ <C-ScrollWheelUp>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <C-ScrollWheelUp>
-        \ <C-ScrollWheelUp><ESC>:call color_coded#move()<CR><INS>
+        \ <C-ScrollWheelUp><ESC>:call color_coded#move(expand("%"))<CR><INS>
   nnoremap <silent> <C-ScrollWheelDown>
-        \ <C-ScrollWheelDown>:call color_coded#move()<CR>
+        \ <C-ScrollWheelDown>:call color_coded#move(expand("%"))<CR>
   inoremap <silent> <C-ScrollWheelDown>
-        \ <C-ScrollWheelDown><ESC>:call color_coded#move()<CR><INS>
+        \ <C-ScrollWheelDown><ESC>:call color_coded#move(expand("%"))<CR><INS>
 endif
 
 " ------------------------------------------------------------------------------

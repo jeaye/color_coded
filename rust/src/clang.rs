@@ -41,7 +41,7 @@ impl Config {
       "-x",
       match &file_type[..] {
         "c" => "c",
-        "c++" => "c++",
+        "cpp" => "c++",
         "objective-c" => "objective-c",
         "objective-c++" => "objective-c++",
         _ => "",

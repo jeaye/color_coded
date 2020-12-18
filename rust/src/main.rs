@@ -70,7 +70,7 @@ impl App {
 
   fn apply(&mut self, buffer: &Buffer) -> Result<()> {
     debug!("applying buffer highlighting: {:#?}", buffer);
-    let nvim_buf = self.nvim.get_current_buf()?;
+    let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(buffer.number));
     /* TODO: Cache this. */
     let namespace = self.nvim.create_namespace(&buffer.name)?;
 

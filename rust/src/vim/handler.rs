@@ -16,11 +16,8 @@ pub fn parse_string(value: &neovim_lib::Value) -> Result<String> {
     .map(|s| String::from(s))
 }
 
-pub fn parse_usize(value: &neovim_lib::Value) -> Result<usize> {
-  value
-    .as_u64()
-    .ok_or(anyhow!("cannot parse usize"))
-    .map(|n| n as usize)
+pub fn parse_i64(value: &neovim_lib::Value) -> Result<i64> {
+  value.as_i64().ok_or(anyhow!("cannot parse usize"))
 }
 
 #[derive(Debug)]
@@ -49,13 +46,14 @@ impl Handler {
   }
 
   async fn push(handler: &mut Self, args: &Vec<Value>) -> Result<Event> {
-    if args.len() != 3 {
+    if args.len() != 4 {
       return Err(anyhow!("invalid args to push: {:?}", args));
     }
 
     let filename = parse_string(&args[0])?;
     let file_type = parse_string(&args[1])?;
     let data = parse_string(&args[2])?;
+    let buffer_number = parse_i64(&args[3])?;
     let clang_config = handler.clang_config.clone();
 
     let mut temp_file = NamedTempFile::new()?;
@@ -63,11 +61,10 @@ impl Handler {
     let tokens = handler
       .runtime_handle
       .spawn_blocking(move || crate::clang::tokenize(clang_config, temp_file, file_type))
-      .await
-      .unwrap()?;
+      .await??;
 
     Ok(Event::Apply {
-      buffer: Buffer::new(&filename, highlight::Group::new(tokens)),
+      buffer: Buffer::new(&filename, buffer_number, highlight::Group::new(tokens)),
     })
   }
 }
