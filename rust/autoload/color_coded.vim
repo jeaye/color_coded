@@ -7,9 +7,8 @@
 " TODO: Version check.
 "let s:color_coded_api_version = 0xba89eb5
 let s:color_coded_valid = 1
-let s:color_coded_unique_counter = 1
+
 let s:rpc_push = "push"
-let s:rpc_pull = "pull"
 let s:rpc_enter_buffer = "enter_buffer"
 let s:rpc_delete_buffer = "delete_buffer"
 let s:rpc_move = "move"
@@ -38,10 +37,10 @@ function! color_coded#setup()
     let s:color_coded_job_id = l:jobid
   endif
 
-  if 0 == s:color_coded_job_id
+  if s:color_coded_job_id == 0
     echoerr "color_coded: cannot start rpc process"
     let s:color_coded_valid = 0
-  elseif -1 == s:color_coded_job_id
+  elseif s:color_coded_job_id == -1
     echoerr "color_coded: rpc process is not executable"
     let s:color_coded_valid = 0
   else
@@ -66,16 +65,6 @@ function! color_coded#push(buffer_file)
   let l:buffer_number = bufnr(a:buffer_file)
   let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
   call rpcnotify(s:color_coded_job_id, s:rpc_push, l:name, &ft, l:data, l:buffer_number)
-endfunction!
-
-function! color_coded#pull(buffer_file)
-  if index(g:color_coded_filetypes, &ft) < 0 || g:color_coded_enabled == 0
-    return
-  endif
-
-  let l:buffer_number = bufnr(a:buffer_file)
-  let l:name = color_coded#get_buffer_name(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_pull, l:name, l:buffer_number)
 endfunction!
 
 function! color_coded#move(buffer_file)
