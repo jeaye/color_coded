@@ -75,12 +75,15 @@ impl Handler {
     }
 
     {
-      let cache = handler.compilation_cache.lock().await;
-      match cache.get(&buffer_number) {
+      let mut cache = handler.compilation_cache.lock().await;
+      match cache.get_mut(&buffer_number) {
         Some(cached_compilation) => {
           if cached_compilation.data_hash == data_hash {
             debug!("skipping recompilation; data is unchanged");
             return Ok(None);
+          } else {
+            /* Mark the current hash as this one so no parallel tasks do duplicate work. */
+            cached_compilation.data_hash = data_hash;
           }
         }
         None => {}
@@ -102,7 +105,6 @@ impl Handler {
     {
       let mut cache = handler.compilation_cache.lock().await;
       if let Some(mut entry) = cache.get_mut(&buffer_number) {
-        entry.data_hash = data_hash;
         entry.group = group.clone();
       } else {
         cache.insert(
