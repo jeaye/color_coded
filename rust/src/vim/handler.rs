@@ -3,6 +3,8 @@ use crate::vim::buffer::Buffer;
 use anyhow::{anyhow, Result};
 use log::*;
 use neovim_lib::Value;
+use std::collections::hash_map::DefaultHasher;
+use std::collections::HashMap;
 use std::io::Write;
 use std::sync::Arc;
 use tempfile::NamedTempFile;
@@ -26,11 +28,17 @@ pub enum Event {
   OpenLog,
 }
 
+struct CachedCompilation {
+  data_hash: u64,
+  group: highlight::Group,
+}
+
 #[derive(Clone)]
 pub struct Handler {
   runtime_handle: tokio::runtime::Handle,
   event_sender: Arc<Mutex<mpsc::UnboundedSender<Event>>>,
   clang_config: Arc<crate::clang::Config>,
+  compilation_cache: Arc<Mutex<HashMap<crate::vim::buffer::BufferNumber, CachedCompilation>>>,
 }
 
 impl Handler {
@@ -42,11 +50,12 @@ impl Handler {
       runtime_handle,
       event_sender: Arc::new(Mutex::new(event_sender)),
       clang_config: Arc::new(crate::clang::Config::new()),
+      compilation_cache: Arc::new(Mutex::new(HashMap::new())),
     }
   }
 
-  async fn recompile(handler: &mut Self, args: &Vec<Value>) -> Result<Event> {
-    if args.len() != 4 {
+  async fn recompile(handler: &mut Self, args: &Vec<Value>) -> Result<Option<Event>> {
+    if args.len() != 6 {
       return Err(anyhow!("invalid args to recompile: {:?}", args));
     }
 
@@ -56,8 +65,29 @@ impl Handler {
     let window_start_line = parse_i64(&args[3])?;
     let window_end_line = parse_i64(&args[4])?;
     let buffer_number = parse_i64(&args[5])?;
-    let clang_config = handler.clang_config.clone();
 
+    let data_hash;
+    {
+      use std::hash::{Hash, Hasher};
+      let mut hasher = DefaultHasher::new();
+      data.hash(&mut hasher);
+      data_hash = hasher.finish();
+    }
+
+    {
+      let cache = handler.compilation_cache.lock().await;
+      match cache.get(&buffer_number) {
+        Some(cached_compilation) => {
+          if cached_compilation.data_hash == data_hash {
+            debug!("skipping recompilation; data is unchanged");
+            return Ok(None);
+          }
+        }
+        None => {}
+      }
+    }
+
+    let clang_config = handler.clang_config.clone();
     let tokens = handler
       .runtime_handle
       .spawn_blocking(move || {
@@ -67,16 +97,33 @@ impl Handler {
       })
       .await??;
 
-    /* TODO: Remove buffer and just put this all in the apply event? */
-    Ok(Event::Apply {
+    let group = highlight::Group::new(tokens);
+
+    {
+      let mut cache = handler.compilation_cache.lock().await;
+      if let Some(mut entry) = cache.get_mut(&buffer_number) {
+        entry.data_hash = data_hash;
+        entry.group = group.clone();
+      } else {
+        cache.insert(
+          buffer_number,
+          CachedCompilation {
+            data_hash,
+            group: group.clone(),
+          },
+        );
+      }
+    }
+
+    Ok(Some(Event::Apply {
       buffer: Buffer::new(
         &filename,
         buffer_number,
         window_start_line,
         window_end_line,
-        highlight::Group::new(tokens),
+        group,
       ),
-    })
+    }))
   }
 }
 
@@ -89,13 +136,14 @@ impl neovim_lib::Handler for Handler {
         let mut handler = self.clone();
         self.runtime_handle.spawn(async move {
           match Self::recompile(&mut handler, &args).await {
-            Ok(event) => {
+            Ok(Some(event)) => {
               let event_sender = handler.event_sender.lock().await;
               if let Err(reason) = event_sender.send(event) {
                 // TODO: Improve
                 error!("failed to send {}", reason);
               }
             }
+            Ok(None) => {}
             Err(e) => error!("failed to handle: {}", e),
           }
         });

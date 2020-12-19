@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Highlight {
   pub r#type: &'static str,
   /* All of these are zero-based. */
@@ -7,7 +7,7 @@ pub struct Highlight {
   pub size: usize,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Group {
   pub highlights: Vec<Highlight>,
 }

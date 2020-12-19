@@ -1,9 +1,11 @@
 use crate::highlight;
 
+pub type BufferNumber = i64;
+
 #[derive(Debug)]
 pub struct Buffer {
   pub name: String,
-  pub number: i64,
+  pub number: BufferNumber,
   pub group: highlight::Group,
   pub window_start_line: i64,
   pub window_end_line: i64,

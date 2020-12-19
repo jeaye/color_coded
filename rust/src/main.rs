@@ -9,8 +9,6 @@ use crate::vim::handler;
 use anyhow::Result;
 use log::*;
 use neovim_lib::NeovimApi;
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
 use vim::buffer::Buffer;
@@ -18,7 +16,6 @@ use vim::buffer::Buffer;
 pub struct App {
   nvim: neovim_lib::Neovim,
   event_receiver: mpsc::UnboundedReceiver<handler::Event>,
-  results: Arc<Mutex<HashMap<String, Buffer>>>,
   log_file_path: String,
 }
 
@@ -38,7 +35,6 @@ impl App {
     Self {
       nvim,
       event_receiver,
-      results: Arc::new(Mutex::new(HashMap::new())),
       log_file_path,
     }
   }
@@ -67,10 +63,16 @@ impl App {
     /* TODO: Cache this. */
     let namespace = self.nvim.create_namespace(&buffer.name)?;
 
-    /* TODO: Only clear the highlighted range. */
+    /* TODO: Only clear the highlighted range? */
     nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
 
     for highlight in &buffer.group.highlights {
+      if (highlight.line as i64) < buffer.window_start_line
+        || (highlight.line as i64) > buffer.window_end_line
+      {
+        continue;
+      }
+
       nvim_buf.add_highlight(
         &mut self.nvim,
         namespace,
