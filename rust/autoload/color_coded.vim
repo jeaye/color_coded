@@ -79,7 +79,7 @@ function! color_coded#enter_buffer(buffer_file)
   endif
 
   let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, l:name, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
 endfunction!
 
 function! color_coded#recompile(buffer_file)
@@ -89,7 +89,7 @@ function! color_coded#recompile(buffer_file)
 
   let l:buffer_number = bufnr(a:buffer_file)
   let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_recompile, l:name, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_recompile, &ft, l:data, line("w0"), line("w$"), l:buffer_number)
 endfunction!
 
 function! color_coded#move(buffer_file)
@@ -98,8 +98,7 @@ function! color_coded#move(buffer_file)
   endif
 
   let l:buffer_number = bufnr(a:buffer_file)
-  let l:name = color_coded#get_buffer_name(l:buffer_number)
-  call rpcnotify(s:color_coded_job_id, s:rpc_move, l:name, line("w0"), line("w$"), l:buffer_number)
+  call rpcnotify(s:color_coded_job_id, s:rpc_move, line("w0"), line("w$"), l:buffer_number)
 endfunction!
 
 function! color_coded#delete_buffer(buffer_file)

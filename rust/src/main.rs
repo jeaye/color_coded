@@ -61,14 +61,16 @@ impl App {
     debug!("applying buffer highlighting: {:#?}", buffer);
     let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(buffer.number));
     /* TODO: Cache this. */
-    let namespace = self.nvim.create_namespace(&buffer.name)?;
+    let namespace = self
+      .nvim
+      .create_namespace(&format!("color_coded:{}", buffer.number))?;
 
     /* TODO: Only clear the highlighted range? */
     nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
 
     for highlight in &buffer.group.highlights {
-      if (highlight.line as i64) < buffer.window_start_line
-        || (highlight.line as i64) > buffer.window_end_line
+      if (highlight.line as i64) < buffer.range_start_line
+        || (highlight.line as i64) > buffer.range_end_line
       {
         continue;
       }

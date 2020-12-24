@@ -19,7 +19,7 @@ pub fn parse_string(value: &neovim_lib::Value) -> Result<String> {
 }
 
 pub fn parse_i64(value: &neovim_lib::Value) -> Result<i64> {
-  value.as_i64().ok_or(anyhow!("cannot parse usize"))
+  value.as_i64().ok_or(anyhow!("cannot parse i64"))
 }
 
 #[derive(Debug)]
@@ -31,6 +31,8 @@ pub enum Event {
 struct CachedCompilation {
   data_hash: u64,
   group: highlight::Group,
+  range_start_line: i64,
+  range_end_line: i64,
 }
 
 #[derive(Clone)]
@@ -55,16 +57,15 @@ impl Handler {
   }
 
   async fn recompile(handler: &mut Self, args: &Vec<Value>) -> Result<Option<Event>> {
-    if args.len() != 6 {
+    if args.len() != 5 {
       return Err(anyhow!("invalid args to recompile: {:?}", args));
     }
 
-    let filename = parse_string(&args[0])?;
-    let file_type = parse_string(&args[1])?;
-    let data = parse_string(&args[2])?;
-    let window_start_line = parse_i64(&args[3])?;
-    let window_end_line = parse_i64(&args[4])?;
-    let buffer_number = parse_i64(&args[5])?;
+    let file_type = parse_string(&args[0])?;
+    let data = parse_string(&args[1])?;
+    let range_start_line = parse_i64(&args[2])?;
+    let range_end_line = parse_i64(&args[3])?;
+    let buffer_number = parse_i64(&args[4])?;
 
     let data_hash;
     {
@@ -112,20 +113,54 @@ impl Handler {
           CachedCompilation {
             data_hash,
             group: group.clone(),
+            range_start_line,
+            range_end_line,
           },
         );
       }
     }
 
     Ok(Some(Event::Apply {
-      buffer: Buffer::new(
-        &filename,
-        buffer_number,
-        window_start_line,
-        window_end_line,
-        group,
-      ),
+      buffer: Buffer::new(buffer_number, range_start_line, range_end_line, group),
     }))
+  }
+
+  async fn move_and_apply(handler: &mut Self, args: &Vec<Value>) -> Result<Option<Event>> {
+    if args.len() != 3 {
+      return Err(anyhow!("invalid args to recompile: {:?}", args));
+    }
+
+    let range_start_line = parse_i64(&args[0])?;
+    let range_end_line = parse_i64(&args[1])?;
+    let buffer_number = parse_i64(&args[2])?;
+
+    let mut cache = handler.compilation_cache.lock().await;
+    match cache.get_mut(&buffer_number) {
+      Some(cached_compilation) => {
+        let (new_range_start, new_range_end) =
+          if range_start_line < cached_compilation.range_start_line {
+            (range_start_line, cached_compilation.range_start_line)
+          } else if range_end_line > cached_compilation.range_end_line {
+            (cached_compilation.range_end_line, range_end_line)
+          } else {
+            return Ok(None);
+          };
+
+        cached_compilation.range_start_line = new_range_start;
+        cached_compilation.range_end_line = new_range_end;
+
+        /* TODO: Don't clear when applying. */
+        Ok(Some(Event::Apply {
+          buffer: Buffer::new(
+            buffer_number,
+            new_range_start,
+            new_range_end,
+            cached_compilation.group.clone(),
+          ),
+        }))
+      }
+      None => Ok(None),
+    }
   }
 }
 
@@ -138,6 +173,22 @@ impl neovim_lib::Handler for Handler {
         let mut handler = self.clone();
         self.runtime_handle.spawn(async move {
           match Self::recompile(&mut handler, &args).await {
+            Ok(Some(event)) => {
+              let event_sender = handler.event_sender.lock().await;
+              if let Err(reason) = event_sender.send(event) {
+                // TODO: Improve
+                error!("failed to send {}", reason);
+              }
+            }
+            Ok(None) => {}
+            Err(e) => error!("failed to handle: {}", e),
+          }
+        });
+      }
+      "move" => {
+        let mut handler = self.clone();
+        self.runtime_handle.spawn(async move {
+          match Self::move_and_apply(&mut handler, &args).await {
             Ok(Some(event)) => {
               let event_sender = handler.event_sender.lock().await;
               if let Err(reason) = event_sender.send(event) {
