@@ -78,7 +78,7 @@ function! color_coded#enter_buffer(buffer_file)
     let w:color_coded_own_syntax = 1
   endif
 
-  let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
+  let l:data = color_coded#get_buffer_data(l:buffer_number)
   call rpcnotify(s:color_coded_job_id, s:rpc_enter_buffer, &ft, l:data, l:buffer_number)
 endfunction!
 
@@ -88,7 +88,7 @@ function! color_coded#recompile(buffer_file)
   endif
 
   let l:buffer_number = bufnr(a:buffer_file)
-  let [l:name, l:data] = color_coded#get_buffer_details(l:buffer_number)
+  let l:data = color_coded#get_buffer_data(l:buffer_number)
   call rpcnotify(s:color_coded_job_id, s:rpc_recompile, &ft, l:data, l:buffer_number)
 endfunction!
 
@@ -141,8 +141,6 @@ function! color_coded#get_buffer_name(buffer_number)
   return s:name
 endfunction!
 
-function! color_coded#get_buffer_details(buffer_number)
-  let l:file = color_coded#get_buffer_name(a:buffer_number)
-  let l:data = join(nvim_buf_get_lines(a:buffer_number, 0, -1, 0), "\n")
-  return [l:file, l:data]
+function! color_coded#get_buffer_data(buffer_number)
+  return join(nvim_buf_get_lines(a:buffer_number, 0, -1, 0), "\n")
 endfunction!
