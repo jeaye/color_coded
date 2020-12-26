@@ -1,18 +1,17 @@
 goals
   ux
-    easier to install (precompiled binaries + appimage)
-    easier to configure (edn)
-    direct llvm usage (rather than libclang)
-    update llvm more easily (avoid portability issues)
+    easier to install (precompiled binaries)
+      update llvm more easily (avoid portability issues)
+    easier to configure (toml)
     match tracing (no more incorrect highlighting when typing or scrolling)
   features
-    support for neovim (remove lua? remove vim support?)
-    easier to extend (multiple languages)
-    lsp support
+    support for neovim
+    lsp highlight support
     better logging (:CCLog to open log file in new buffer)
     syntax highlighting supported in multiple windows at once
     better tests
-    additional language support
+    client/server model for use outside of vim
+    easier to extend (multiple languages)
       clojure
       rust
   performance

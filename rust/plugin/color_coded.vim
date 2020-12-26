@@ -36,7 +36,9 @@ if s:color_coded_valid == 1
     au VimEnter,ColorScheme * exe "source " . s:root_dir . "/../after/syntax/color_coded.vim"
     au BufEnter * call color_coded#enter_buffer(expand("<afile>"))
     au WinEnter * call color_coded#enter_buffer(expand("<afile>"))
-    au TextChanged,TextChangedI * call color_coded#recompile(expand("<afile>"))
+    " We only recompile when in normal mode, since recompiling for every key
+    " press in insert mode causes way too much churn and can cause flickering.
+    au TextChanged,InsertLeave * call color_coded#recompile(expand("<afile>"))
     " TODO: When moving, highlight the new area outside of the old area without clearing.
     au CursorMoved,CursorMovedI * call color_coded#move(expand("<afile>"))
     au CursorHold,CursorHoldI * call color_coded#move(expand("<afile>"))

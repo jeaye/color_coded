@@ -11,7 +11,6 @@ use log::*;
 use neovim_lib::NeovimApi;
 use tempfile::NamedTempFile;
 use tokio::sync::mpsc;
-use vim::buffer::Buffer;
 
 pub struct App {
   nvim: neovim_lib::Neovim,
@@ -44,7 +43,7 @@ impl App {
     loop {
       let event = self.event_receiver.recv().await;
       let result = match event {
-        Some(handler::Event::Apply { ref buffer }) => self.apply(buffer),
+        Some(ref event @ handler::Event::Apply { .. }) => self.apply(event),
         Some(handler::Event::OpenLog) => self.open_log(),
         None => {
           break;
@@ -57,32 +56,38 @@ impl App {
     }
   }
 
-  fn apply(&mut self, buffer: &Buffer) -> Result<()> {
-    debug!("applying buffer highlighting: {:#?}", buffer);
-    let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(buffer.number));
-    /* TODO: Cache this. */
-    let namespace = self
-      .nvim
-      .create_namespace(&format!("color_coded:{}", buffer.number))?;
+  fn apply(&mut self, event: &handler::Event) -> Result<()> {
+    debug!("applying buffer highlighting: {:#?}", event);
+    match event {
+      handler::Event::Apply {
+        buffer_number,
+        group,
+        clear_all,
+      } => {
+        let nvim_buf = neovim_lib::neovim_api::Buffer::new(neovim_lib::Value::from(*buffer_number));
+        /* TODO: Cache this. */
+        let namespace = self
+          .nvim
+          .create_namespace(&format!("color_coded:{}", buffer_number))?;
 
-    /* TODO: Only clear the highlighted range? */
-    nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
+        /* TODO: Only clear the highlighted range? */
+        if *clear_all {
+          /* TODO: This could be double buffered in order to prevent flickering? */
+          nvim_buf.clear_namespace(&mut self.nvim, namespace, 0, -1)?;
+        }
 
-    for highlight in &buffer.group.highlights {
-      if (highlight.line as i64) < buffer.range_start_line
-        || (highlight.line as i64) > buffer.range_end_line
-      {
-        continue;
+        for highlight in &group.highlights {
+          nvim_buf.add_highlight(
+            &mut self.nvim,
+            namespace,
+            highlight.r#type,
+            highlight.line as i64,
+            highlight.column as i64,
+            (highlight.column + highlight.size) as i64,
+          )?;
+        }
       }
-
-      nvim_buf.add_highlight(
-        &mut self.nvim,
-        namespace,
-        highlight.r#type,
-        highlight.line as i64,
-        highlight.column as i64,
-        (highlight.column + highlight.size) as i64,
-      )?;
+      _ => error!("not an apply event: {:#?}", event),
     }
 
     Ok(())

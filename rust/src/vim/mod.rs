@@ -1,2 +1,3 @@
-pub mod buffer;
 pub mod handler;
+
+pub type BufferNumber = i64;
