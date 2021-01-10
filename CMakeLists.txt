@@ -54,7 +54,7 @@ if (NOT DOWNLOAD_CLANG)
 	if(LLVM_FOUND)
 	  find_package(LibClang)
 	else()
-	  message(STATUS "LLVM not found on system")
+	  message(FATAL_ERROR "LLVM not found on system")
 	endif()
 endif()
 
