@@ -79,6 +79,7 @@ foreach (ver IN LISTS LUA_MINOR_VERSIONS)
         lua5${ver}
         lua5.${ver}
         lua-5.${ver}
+        lua.5.${ver}
         )
 endforeach ()
 
