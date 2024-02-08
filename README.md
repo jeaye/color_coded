@@ -1,5 +1,11 @@
 color_coded: semantic highlighting with vim [![Build Status](https://travis-ci.org/jeaye/color_coded.svg?branch=master)](https://travis-ci.org/jeaye/color_coded)
 ---
+**NOTE: This project is archived and has been superseded by LSP-based
+highlighting, which is less clunky and less resource intensive. color_coded
+no doubt pioneered this space and I'm grateful for all of the tokens which have
+been colored in our editors ever since.**
+
+---
 color_coded is a vim plugin that provides realtime (fast), tagless code highlighting for C++, C, and Objective C using libclang.
 
   * Environmentally friendly
