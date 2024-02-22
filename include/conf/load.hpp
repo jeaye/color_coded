@@ -41,6 +41,40 @@ namespace color_coded
 
         return line;
       }
+
+      template <typename It>
+      It make_absolute(It const begin, It const end, fs::path const &base)
+      {
+        static const std::regex reg_dual
+        {
+          "\\s*(-I|-isystem|-iquote)\\s*$",
+            std::regex::optimize
+        };
+
+        std::smatch match;
+        if (std::regex_search(*begin, match, reg_dual))
+        {
+          for (auto next = begin + 1; next < end; ++next)
+          {
+            if (next->size() == 0)
+            { continue; }
+            else
+            {
+              auto path = next->c_str();
+              if (path[0] != '/')
+                *next = fs::absolute(path, base).string();
+              return next +1;
+            }
+          }
+
+          return end + 1;
+        }
+        else
+        {
+          *begin = make_absolute(*begin, base);
+          return begin +1;
+        }
+      }
     }
 
     inline args_t load_compilation_database(std::string const &file, fs::path filename)
@@ -106,6 +140,7 @@ namespace color_coded
       if(compile_commands.empty())
       { return {}; }
 
+      const auto base(fs::path{compile_commands[0].Directory});
       // Skip argv[0] which is the name of the clang executable.
       args_t commands((compile_commands[0].CommandLine.begin() + 1), compile_commands[0].CommandLine.end());
 
@@ -113,6 +148,9 @@ namespace color_coded
       // NOTE: '-o <output>' and '-c' will be automatically ignored by libclang.
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
       commands.erase(std::remove(commands.begin(), commands.end(), compile_commands[0].Filename), commands.end());
+
+      for (auto it = commands.begin(); it < commands.end();)
+      { it = detail::make_absolute(it, commands.end(), base); }
 
       return commands;
     }
