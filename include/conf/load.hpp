@@ -114,6 +114,11 @@ namespace color_coded
       commands.erase(std::remove(commands.begin(), commands.end(), filename), commands.end());
       commands.erase(std::remove(commands.begin(), commands.end(), compile_commands[0].Filename), commands.end());
 
+      // Make these paths relative to the working directory.
+      for (auto &cmd : commands) {
+          cmd = detail::make_absolute(cmd, fs::path(compile_commands[0].Directory));
+      }
+
       return commands;
     }
 
